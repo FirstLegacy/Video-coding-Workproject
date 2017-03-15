@@ -16,5 +16,6 @@ int main()
 	cout << OtherClass::pointerExampleHeap() << endl;
 	cout << OtherClass::pointerExampleUnique() << endl;
 	cout << OtherClass::pointerExampleFunc() << endl;
-	cout << OtherClass::arrayExample() << endl;
+	cout << OtherClass::twoDArrayExample() << endl;
+	cout << OtherClass::flattenedArrayExample() << endl;
 }

@@ -13,8 +13,8 @@ public:
 	static int pointerExampleHeap();
 	static int pointerExampleUnique();
 	static int pointerExampleFunc();
-	static string arrayExample();
+	static string twoDArrayExample();
+	static string flattenedArrayExample();
 private:
 	static void plusFive(int&);
 };
-
