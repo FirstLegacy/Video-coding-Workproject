@@ -11,7 +11,7 @@ int OtherClass::pointerExampleStack() {
 	int i = 0;
 	int* p = &i;
 	*p = 10;
-	
+
 	return i;
 }
 
@@ -54,14 +54,32 @@ void OtherClass::plusFive(int& val) {
 	val += 5;
 }
 
-string OtherClass::arrayExample() {
+string OtherClass::twoDArrayExample() {
 	int exampleArr[2][3] = { { 1, 2, 3 },{ 4, 5, 6 } };
-	string s = "dwa";
+	string s = "";
 
 	for (auto &y : exampleArr)
 	{
 		for (auto &x : y) {
 			s = s + to_string(x) + " ";
+		}
+		s = s + "\n";
+	}
+	s = s.substr(0, s.length() - 2);
+	return s;
+}
+
+string OtherClass::flattenedArrayExample() {
+	const int height = 2;
+	const int width = 3;
+	int exampleArr[height*width] = { 1, 2, 3, 4, 5, 6 };
+	string s = "";
+
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			s = s + to_string(exampleArr[x + y * width]) + " ";
 		}
 		s = s + "\n";
 	}
