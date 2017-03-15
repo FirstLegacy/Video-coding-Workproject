@@ -56,7 +56,7 @@ void OtherClass::plusFive(int& val) {
 
 string OtherClass::arrayExample() {
 	int exampleArr[2][3] = { { 1, 2, 3 },{ 4, 5, 6 } };
-	string s = "";
+	string s = "dwa";
 
 	for (auto &y : exampleArr)
 	{
