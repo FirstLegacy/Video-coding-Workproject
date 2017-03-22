@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "dCT.h"
+#include "DCT.h"
 
+void DCT::doStuff() {
 
-dCT::dCT()
-{
-}
-
-
-dCT::~dCT()
-{
 }

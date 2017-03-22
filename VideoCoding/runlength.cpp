@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "runlength.h"
+#include "Runlength.h"
 
+void Runlength::doStuff() {
 
-runlength::runlength()
-{
-}
-
-
-runlength::~runlength()
-{
 }

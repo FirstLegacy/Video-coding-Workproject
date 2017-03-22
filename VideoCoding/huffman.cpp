@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "huffman.h"
+#include "Huffman.h"
 
+void Huffman::doStuff() {
 
-huffman::huffman()
-{
-}
-
-
-huffman::~huffman()
-{
 }

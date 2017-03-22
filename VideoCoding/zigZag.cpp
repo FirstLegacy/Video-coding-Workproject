@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "zigZag.h"
+#include "ZigZag.h"
 
+void ZigZag::doStuff() {
 
-zigZag::zigZag()
-{
-}
-
-
-zigZag::~zigZag()
-{
 }

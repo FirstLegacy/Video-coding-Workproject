@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "toBlock.h"
+#include "ToBlock.h"
 
+void ToBlock::doStuff() {
 
-toBlock::toBlock()
-{
-}
-
-
-toBlock::~toBlock()
-{
 }

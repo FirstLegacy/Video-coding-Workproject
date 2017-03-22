@@ -1,8 +1,7 @@
 #pragma once
-class runlength
+class Runlength
 {
 public:
-	runlength();
-	~runlength();
+	static void doStuff();
 };
 

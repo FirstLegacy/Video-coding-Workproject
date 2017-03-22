@@ -1,8 +1,7 @@
 #pragma once
-class rgbToYCbCr
+class RgbToYCbCr
 {
 public:
-	rgbToYCbCr();
-	~rgbToYCbCr();
+	static void doStuff();
 };
 
