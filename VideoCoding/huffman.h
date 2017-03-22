@@ -1,8 +1,7 @@
 #pragma once
-class huffman
+class Huffman
 {
 public:
-	huffman();
-	~huffman();
+	static void doStuff();
 };
 

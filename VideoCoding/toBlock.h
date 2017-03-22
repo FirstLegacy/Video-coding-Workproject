@@ -1,8 +1,7 @@
 #pragma once
-class toBlock
+class ToBlock
 {
 public:
-	toBlock();
-	~toBlock();
+	static void doStuff();
 };
 

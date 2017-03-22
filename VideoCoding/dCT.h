@@ -1,8 +1,7 @@
 #pragma once
-class dCT
+class DCT
 {
 public:
-	dCT();
-	~dCT();
+	static void doStuff();
 };
 

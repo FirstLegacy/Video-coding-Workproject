@@ -1,8 +1,7 @@
 #pragma once
-class quantize
+class Quantize
 {
 public:
-	quantize();
-	~quantize();
+	static void doStuff();
 };
 

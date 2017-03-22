@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "quantize.h"
+#include "Quantize.h"
 
+void Quantize::doStuff() {
 
-quantize::quantize()
-{
-}
-
-
-quantize::~quantize()
-{
 }

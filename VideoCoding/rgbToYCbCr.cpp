@@ -1,12 +1,6 @@
 #include "stdafx.h"
-#include "rgbToYCbCr.h"
+#include "RgbToYCbCr.h"
 
+void RgbToYCbCr::doStuff() {
 
-rgbToYCbCr::rgbToYCbCr()
-{
-}
-
-
-rgbToYCbCr::~rgbToYCbCr()
-{
 }

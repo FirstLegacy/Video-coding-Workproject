@@ -1,8 +1,7 @@
 #pragma once
-class zigZag
+class ZigZag
 {
 public:
-	zigZag();
-	~zigZag();
+	static void doStuff();
 };
 
