@@ -149,6 +149,7 @@
     <ClInclude Include="connectCamera.h" />
     <ClInclude Include="dCT.h" />
     <ClInclude Include="Encode.h" />
+    <ClInclude Include="getFrame.h" />
     <ClInclude Include="huffman.h" />
     <ClInclude Include="OtherClass.h" />
     <ClInclude Include="quantize.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="connectCamera.cpp" />
     <ClCompile Include="dCT.cpp" />
     <ClCompile Include="Encode.cpp" />
+    <ClCompile Include="getFrame.cpp" />
     <ClCompile Include="huffman.cpp" />
     <ClCompile Include="quantize.cpp" />
     <ClCompile Include="rgbToYCbCr.cpp" />
