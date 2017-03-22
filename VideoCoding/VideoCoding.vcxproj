@@ -151,6 +151,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="VideoCoding.cpp" />
     <ClCompile Include="OtherClass.cpp" />
     <ClCompile Include="stdafx.cpp">
