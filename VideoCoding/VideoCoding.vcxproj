@@ -146,12 +146,29 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="connectCamera.h" />
+    <ClInclude Include="dCT.h" />
+    <ClInclude Include="Encode.h" />
+    <ClInclude Include="huffman.h" />
     <ClInclude Include="OtherClass.h" />
+    <ClInclude Include="quantize.h" />
+    <ClInclude Include="rgbToYCbCr.h" />
+    <ClInclude Include="runlength.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="toBlock.h" />
+    <ClInclude Include="zigZag.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="connectCamera.cpp" />
+    <ClCompile Include="dCT.cpp" />
+    <ClCompile Include="Encode.cpp" />
+    <ClCompile Include="huffman.cpp" />
+    <ClCompile Include="quantize.cpp" />
+    <ClCompile Include="rgbToYCbCr.cpp" />
+    <ClCompile Include="runlength.cpp" />
+    <ClCompile Include="toBlock.cpp" />
     <ClCompile Include="VideoCoding.cpp" />
     <ClCompile Include="OtherClass.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -160,6 +177,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="zigZag.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
