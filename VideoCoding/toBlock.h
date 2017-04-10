@@ -1,7 +1,8 @@
 #pragma once
+
 class ToBlock
 {
 public:
-	static void doStuff();
+	static std::vector<uint8_t> blockify(std::vector<uint_fast8_t>);
 };
 
