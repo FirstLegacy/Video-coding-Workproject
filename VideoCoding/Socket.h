@@ -3,6 +3,6 @@ class Socket
 {
 public:
 	static void connect();
-	static void sendMessage(); // Some input format.
+	static void sendMessage(std::vector<uint8_t>);
 };
 

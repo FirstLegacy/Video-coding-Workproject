@@ -10,6 +10,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-
+const static size_t blockSize = 16;
 
 // TODO: reference additional headers your program requires here

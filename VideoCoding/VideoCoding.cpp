@@ -2,6 +2,8 @@
 
 using namespace std;
 
-int main()
-{
+unsigned int frameCount = 0;
+
+int main() {
+
 }

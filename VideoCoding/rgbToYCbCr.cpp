@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "RgbToYCbCr.h"
 
-void RgbToYCbCr::doStuff() {
+#include <vector>
+
+std::vector<uint8_t> RgbToYCbCr::convert(std::vector<int>) { // Input argument needs to be camera output
 
 }
