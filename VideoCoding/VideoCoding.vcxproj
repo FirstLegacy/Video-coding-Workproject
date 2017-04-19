@@ -146,6 +146,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DCT.h" />
     <ClInclude Include="Huffman.h" />
+    <ClInclude Include="qedit.h" />
     <ClInclude Include="Quantize.h" />
     <ClInclude Include="RgbToYCbCr.h" />
     <ClInclude Include="Runlength.h" />
