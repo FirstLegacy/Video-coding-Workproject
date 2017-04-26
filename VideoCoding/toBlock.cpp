@@ -2,7 +2,8 @@
 #include "ToBlock.h"
 
 #include <vector>
+#include <array>
 
-std::vector<uint8_t> ToBlock::blockify(std::vector<uint_fast8_t>) {
+std::vector<char> ToBlock::blockify(std::array<uint_fast8_t>) {
 
 }
