@@ -2,6 +2,6 @@
 class RgbToYCbCr
 {
 public:
-	static std::vector<uint8_t> convert(std::vector<int>);
+	static std::vector<char> convert(std::array<uint8_t, in_res_rgb>);
 };
 
