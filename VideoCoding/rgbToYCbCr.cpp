@@ -2,7 +2,8 @@
 #include "RgbToYCbCr.h"
 
 #include <vector>
+#include <array>
 
-std::vector<uint8_t> RgbToYCbCr::convert(std::vector<int>) { // Input argument needs to be camera output
+std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, in_res_rgb>) {
 
 }
