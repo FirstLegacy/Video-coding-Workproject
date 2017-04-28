@@ -2,6 +2,8 @@
 class DCT
 {
 public:
-	static std::vector<uint8_t> transform(std::vector<uint_fast8_t>);
+	static std::vector<char> transform(std::array<uint_fast8_t, img_res_ycbcr>);
+private:
+	static void binDCT(std::array<uint_fast8_t, mBlockSize> &, bool);
 };
 

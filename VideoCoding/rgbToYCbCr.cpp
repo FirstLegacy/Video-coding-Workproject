@@ -4,6 +4,6 @@
 #include <vector>
 #include <array>
 
-std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, in_res_rgb>) {
+std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, img_res_rgb> in) {
 
 }

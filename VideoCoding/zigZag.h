@@ -3,6 +3,6 @@
 class ZigZag
 {
 public:
-	static std::vector<uint8_t> zigzag(std::vector<uint_fast8_t>);
+	static std::vector<char> zigzag(std::array<uint_fast16_t, img_res_ycbcr>);
 };
 
