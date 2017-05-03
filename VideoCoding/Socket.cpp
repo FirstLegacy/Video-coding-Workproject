@@ -1,6 +1,3 @@
-/*
-Simple udp client
-*/
 #include<stdio.h>
 #include<winsock2.h>
 #include<vector>
@@ -14,6 +11,7 @@ Simple udp client
 int s = 0, slen = 0;
 struct sockaddr_in si_other;
 
+// The function to send a message through the socket
 void send(std::vector<char> message) {
 	if (sendto(s, &message[0], message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
 	{
@@ -22,6 +20,7 @@ void send(std::vector<char> message) {
 	}
 }
 
+// Establish socket connection and attempt to connect to defined server
 void connect()
 {
 	s, slen = sizeof(si_other);
@@ -50,37 +49,7 @@ void connect()
 	si_other.sin_family = AF_INET;
 	si_other.sin_port = htons(PORT);
 	si_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
-
-	//start communication
-	//while (1)
-	//{
-		//printf("Enter message : ");
-		//gets(message);
-
-		//send the message
-		//if (sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
-		//{
-		//	printf("sendto() failed with error code : %d", WSAGetLastError());
-		//	exit(EXIT_FAILURE);
-		//}
-
-		//receive a reply and print it
-		//clear the buffer by filling null, it might have previously received data
-		//memset(buf, '\0', BUFLEN);
-		//try to receive some data, this is a blocking call
-		//if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen) == SOCKET_ERROR)
-		//{
-		//	printf("recvfrom() failed with error code : %d", WSAGetLastError());
-		//	exit(EXIT_FAILURE);
-		//}
-
-		//puts(buf);
-	//}
-
-	//closesocket(s);
-	//WSACleanup();
-
-	//return 0;
+	// Socket is now ready to start communication
 }
 
 void closeConnection()
@@ -89,6 +58,9 @@ void closeConnection()
 	WSACleanup();
 }
 
+// // // // //
+// Beyond is un-used code for extensions or debug
+// // // // //
 
 //receive a reply and print it
 //clear the buffer by filling null, it might have previously received data
@@ -101,3 +73,34 @@ void closeConnection()
 //}
 
 //puts(buf);
+
+//start communication
+//while (1)
+//{
+//printf("Enter message : ");
+//gets(message);
+
+//send the message
+//if (sendto(s, message, strlen(message), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
+//{
+//	printf("sendto() failed with error code : %d", WSAGetLastError());
+//	exit(EXIT_FAILURE);
+//}
+
+//receive a reply and print it
+//clear the buffer by filling null, it might have previously received data
+//memset(buf, '\0', BUFLEN);
+//try to receive some data, this is a blocking call
+//if (recvfrom(s, buf, BUFLEN, 0, (struct sockaddr *) &si_other, &slen) == SOCKET_ERROR)
+//{
+//	printf("recvfrom() failed with error code : %d", WSAGetLastError());
+//	exit(EXIT_FAILURE);
+//}
+
+//puts(buf);
+//}
+
+//closesocket(s);
+//WSACleanup();
+
+//return 0;
