@@ -33,6 +33,4 @@ void RgbToYCbCr::downSampling(std::array<uint8_t, in_res_ycbcr> &in) {
 
 
 
-
-	}
 }
