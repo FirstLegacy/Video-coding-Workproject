@@ -4,6 +4,6 @@
 #include <vector>
 #include <array>
 
-std::vector<char> ToBlock::blockify(std::array<uint_fast8_t>) {
+std::vector<char> ToBlock::blockify(std::array<uint_fast8_t, img_res_ycbcr>) {
 
 }
