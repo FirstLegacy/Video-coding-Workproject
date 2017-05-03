@@ -22,7 +22,7 @@
     <ProjectGuid>{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>cppExample</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
     <ProjectName>VideoCoding</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
