@@ -29,7 +29,7 @@ std::vector<char> RgbToYCbCr::convert(std::array<uint8_t,  in_res> in) {
 	}
 }
 
-void RgbToYCbCr::downSampling(std::array<uint8_t, in_res_ycbcr> &in) {
+void RgbToYCbCr::downSampling(std::array<uint8_t, img_res_ycbcr> &in) {
 
 
 
