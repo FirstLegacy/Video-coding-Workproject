@@ -4,14 +4,19 @@
 #include <vector>
 #include <map>
 
+// Maybe use bitset instead of vector<bool> depending on ease of implementation. vector<char> might be more efficient.
 using bitvec = std::vector<bool>;
 
-const std::map<uint_fast8_t, bitvec> dcLumTable;
-const std::map<uint_fast8_t, bitvec> acLumTable;
-const std::map<uint_fast8_t, bitvec> dcChromTable;
-const std::map<uint_fast8_t, bitvec> acChromTable;
+std::map<uint_fast8_t, bitvec> dcLumTable;
+std::map<uint_fast8_t, bitvec> acLumTable;
+std::map<uint_fast8_t, bitvec> dcChromTable;
+std::map<uint_fast8_t, bitvec> acChromTable;
 
-// Returns byte-array
-std::vector<uint8_t> Huffman::huff(std::vector<uint_fast8_t>) {
+// Table for bitstrings of signed values. Needs to be calculated.
+std::map<short, bitvec> signValueTable;
 
+// Huffman encoder.
+// Returns char-array, which is what socket can send.
+std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
+	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
 }

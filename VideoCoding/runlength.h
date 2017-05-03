@@ -2,6 +2,6 @@
 class Runlength
 {
 public:
-	static std::vector<uint8_t> run(std::vector<uint_fast8_t>);
+	static std::vector<char> run(std::array<uint_fast16_t, img_res_ycbcr>);
 };
 
