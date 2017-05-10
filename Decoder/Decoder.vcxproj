@@ -39,10 +39,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="..\VideoCoding\stdafx.h" />
     <ClInclude Include="DeHuffman.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
     <ClCompile Include="..\VideoCoding\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
