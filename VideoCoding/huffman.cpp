@@ -16,6 +16,9 @@ std::map<uint_fast8_t, bitvec> acChromTable;
 std::map<short, bitvec> signValueTable;
 
 // Huffman encoder.
+
+
+
 // Returns char-array, which is what socket can send.
 std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
 	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
