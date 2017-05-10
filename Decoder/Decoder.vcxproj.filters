@@ -4,10 +4,16 @@
     <ClInclude Include="DeHuffman.h" />
     <ClInclude Include="..\VideoCoding\stdafx.h" />
     <ClInclude Include="..\VideoCoding\SocketServer.h" />
+    <ClInclude Include="DeRunlength.h" />
+    <ClInclude Include="DeQuantize.h" />
+    <ClInclude Include="DeDCT.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
     <ClCompile Include="..\VideoCoding\stdafx.cpp" />
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
+    <ClCompile Include="DeRunlength.cpp" />
+    <ClCompile Include="DeQuantize.cpp" />
+    <ClCompile Include="DeDCT.cpp" />
   </ItemGroup>
 </Project>

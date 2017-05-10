@@ -41,7 +41,10 @@
   <ItemGroup>
     <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="..\VideoCoding\stdafx.h" />
+    <ClInclude Include="DeDCT.h" />
     <ClInclude Include="DeHuffman.h" />
+    <ClInclude Include="DeQuantize.h" />
+    <ClInclude Include="DeRunlength.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
@@ -53,7 +56,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="DeDCT.cpp" />
     <ClCompile Include="DeHuffman.cpp" />
+    <ClCompile Include="DeQuantize.cpp" />
+    <ClCompile Include="DeRunlength.cpp" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
