@@ -1,7 +1,6 @@
 #pragma once
-class Camera
-{
-public:
-	static void connectCamera();
-};
 
+#include <windows.h>
+
+void StopPreview();
+HRESULT CaptureVideo();

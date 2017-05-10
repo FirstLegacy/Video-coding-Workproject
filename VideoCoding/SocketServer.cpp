@@ -28,7 +28,9 @@ void init()
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
 	{
 		cerr << "Socket Initialization: Error with WSAStartup\n";
-		system("pause");
+		do {
+			cout << '\n' << "Press the Enter key to continue.";
+		} while (cin.get() != '\n');
 		WSACleanup();
 		exit(10);
 	}
@@ -37,7 +39,9 @@ void init()
 	if (mySocket == INVALID_SOCKET)
 	{
 		cerr << "Socket Initialization: Error creating socket" << endl;
-		system("pause");
+		do {
+			cout << '\n' << "Press the Enter key to continue.";
+		} while (cin.get() != '\n');
 		WSACleanup();
 		exit(11);
 	}
@@ -54,7 +58,9 @@ void init()
 	if (bind(mySocket, (SOCKADDR*)&myAddress, sizeof(myAddress)) == SOCKET_ERROR)
 	{
 		cerr << "ServerSocket: Failed to connect\n";
-		system("pause");
+		do {
+			cout << '\n' << "Press the Enter key to continue.";
+		} while (cin.get() != '\n');
 		WSACleanup();
 		exit(14);
 	}
