@@ -2,14 +2,14 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="DeHuffman.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
     <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="deToBlock.h" />
+    <ClInclude Include="deYCbCrToRgb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
     <ClCompile Include="deToBlock.cpp" />
+    <ClCompile Include="deYCbCrToRgb.cpp" />
   </ItemGroup>
 </Project>
