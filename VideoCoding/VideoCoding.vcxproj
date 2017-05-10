@@ -195,7 +195,6 @@
     <ClInclude Include="ZigZag.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\src\stdafx.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DCT.cpp" />
     <ClCompile Include="Huffman.cpp" />
