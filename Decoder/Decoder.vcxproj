@@ -42,6 +42,7 @@
     <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="..\VideoCoding\stdafx.h" />
     <ClInclude Include="DeHuffman.h" />
+    <ClInclude Include="deToBlock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
@@ -54,6 +55,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="DeHuffman.cpp" />
+    <ClCompile Include="deToBlock.cpp" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
