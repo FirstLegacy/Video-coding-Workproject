@@ -1,3 +1,4 @@
+#include<stdafx.h>
 #include<stdio.h>
 #include<winsock2.h>
 #include<vector>

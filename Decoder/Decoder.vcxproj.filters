@@ -2,10 +2,8 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="DeHuffman.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
   </ItemGroup>
 </Project>
