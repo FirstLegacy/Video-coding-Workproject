@@ -3,9 +3,11 @@
   <ItemGroup>
     <ClInclude Include="DeHuffman.h" />
     <ClInclude Include="..\VideoCoding\stdafx.h" />
+    <ClInclude Include="..\VideoCoding\SocketServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
     <ClCompile Include="..\VideoCoding\stdafx.cpp" />
+    <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
   </ItemGroup>
 </Project>
