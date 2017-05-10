@@ -38,6 +38,21 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\VideoCoding\stdafx.h" />
+    <ClInclude Include="DeHuffman.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\VideoCoding\stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="DeHuffman.cpp" />
+  </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -135,40 +150,6 @@
       <DisableSpecificWarnings>4453;28204</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\VideoCoding\Camera.h" />
-    <ClInclude Include="..\VideoCoding\DCT.h" />
-    <ClInclude Include="..\VideoCoding\Huffman.h" />
-    <ClInclude Include="..\VideoCoding\qedit.h" />
-    <ClInclude Include="..\VideoCoding\Quantize.h" />
-    <ClInclude Include="..\VideoCoding\RgbToYCbCr.h" />
-    <ClInclude Include="..\VideoCoding\Runlength.h" />
-    <ClInclude Include="..\VideoCoding\Socket.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
-    <ClInclude Include="..\VideoCoding\targetver.h" />
-    <ClInclude Include="..\VideoCoding\ToBlock.h" />
-    <ClInclude Include="..\VideoCoding\ZigZag.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\VideoCoding\Camera.cpp" />
-    <ClCompile Include="..\VideoCoding\DCT.cpp" />
-    <ClCompile Include="..\VideoCoding\Huffman.cpp" />
-    <ClCompile Include="..\VideoCoding\Quantize.cpp" />
-    <ClCompile Include="..\VideoCoding\RgbToYCbCr.cpp" />
-    <ClCompile Include="..\VideoCoding\Runlength.cpp" />
-    <ClCompile Include="..\VideoCoding\Socket.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\VideoCoding\ToBlock.cpp" />
-    <ClCompile Include="..\VideoCoding\VideoCoding.cpp" />
-    <ClCompile Include="..\VideoCoding\ZigZag.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
