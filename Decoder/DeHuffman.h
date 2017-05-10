@@ -1,5 +1,5 @@
 #pragma once
-class Huffman
+class DeHuffman
 {
 private:
 	const static std::map<uint_fast8_t, bitvec> dcLumTable;
@@ -10,4 +10,3 @@ private:
 public:
 	static std::vector<char> huff(std::vector<uint_fast16_t>);
 };
-

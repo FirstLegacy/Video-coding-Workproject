@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Huffman.h"
+#include "DeHuffman.h"
 
 #include <vector>
 #include <map>
@@ -17,6 +17,6 @@ std::map<short, bitvec> signValueTable;
 
 // Huffman encoder.
 // Returns char-array, which is what socket can send.
-std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
+std::vector<char> DeHuffman::huff(std::vector<uint_fast16_t> in) {
 	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
 }
