@@ -2,9 +2,6 @@
 #include "Quantize.h"
 #include "ZigZag.h"
 
-#include <vector>
-#include <array>
-
 // uint_fast16_t quality = 100; // 100 is max quality, 1 is min quality
 
 // https://www.w3.org/Graphics/JPEG/itu-t81.pdf Page 143
