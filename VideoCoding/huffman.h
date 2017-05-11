@@ -20,7 +20,7 @@ private:
 	const static std::array<bitvec, 4095> signValueTable;
 	static uint32_t abs(uint_fast16_t);
 	static void insertLength(bitvec&, size_t, int_fast8_t);
-	static void insertValue(bitvec&, uint_fast16_t);
+	static void insertValue(bitvec&, size_t, uint_fast16_t);
 	static void inserter(bitvec&, uint_fast16_t, int_fast8_t);
 public:
 	static std::vector<char> huff(std::vector<uint_fast16_t>);
