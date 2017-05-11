@@ -113,20 +113,20 @@ void Huffman::insertLength(bitvec &out, size_t val, int_fast8_t type) {
 	switch (type)
 	{
 	case 0: // Lum DC table
-		bits = dcLumTable[val];
+		bits = dcLumTable.at(val);
 		break;
 	case -1: // Chroma DC table
-		bits = dcChromTable[val];
+		bits = dcChromTable.at(val);
 		break;
 	default: // AC table
-		bits = acTable[val];
+		bits = acTable.at(val);
 		break;
 	}
 	out.insert(out.end(), bits.begin(), bits.end());
 }
 
 void Huffman::insertValue(bitvec &out, size_t length, uint_fast16_t val) {
-	auto bits = signValueTable[val];
+	auto bits = signValueTable.at(val);
 	for (int i = 0; i < length; ++i) {
 		out.push_back(bits[i]);
 	}
@@ -155,14 +155,14 @@ void Huffman::inserter(bitvec &out, uint_fast16_t current, int_fast8_t type) {
 std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
 	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
 	
-	bitvec out;
+	std::vector<bool> bout;
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
 
 	for (size_t i = 0; i < img_res; ++i) {
 		auto current = in[i];
 
-		Huffman::inserter(out, current, dcmeasure);
+		Huffman::inserter(bout, current, dcmeasure);
 
 		dcmeasure++;
 
@@ -176,7 +176,7 @@ std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
 	for (size_t i = img_res; i < img_res_ycbcr; ++i) {
 		auto current = in[i];
 
-		Huffman::inserter(out, current, dcmeasure);
+		Huffman::inserter(bout, current, dcmeasure);
 
 		dcmeasure--;
 
@@ -184,7 +184,15 @@ std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
 			dcmeasure = -1;
 		}
 	}
+	
+	std::vector<char> out(bout.size() / CHAR_BIT);
 
-	return std::vector<char>{3};
-	// return out;
+	// Iterate all bits? Not sure what else to do.
+	for (int i = 0; i < out.size(); ++i) {
+		for (int j = 0; j < CHAR_BIT; ++j) {
+			out[i] ^= (-bout.at(i + j) ^ out[i]) & (1 << j); // - bool says unsafe but it's fine.
+		}
+	}
+
+	return out;
 }

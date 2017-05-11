@@ -1,8 +1,12 @@
 #pragma once
+
+#include<vector>
+
 class Socket
 {
 public:
 	static void connect();
-	static void sendMessage(std::vector<uint8_t>);
+	static void closeConnection();
+	static void send(std::vector<char>);
 };
 
