@@ -125,9 +125,12 @@ void Huffman::insertLength(bitvec &out, size_t val, int_fast8_t type) {
 	out.insert(out.end(), bits.begin(), bits.end());
 }
 
-void Huffman::insertValue(bitvec &out, uint_fast16_t val) {
+void Huffman::insertValue(bitvec &out, size_t length, uint_fast16_t val) {
 	auto bits = signValueTable[val];
-	out.insert(out.end(), bits.begin(), bits.end());
+	for (int i = 0; i < length; ++i) {
+		out.push_back(bits[i]);
+	}
+	// out.insert(out.end(), bits.begin(), bits.end());
 }
 
 void Huffman::inserter(bitvec &out, uint_fast16_t current, int_fast8_t type) {
@@ -138,7 +141,7 @@ void Huffman::inserter(bitvec &out, uint_fast16_t current, int_fast8_t type) {
 		for (size_t i = 0; i < two_pow.size(); ++i) {
 			if (abs(current) < two_pow[i]) {
 				Huffman::insertLength(out, i + 1, type); // Insert length of value.
-				Huffman::insertValue(out, current); // Insert actual value.
+				Huffman::insertValue(out, i + 1, current); // Insert actual value.
 			}
 		}
 	}
