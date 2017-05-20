@@ -5,7 +5,7 @@
 // std::map<uint_fast8_t, bitvec> acChromTable;
 
 // JPEG standard
-const std::array<bitvec, 12> dcChromTable = {
+const std::array<bitvec, 12> Huffman::dcChromTable = {
 	bitvec{ false, true },
 	bitvec{ false, false },
 	bitvec{ true, false, false },
@@ -21,7 +21,7 @@ const std::array<bitvec, 12> dcChromTable = {
 };
 
 // JPEG standard
-const std::array<bitvec, 12> dcLumTable = {
+const std::array<bitvec, 12> Huffman::dcLumTable = {
 	bitvec{ true, true, false },
 	bitvec{ true, false, true },
 	bitvec{ false, true, true },
@@ -37,7 +37,7 @@ const std::array<bitvec, 12> dcLumTable = {
 };
 
 // Custom
-const std::array<bitvec, 11> acTable = {
+const std::array<bitvec, 11> Huffman::acTable = {
 	bitvec{ false, false },
 	bitvec{ false, true, false },
 	bitvec{ false, true, true },
@@ -54,47 +54,45 @@ const std::array<bitvec, 11> acTable = {
 // Calculate value table from here...
 
 // Gets correct values.
-constexpr std::bitset<12> f(size_t n) {
-	return n < 0 ? std::bitset<12>(n).flip() : std::bitset<12>(n); // Gets binary representation of values.
+constexpr std::bitset<11> f(int_fast16_t n) {
+	return n < 0 ? std::bitset<11>(-n).flip() : std::bitset<11>(n); // Gets binary representation of values.
 																   // Flips bits if negative.
 }
 
 template <int N>
-constexpr typename std::vector<std::bitset<12>>
+constexpr typename std::vector<std::bitset<11>>
 makeVal() {
-	return makeVal<N, 1>(std::vector<std::bitset<12>>{f(0)});
+	return makeVal<N, 1>(std::vector<std::bitset<11>>{f(-2047)});
 }
 
 // Returns if size reaches N.
 template <int N, size_t size>
-constexpr
-typename std::enable_if<N == size, std::vector<std::bitset<12>>>::type
-makeVal(std::vector<std::bitset<12>> Vals) {
+constexpr typename std::enable_if<N == size, std::vector<std::bitset<11>>>::type
+makeVal(std::vector<std::bitset<11>> Vals) {
 	return Vals;
 }
 
 // Recursive function adding to vector.
 template <int N, size_t size>
-constexpr
-typename std::enable_if<N != size, std::vector<std::bitset<12>>>::type
-makeVal(std::vector<std::bitset<12>> Vals) {
-	Vals.push_back(f(Vals.size() - 2047));
+constexpr typename std::enable_if<N != size, std::vector<std::bitset<11>>>::type
+makeVal(std::vector<std::bitset<11>> Vals) {
+	Vals.push_back(f((int_fast16_t)Vals.size() - 2047));
 	return makeVal<N, size + 1>(Vals);
 }
 // ...to here.
 
 // Table for bitstrings of signed values. Needs to be calculated.
-const auto signValueTable = 
-makeVal<4095, 3588>(
-makeVal<3587, 3075>(
-makeVal<3074, 2562>(
-makeVal<2561, 2049>(
-makeVal<2048, 1537>(
-makeVal<1536, 1025>(
-makeVal<1024, 513>(
+const std::vector<std::bitset<11>> Huffman::signValueTable =
+makeVal<4095, 3584>(
+makeVal<3584, 3072>(
+makeVal<3072, 2560>(
+makeVal<2560, 2048>(
+makeVal<2048, 1536>(
+makeVal<1536, 1024>(
+makeVal<1024, 512>(
 makeVal<512>()))))))); // Split up due to recursive function limits.
 
-const std::array<uint_fast16_t, 10> two_pow = {
+const std::array<int_fast16_t, 10> Huffman::two_pow = {
 	2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
 };
 
@@ -102,38 +100,31 @@ const std::array<uint_fast16_t, 10> two_pow = {
 #define FAST16_BITS (sizeof(UINT_FAST16_MAX) * CHAR_BIT - 1) // Amount of bits minus 1.
 #endif
 
-inline uint_fast16_t Huffman::abs(uint_fast16_t value) {
-	uint_fast16_t buffer = value >> FAST16_BITS;     // Make a mask of the sign bit
-	value ^= buffer;							// Toggle the bits if value is negative
-	return value + buffer & 1;						// Add one if value was negative
-}
-
-void Huffman::insertLength(bitvec &out, size_t val, int_fast8_t type) {
+void Huffman::insertLength(bitvec &out, size_t length, int_fast8_t type) {
 	bitvec bits;
 	switch (type)
 	{
 	case 0: // Lum DC table
-		bits = dcLumTable.at(val);
+		bits = dcLumTable.at(length);
 		break;
 	case -1: // Chroma DC table
-		bits = dcChromTable.at(val);
+		bits = dcChromTable.at(length);
 		break;
 	default: // AC table
-		bits = acTable.at(val);
+		bits = acTable.at(length);
 		break;
 	}
 	out.insert(out.end(), bits.begin(), bits.end());
 }
 
-void Huffman::insertValue(bitvec &out, size_t length, uint_fast16_t val) {
-	auto bits = signValueTable.at(val);
-	for (int i = 0; i < length; ++i) {
+void Huffman::insertValue(bitvec &out, size_t length, int_fast16_t val) {
+	auto bits = signValueTable.at(val + 2047);
+	for (size_t i = length - 1; i != -1; i--) {
 		out.push_back(bits[i]);
 	}
-	// out.insert(out.end(), bits.begin(), bits.end());
 }
 
-void Huffman::inserter(bitvec &out, uint_fast16_t current, int_fast8_t type) {
+void Huffman::inserter(bitvec &out, int_fast16_t current, int_fast8_t type) {
 	if (current == 0) {
 		Huffman::insertLength(out, 0, type); // Insert length of value.
 	}
@@ -142,55 +133,49 @@ void Huffman::inserter(bitvec &out, uint_fast16_t current, int_fast8_t type) {
 			if (abs(current) < two_pow[i]) {
 				Huffman::insertLength(out, i + 1, type); // Insert length of value.
 				Huffman::insertValue(out, i + 1, current); // Insert actual value.
+				break;
 			}
 		}
 	}
 }
 
 // Huffman encoder.
-
-
-
 // Returns char-array, which is what socket can send.
-std::vector<char> Huffman::huff(std::vector<uint_fast16_t> in) {
+std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
 	
-	std::vector<bool> bout;
+	bitvec bout;
+	bout.reserve(img_res); // Reserve some capacity.
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
+	const size_t y_dc_values = img_res / mBlockSize;
+	size_t dc_count = 0;
 
-	for (size_t i = 0; i < img_res; ++i) {
-		auto current = in[i];
+	uint_fast16_t last = 0;
 
+	for (const auto &current : in) {
 		Huffman::inserter(bout, current, dcmeasure);
 
-		dcmeasure++;
-
-		if (dcmeasure == mBlockSize) {
-			dcmeasure = 0;
+		if (current == 0 && last == 0) {
+			if (dc_count > y_dc_values) {
+				dcmeasure = -1;
+			} else {
+				++dc_count;
+				dcmeasure = 0;
+			}
+		} else {
+			dcmeasure = 1;
 		}
+
+		last = current;
 	}
-	
-	dcmeasure = -1;
-
-	for (size_t i = img_res; i < img_res_ycbcr; ++i) {
-		auto current = in[i];
-
-		Huffman::inserter(bout, current, dcmeasure);
-
-		dcmeasure--;
-
-		if (-dcmeasure == mBlockSize + 1) {
-			dcmeasure = -1;
-		}
-	}
-	
+		
 	std::vector<char> out(bout.size() / CHAR_BIT);
 
 	// Iterate all bits? Not sure what else to do.
 	for (int i = 0; i < out.size(); ++i) {
 		for (int j = 0; j < CHAR_BIT; ++j) {
-			out[i] ^= (-bout.at(i + j) ^ out[i]) & (1 << j); // - bool says unsafe but it's fine.
+			out[i] |= bout.at(i * CHAR_BIT + j) << j; // OR bit operation on the bit, it's 0 as default, så it's set to the bout value.
 		}
 	}
 

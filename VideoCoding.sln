@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VideoCoding", "VideoCoding\VideoCoding.vcxproj", "{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}"
 EndProject
@@ -25,6 +25,7 @@ Global
 		{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}.Release|ARM.ActiveCfg = Release|Win32
 		{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}.Release|x64.ActiveCfg = Release|x64
 		{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}.Release|x64.Build.0 = Release|x64
+		{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}.Release|x64.Deploy.0 = Release|x64
 		{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}.Release|x86.ActiveCfg = Release|Win32
 		{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}.Release|x86.Build.0 = Release|Win32
 		{EB196B63-AACD-46BF-A7AD-0F0AD983EF7A}.Debug|ARM.ActiveCfg = Debug|ARM
