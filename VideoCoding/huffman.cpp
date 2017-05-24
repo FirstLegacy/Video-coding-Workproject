@@ -1,54 +1,66 @@
 #include "stdafx.h"
 #include "Huffman.h"
 
-// std::map<uint_fast8_t, bitvec> acLumTable;
-// std::map<uint_fast8_t, bitvec> acChromTable;
-
 // JPEG standard
-const std::array<bitvec, 12> Huffman::dcChromTable = {
-	bitvec{ false, true },
-	bitvec{ false, false },
-	bitvec{ true, false, false },
-	bitvec{ true, false, true },
-	bitvec{ true, true, false, false },
-	bitvec{ true, true, false, true },
-	bitvec{ true, true, true, false },
-	bitvec{ true, true, true, true, false },
-	bitvec{ true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, true, true }
+const std::array<bitvec, 12> Huffman::dcChromTable = {			// Value:	Total size:
+	bitvec{ false, true },										// 0			2
+	bitvec{ false, false },										// 1			3
+	bitvec{ true, false, false },								// 2			5
+	bitvec{ true, false, true },								// 3			6
+	bitvec{ true, true, false, false },							// 4			8
+	bitvec{ true, true, false, true },							// 5			9
+	bitvec{ true, true, true, false },							// 6			10
+	bitvec{ true, true, true, true, false },					// 7			12
+	bitvec{ true, true, true, true, true, false },				// 8			14
+	bitvec{ true, true, true, true, true, true, false },		// 9			16
+	bitvec{ true, true, true, true, true, true, true, false },	// 10			18
+	bitvec{ true, true, true, true, true, true, true, true }	// 11			19
 };
 
 // JPEG standard
-const std::array<bitvec, 12> Huffman::dcLumTable = {
-	bitvec{ true, true, false },
-	bitvec{ true, false, true },
-	bitvec{ false, true, true },
-	bitvec{ false, true, false },
-	bitvec{ false, false, false },
-	bitvec{ false, false, true },
-	bitvec{ true, false, false },
-	bitvec{ true, true, true, false },
-	bitvec{ true, true, true, true, false },
-	bitvec{ true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, true }
+const std::array<bitvec, 12> Huffman::dcLumTable = {		// Value:	Total size:
+	bitvec{ true, true, false },							// 0			3
+	bitvec{ true, false, true },							// 1			4
+	bitvec{ false, true, true },							// 2			5
+	bitvec{ false, true, false },							// 3			6
+	bitvec{ false, false, false },							// 4			7
+	bitvec{ false, false, true },							// 5			8
+	bitvec{ true, false, false },							// 6			9
+	bitvec{ true, true, true, false },						// 7			11
+	bitvec{ true, true, true, true, false },				// 8			13
+	bitvec{ true, true, true, true, true, false },			// 9			15
+	bitvec{ true, true, true, true, true, true, false },	// 10			17
+	bitvec{ true, true, true, true, true, true, true }		// 11			18
 };
 
 // Custom
-const std::array<bitvec, 11> Huffman::acTable = {
-	bitvec{ false, false },
-	bitvec{ false, true, false },
-	bitvec{ false, true, true },
-	bitvec{ true, false, false },
-	bitvec{ true, false, true },
-	bitvec{ true, true, false },
-	bitvec{ true, true, true, false },
-	bitvec{ true, true, true, true, false },
-	bitvec{ true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, false },
-	bitvec{ true, true, true, true, true, true, true }
+const std::array<bitvec, 11> Huffman::acTable = {			// Value:	Total size:
+	bitvec{ false, false },			// Next is a length of zeroes.
+	bitvec{ false, true, false },							// 1			4
+	bitvec{ false, true, true },							// 2			5
+	bitvec{ true, false, false },							// 3			6
+	bitvec{ true, false, true },							// 4			7
+	bitvec{ true, true, false },							// 5			8
+	bitvec{ true, true, true, false },						// 6			10
+	bitvec{ true, true, true, true, false },				// 7			12
+	bitvec{ true, true, true, true, true, false },			// 8			14
+	bitvec{ true, true, true, true, true, true, false },	// 9			16
+	bitvec{ true, true, true, true, true, true, true }		// 10			17
+};
+
+// For length of zeroes
+const std::array<bitvec, 10> Huffman::zeroLengthTable = {	// Value:				Total size (incl. 00 in front):
+	bitvec{ false, false, false },							// EOB								5
+	bitvec{ true, false },									// 1								4
+	// true, true is reserved for full 6-bit number giving a size of 8 bit.						10
+	bitvec{ false, false, true },							// 2								5
+	bitvec{ false, true, false },							// 3								5
+	bitvec{ false, true, true, false, true },				// 4								7
+	bitvec{ false, true, true, false, false },				// 5								7
+	bitvec{ false, true, true, true, false },				// 6								7
+	bitvec{ false, true, true, true, true, false },			// 7								8
+	bitvec{ false, true, true, true, true, true, false },	// 8								9
+	bitvec{ false, true, true, true, true, true, true },	// 9								9
 };
 
 // Calculate value table from here...
@@ -56,7 +68,7 @@ const std::array<bitvec, 11> Huffman::acTable = {
 // Gets correct values.
 constexpr std::bitset<11> f(int_fast16_t n) {
 	return n < 0 ? std::bitset<11>(-n).flip() : std::bitset<11>(n); // Gets binary representation of values.
-																   // Flips bits if negative.
+																    // Flips bits if negative.
 }
 
 template <int N>
@@ -90,7 +102,7 @@ makeVal<2560, 2048>(
 makeVal<2048, 1536>(
 makeVal<1536, 1024>(
 makeVal<1024, 512>(
-makeVal<512>()))))))); // Split up due to recursive function limits.
+makeVal<512>()))))))); // Split up due to recursive function limits in the Visual C++ compiler.
 
 const std::array<int_fast16_t, 10> Huffman::two_pow = {
 	2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
@@ -110,6 +122,18 @@ void Huffman::insertLength(bitvec &out, size_t length, int_fast8_t type) {
 	case -1: // Chroma DC table
 		bits = dcChromTable.at(length);
 		break;
+	case -2: // Zero length table
+		if (length < zeroLengthTable.size()) {
+			bits = zeroLengthTable.at(length);
+		}
+		else {
+			bits = { true, true };
+			std::bitset<6> bset = std::bitset<6>(length);
+			for (size_t i = 0; i < 6; ++i) {
+				bits.push_back(bset[i]);
+			}
+		}
+		break;
 	default: // AC table
 		bits = acTable.at(length);
 		break;
@@ -124,9 +148,12 @@ void Huffman::insertValue(bitvec &out, size_t length, int_fast16_t val) {
 	}
 }
 
-void Huffman::inserter(bitvec &out, int_fast16_t current, int_fast8_t type) {
-	if (current == 0) {
+void Huffman::inserter(bitvec &out, int_fast16_t current, int_fast16_t last, int_fast8_t type) {
+	if (current == 0 && last != 0) {
 		Huffman::insertLength(out, 0, type); // Insert length of value.
+	}
+	else if (last == 0) { // If it's a length of zeroes.
+		Huffman::insertLength(out, current, -2); // Set the length of a 1 without the value.
 	}
 	else {
 		for (size_t i = 0; i < two_pow.size(); ++i) {
@@ -145,16 +172,16 @@ std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
 	
 	bitvec bout;
-	bout.reserve(img_res); // Reserve some capacity.
+	bout.reserve(3500 * 8); // Reserve 3.5 KB
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
 	const size_t y_dc_values = img_res / mBlockSize;
 	size_t dc_count = 0;
 
-	uint_fast16_t last = 0;
+	uint_fast16_t last = -1;
 
 	for (const auto &current : in) {
-		Huffman::inserter(bout, current, dcmeasure);
+		Huffman::inserter(bout, current, last, dcmeasure);
 
 		if (current == 0 && last == 0) {
 			if (dc_count > y_dc_values) {
@@ -163,11 +190,11 @@ std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 				++dc_count;
 				dcmeasure = 0;
 			}
+			last = -1; // Last is -1 if next is a new block.
 		} else {
 			dcmeasure = 1;
+			last = current;
 		}
-
-		last = current;
 	}
 		
 	std::vector<char> out(bout.size() / CHAR_BIT);
