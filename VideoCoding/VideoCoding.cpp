@@ -6,7 +6,7 @@
 unsigned int frameCount = 0;
 
 int main() {
-	Quantize::setQuality(100);
+	Quantize::setQuality(1);
 	//for (size_t i = 0; i < 100; ++i) { // Test 100 times
 		std::vector<uint_fast8_t> testdata(img_res_ycbcr); // Random vector of correct size
 

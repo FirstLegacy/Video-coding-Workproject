@@ -4,6 +4,7 @@
 
 
 // https://www.w3.org/Graphics/JPEG/itu-t81.pdf Page 143
+// JPEG standard quantization tables.
 // Luminance Quantization Table
 const std::array<int_fast16_t, 64> Quantize::lumTableOrig =
 { 16, 11, 10, 16, 24,  40,  51,  61,
@@ -26,12 +27,15 @@ const std::array<int_fast16_t, 64> Quantize::chromTableOrig =
   99, 99, 99, 99, 99, 99, 99, 99,
   99, 99, 99, 99, 99, 99, 99, 99 };
 
+// Non-const versions for changing quality.
 std::array<int_fast16_t, 64> Quantize::lumTable = lumTableOrig;
 std::array<int_fast16_t, 64> Quantize::chromTable = chromTableOrig;
 
 std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 	int j = 0;
+	// First quantize the luminance part using the lum table
 	for (size_t i = 0; i < img_res; ++i) {
+		// J is used to find the correct part of the table.
 		if (j >= 64)
 			j = 0;
 
@@ -40,6 +44,7 @@ std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 		j++;
 	}
 	
+	// Quantize the chrom table.
 	for (size_t i = img_res; i < img_res_cbcr; ++i) {
 		if (j >= 64)
 			j = 0;
@@ -52,6 +57,7 @@ std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 	return ZigZag::zigzag(in);
 }
 
+// Sets quality
 // 100 is max quality, 1 is min quality
 void Quantize::setQuality(int_fast16_t q) {
 	int_fast16_t s;

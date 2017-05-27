@@ -4,11 +4,13 @@
 
 std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 	std::vector<int_fast16_t> out; // Empty vector
-	out.reserve(img_res_ycbcr / 4); // Reserve a convervative amount of data in the vector.
+	out.reserve(img_res_cbcr); // Reserve a convervative amount of data in the vector. (Here 1/3 the full size)
 
 	size_t j = 0;
+	// For counting the amount of zeroes.
 	uint_fast16_t zeroCount = 0;
 
+	// Iterates entire input.
 	for (const auto &val : in) {
 		if (j == 64) { // Is next block
 			out.push_back(0);
@@ -17,8 +19,9 @@ std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 			j = 0;
 		}
 		if (val == 0) {
-			zeroCount++;
+			++zeroCount;
 		} else {
+			// If it's not zero add a zero, the amount of zeroes before it, and the number.
 			if (zeroCount > 0) {
 				out.push_back(0);
 				out.push_back(zeroCount);
@@ -27,7 +30,7 @@ std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 			out.push_back(val);
 		}
 
-		j++;
+		++j;
 	}
 
 	return Huffman::huff(out);
