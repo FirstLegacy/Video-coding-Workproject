@@ -45,6 +45,7 @@
     <ClInclude Include="DeHuffman.h" />
     <ClInclude Include="DeQuantize.h" />
     <ClInclude Include="DeRunlength.h" />
+    <ClInclude Include="deYCbCrToRgb.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
@@ -60,6 +61,7 @@
     <ClCompile Include="DeHuffman.cpp" />
     <ClCompile Include="DeQuantize.cpp" />
     <ClCompile Include="DeRunlength.cpp" />
+    <ClCompile Include="deYCbCrToRgb.cpp" />
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
