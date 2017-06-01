@@ -1,20 +1,15 @@
 #include "stdafx.h"
 #include "Camera.h"
-#include <dshow.h> // Заголовочный файл DirectShow
+#include <dshow.h> // DirectShow
 #include <qedit.h>
 #include <iostream>
 #include <objbase.h>
 #include "streams.h"
 #include <strmif.h>
 
-// Необходимые билиотеки!
 //#pragma comment(lib,"strmiids.lib")
-
-// Здесь можно задать размеры окна с изображением
 #define DEFAULT_VIDEO_WIDTH     320
 #define DEFAULT_VIDEO_HEIGHT    240
-//
-// CallBack класс для SampleGrabbera
 //
 // this object is a SEMI-COM object, and can only be created statically.
 
@@ -56,13 +51,12 @@ class CSampleGrabberCB : public ISampleGrabberCB
 {
 public:
 
-	// Эти параметры устанавливаются главным потоком
 	DWORD lastTime;
 	long Width;
 	long Height;
 
 	HANDLE BufferEvent;
-	LONGLONG prev, step; // не используется
+	LONGLONG prev, step; 
 
 						 // Fake out any COM ref counting
 	STDMETHODIMP_(ULONG) AddRef() { return 2; }
@@ -86,7 +80,6 @@ public:
 		return E_NOINTERFACE;
 	}
 
-	// Не используется
 	//
 	STDMETHODIMP SampleCB(double SampleTime, IMediaSample * pSample)
 	{
@@ -94,7 +87,7 @@ public:
 	}
 
 
-	// Callback ф-ия вызываемая SampleGrabber-ом, в другом потоке
+	// Callback
 	//
 	STDMETHODIMP BufferCB(double SampleTime, BYTE * pBuffer, long BufferSize)
 	{
@@ -135,20 +128,20 @@ public:
 
 
 enum PLAYSTATE { Stopped, Paused, Running, Init };
-PLAYSTATE psCurrent = Stopped;							// Переменная состояния видео потока
+PLAYSTATE psCurrent = Stopped;
 
-														// Интерфейсы DirectShow
-IMediaControl *pMediaControl = NULL;					// Управление графом
+// DirectShow
+IMediaControl *pMediaControl = NULL;
 IMediaEvent *pMediaEvent = NULL;
-IGraphBuilder *pGraphBuilder = NULL;					// Наш граф вцелом
-ICaptureGraphBuilder2 *pCaptureGraphBuilder2 = NULL;	// Граф захвата видео
-IVideoWindow *pVideoWindow = NULL;						// Окно, в которое выводится видео поток
-IMoniker *pMonikerVideo = NULL;							// Устройство видеозахвата
-IBaseFilter *pVideoCaptureFilter = NULL;				// Фильтр видеозахвата
+IGraphBuilder *pGraphBuilder = NULL;
+ICaptureGraphBuilder2 *pCaptureGraphBuilder2 = NULL;	
+IVideoWindow *pVideoWindow = NULL;						
+IMoniker *pMonikerVideo = NULL;							
+IBaseFilter *pVideoCaptureFilter = NULL;				
 IBaseFilter *pGrabberF = NULL;
 ISampleGrabber *pSampleGrabber = NULL;
 
-void SetupVideoWindow(void)	// Настройка окна для вывода видео на экран
+void SetupVideoWindow(void)
 {
 	pVideoWindow->put_Left(0);
 	pVideoWindow->put_Width(DEFAULT_VIDEO_WIDTH);
@@ -157,23 +150,21 @@ void SetupVideoWindow(void)	// Настройка окна для вывода видео на экран
 	pVideoWindow->put_Caption(L"Video Window");
 }
 
-HRESULT GetInterfaces(void)		// Инициализация интерфесов DirectShow
+HRESULT GetInterfaces(void) // DirectShow
 {
 	HRESULT hr;
 
-	// Создание графа фильтров
+	
 	hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC,
 		IID_IGraphBuilder, (void **)&pGraphBuilder);
 	if (FAILED(hr))
 		return hr;
 
-	// Создание графа захвата видео
 	hr = CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC,
 		IID_ICaptureGraphBuilder2, (void **)&pCaptureGraphBuilder2);
 	if (FAILED(hr))
 		return hr;
 
-	// Получим интерфейсы для управления графом и окном
 	hr = pGraphBuilder->QueryInterface(IID_IMediaControl, (LPVOID *)&pMediaControl);
 	if (FAILED(hr))
 		return hr;
@@ -207,29 +198,26 @@ HRESULT GetInterfaces(void)		// Инициализация интерфесов DirectShow
 	return hr;
 }
 
-void CloseInterfaces(void)		// Закрытие интерфейсов DirectShow
+void CloseInterfaces(void)		// DirectShow
 {
-	// Остановить видео
 	if (pMediaControl)
 		pMediaControl->StopWhenReady();
 	psCurrent = Stopped;
 
-	// Закрытие окна
 	if (pVideoWindow) pVideoWindow->put_Visible(OAFALSE);
 
-	// Закрытие остальных интерфейсов
 	pMediaControl->Release();
 	pGraphBuilder->Release();
 	pVideoWindow->Release();
 	pCaptureGraphBuilder2->Release();
 }
 
-HRESULT InitMonikers()		// Инициализация устройства видеозахвата
+HRESULT InitMonikers()
 {
 	HRESULT hr;
 	ULONG cFetched;
 
-	ICreateDevEnum *pCreateDevEnum;		// Интерфейс для обнаружения и перечисления всех доступных устройств
+	ICreateDevEnum *pCreateDevEnum;
 	hr = CoCreateInstance(CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC_SERVER, IID_ICreateDevEnum, (void**)&pCreateDevEnum);
 	if (FAILED(hr))
 	{
@@ -237,9 +225,8 @@ HRESULT InitMonikers()		// Инициализация устройства видеозахвата
 		return hr;
 	}
 
-	IEnumMoniker *pEnumMoniker;			// Интерфейс, который будет содержать список всех доступных устройств
+	IEnumMoniker *pEnumMoniker;
 
-										//	Обнаружение подключенный устройств видеозахвата
 	hr = pCreateDevEnum->CreateClassEnumerator(CLSID_VideoInputDeviceCategory, &pEnumMoniker, 0);
 	if (FAILED(hr) || !pEnumMoniker)
 	{
@@ -250,11 +237,9 @@ HRESULT InitMonikers()		// Инициализация устройства видеозахвата
 
 
 
-	// Выбор активного устройства в фильтр pMonikerVideo. Мы берем первое из списка для простоты
 	hr = pEnumMoniker->Next(1, &pMonikerVideo, &cFetched);
 	if (S_OK == hr)
 	{
-		// Соединяем устройство с нашим фильтром захвата видео
 		hr = pMonikerVideo->BindToObject(0, 0, IID_IBaseFilter, (void**)&pVideoCaptureFilter);
 		if (FAILED(hr))
 		{
@@ -356,11 +341,10 @@ HRESULT ConnectFilters(
 char *pBuffer = NULL;
 
 
-HRESULT CaptureVideo()		// Захват видео
+HRESULT CaptureVideo()
 {
-	HRESULT hr = CoInitialize(NULL);	// Инициализация DirectShow
+	HRESULT hr = CoInitialize(NULL);	// DirectShow
 
-										// Инициализация необходимых интерфейсов
 	hr = GetInterfaces();
 	if (FAILED(hr))
 	{
@@ -368,7 +352,6 @@ HRESULT CaptureVideo()		// Захват видео
 		return hr;
 	}
 
-	// Присоединим граф захвата видео к основному графу фильтров
 	hr = pCaptureGraphBuilder2->SetFiltergraph(pGraphBuilder);
 	if (FAILED(hr))
 	{
@@ -376,7 +359,6 @@ HRESULT CaptureVideo()		// Захват видео
 		return hr;
 	}
 
-	// Подключение к устройству захвата
 
 	hr = InitMonikers();
 	if (FAILED(hr))
@@ -385,7 +367,6 @@ HRESULT CaptureVideo()		// Захват видео
 		return hr;
 	}
 
-	// Поместить фильтр захвата видео на граф фильтров
 	hr = pGraphBuilder->AddFilter(pVideoCaptureFilter, L"Video Capture");
 	if (FAILED(hr))
 	{
@@ -408,7 +389,6 @@ HRESULT CaptureVideo()		// Захват видео
 		// Return an error.
 	}
 
-	// Подключаем этот фильтр к устройству
 	hr = pCaptureGraphBuilder2->RenderStream(&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video, pVideoCaptureFilter, pGrabberF, 0);
 	if (FAILED(hr))
 	{
@@ -437,13 +417,10 @@ HRESULT CaptureVideo()		// Захват видео
 	hr = pSampleGrabber->SetCallback(CB, 1);
 
 
-	// Этот фильтр захвата видео больше не понадобится
 	pVideoCaptureFilter->Release();
 
-	// Инициализация окна для вывода изображения
 	SetupVideoWindow();
 
-	// Начинаем захват видео
 	hr = pMediaControl->Run();
 	if (FAILED(hr))
 	{
@@ -454,10 +431,10 @@ HRESULT CaptureVideo()		// Захват видео
 	return hr;
 }
 
-void StopPreview()	// Остановить видео
+void StopPreview()
 {
 	pMediaControl->Stop();
-	// Закрываем все интерфейсы DirectShow
+	// DirectShow
 	CloseInterfaces();
 	CoUninitialize();
 	psCurrent = Stopped;
@@ -466,8 +443,8 @@ void StopPreview()	// Остановить видео
 /*
 int main()
 {
-	HRESULT hr;														// Результат операций. Будет содержать код ошибки
-	char cmd;														// Код команды, вводимой пользователем
+	HRESULT hr;
+	char cmd;
 
 	printf("p - Play Video\ns - Stop Video\nq - Quit\n\n");
 
@@ -476,17 +453,17 @@ int main()
 		std::cin >> cmd;
 		switch (cmd)
 		{
-		case 'p': {													// Запуск видео
+		case 'p': {	
 			printf("	Play Video!\n");
 			hr = CaptureVideo();
 			if (FAILED(hr))	printf("Error!");
 		}break;
-		case 's': {													// Выключение видео
+		case 's': {	
 			printf("	Stop Video!\n");
 			if (psCurrent == Running) StopPreview();
 			else printf("Video already stopped.\n");
 		}break;
-		case 'q': return 0;											// Выход из программы
+		case 'q': return 0;	
 			break;
 		default: printf("Unknown command!\n");
 			break;

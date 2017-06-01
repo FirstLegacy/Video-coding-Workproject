@@ -6,6 +6,6 @@
 class ToBlock
 {
 public:
-	static std::vector<char> blockify(std::array<uint_fast8_t, img_res_ycbcr>);
+	static std::vector<char> blockify(std::vector<uint_fast8_t>);
 };
 
