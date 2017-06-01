@@ -6,6 +6,8 @@ class Socket
 {
 public:
 	static void connect();
-	static void sendMessage(std::vector<char>);
+  
+	static void closeConnection();
+	static void send(std::vector<char>);
 };
 

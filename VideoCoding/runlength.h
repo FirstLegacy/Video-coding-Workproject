@@ -1,4 +1,8 @@
 #pragma once
+
+#include <vector>
+#include <array>
+
 class Runlength
 {
 public:

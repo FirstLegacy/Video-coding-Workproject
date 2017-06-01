@@ -2,9 +2,6 @@
 #include "ZigZag.h"
 #include "Runlength.h"
 
-#include <vector>
-#include <array>
-
 const std::array<uint_fast8_t, mBlockSize> zigzagOrder =
 {
 	 0,  1,  8, 16,  9,  2,  3, 10,
