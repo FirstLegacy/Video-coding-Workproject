@@ -7,9 +7,10 @@
 // Der bliver kun kørt 8x8x8 hvilket er forkert.
 // Desuden er blockSize og mBlockSize globale variabler fra stdafx.h, brug dem.
 // Jeg ville nok gøre noget a la
-/*
-std::vector<char> ToBlock::blockify(std::array<uint_fast8_t, img_res_ycbcr> bits) {
-	std::array<uint_fast8_t, img_res_ycbcr> block; // Empty array on stack.
+
+std::vector<char> ToBlock::blockify(std::vector<uint_fast8_t> bits) {
+	std::vector<uint_fast8_t> block; // Empty array on stack.
+	block.reserve(img_res_ycbcr);
 	for (int i = 0; i < img_res_ycbcr / mBlockSize; ++i) { // Iterate blocks
 		for (int j = 0; j < blockSize; ++j) { // Iterate x-axis
 			for (int k = 0; k < blockSize; ++k) { // Iterate y-axis
@@ -20,9 +21,9 @@ std::vector<char> ToBlock::blockify(std::array<uint_fast8_t, img_res_ycbcr> bits
 
 	return DCT::transform(block);
 }
-*/
-// Jeg aner ikke om det virker, men det er rigtig syntax.
 
+// Jeg aner ikke om det virker, men det er rigtig syntax.
+/*
 std::vector<char> ToBlock::blockify(std::array<uint_fast8_t, img_res_ycbcr> bits) {
 	int size = 8;
 	uint8_t*** block = new uint8_t**[size];
@@ -35,3 +36,4 @@ std::vector<char> ToBlock::blockify(std::array<uint_fast8_t, img_res_ycbcr> bits
 
 	return DCT::transform(block);
 }
+*/
