@@ -18,6 +18,34 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DCT.cpp" />
+    <ClCompile Include="getFrame.cpp" />
+    <ClCompile Include="huffman.cpp" />
+    <ClCompile Include="quantize.cpp" />
+    <ClCompile Include="rgbToYCbCr.cpp" />
+    <ClCompile Include="runlength.cpp" />
+    <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="SocketServer.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="toBlock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="dCT.h" />
+    <ClInclude Include="getFrame.h" />
+    <ClInclude Include="huffman.h" />
+    <ClInclude Include="qedit.h" />
+    <ClInclude Include="quantize.h" />
+    <ClInclude Include="rgbToYCbCr.h" />
+    <ClInclude Include="runlength.h" />
+    <ClInclude Include="Socket.h" />
+    <ClInclude Include="SocketServer.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="toBlock.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -142,80 +170,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\amextra.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\amfilter.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\cache.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\combase.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\cprop.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\crossbar.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\ctlutil.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\ddmm.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\dllsetup.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\dsschedule.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\dxtrans.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\fourcc.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\measure.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\msgthrd.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\mtype.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\outputq.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\pstream.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\pullpin.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\refclock.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\reftime.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\renbase.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\seekpt.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\source.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\streams.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\strmctl.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\sysclock.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\transfrm.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\transip.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\videoctl.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\vtrans.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\winctrl.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\winutil.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\wxdebug.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\wxlist.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\BaseClasses\wxutil.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\DX\d3drm.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\include\DX\dxtrans.h" />
-    <ClInclude Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\src\resource.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="DCT.h" />
-    <ClInclude Include="Huffman.h" />
-    <ClInclude Include="qedit.h" />
-    <ClInclude Include="Quantize.h" />
-    <ClInclude Include="RgbToYCbCr.h" />
-    <ClInclude Include="Runlength.h" />
-    <ClInclude Include="Socket.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="ToBlock.h" />
-    <ClInclude Include="ZigZag.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\src\stdafx.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DCT.cpp" />
-    <ClCompile Include="Huffman.cpp" />
-    <ClCompile Include="Quantize.cpp" />
-    <ClCompile Include="RgbToYCbCr.cpp" />
-    <ClCompile Include="Runlength.cpp" />
-    <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="ToBlock.cpp" />
-    <ClCompile Include="VideoCoding.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="ZigZag.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\..\..\..\Desktop\Lektier\2017 4.Semester\Project Bachelor\webcam-samplegrabber-master\src\new_webcam.rc" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
