@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<winsock2.h>
-#include<vector>
+
+#include "stdafx.h"
+#include "Socket.h"
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
@@ -12,7 +14,7 @@ int s = 0, slen = 0;
 struct sockaddr_in si_other;
 
 // The function to send a message through the socket
-void send(std::vector<char> message) {
+void Socket::sendMessage(std::vector<char> message) {
 	if (sendto(s, &message[0], message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
 	{
 		printf("sendto() failed with error code : %d", WSAGetLastError());
@@ -21,7 +23,7 @@ void send(std::vector<char> message) {
 }
 
 // Establish socket connection and attempt to connect to defined server
-void connect()
+void Socket::connect()
 {
 	s, slen = sizeof(si_other);
 	char buf[BUFLEN];
@@ -51,6 +53,7 @@ void connect()
 	si_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
 	// Socket is now ready to start communication
 }
+
 
 void closeConnection()
 {
