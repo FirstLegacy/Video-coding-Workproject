@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Camera.h"
 #include <dshow.h> // Заголовочный файл DirectShow
-#include "qedit.h"
+#include <qedit.h>
 #include <iostream>
 #include <objbase.h>
 #include "streams.h"
@@ -41,7 +41,7 @@ void SaveFrame(BITMAPINFO bi, BYTE *data, unsigned long size)
 	bih.biBitCount = 24;
 
 	char FileName[256];
-	sprintf(FileName, "capture_%d.bmp", (int)GetTickCount());
+	sprintf_s(FileName, "capture_%d.bmp", (int)GetTickCount());
 	FILE * out = fopen(FileName, "wb");
 	if (out)
 	{
