@@ -18,6 +18,34 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DCT.cpp" />
+    <ClCompile Include="getFrame.cpp" />
+    <ClCompile Include="huffman.cpp" />
+    <ClCompile Include="quantize.cpp" />
+    <ClCompile Include="rgbToYCbCr.cpp" />
+    <ClCompile Include="runlength.cpp" />
+    <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="toBlock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="dCT.h" />
+    <ClInclude Include="getFrame.h" />
+    <ClInclude Include="huffman.h" />
+    <ClInclude Include="quantize.h" />
+    <ClInclude Include="rgbToYCbCr.h" />
+    <ClInclude Include="runlength.h" />
+    <ClInclude Include="Socket.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="toBlock.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC6E2632-4FFA-41BD-BD15-7125B6B5CE5A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -102,6 +130,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Camera_utils\libs;$(ProjectDir)\Camera_utils\include\DX\DShowIDL;$(ProjectDir)\Camera_utils\include\DX;$(ProjectDir)\Camera_utils\include\BaseClasses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +164,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Camera_utils\libs;$(ProjectDir)\Camera_utils\include\DX\DShowIDL;$(ProjectDir)\Camera_utils\include\DX;$(ProjectDir)\Camera_utils\include\BaseClasses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
