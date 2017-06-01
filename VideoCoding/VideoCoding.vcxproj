@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -163,7 +163,6 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <AdditionalIncludeDirectories>$(ProjectDir)\Camera_utils\libs;$(ProjectDir)\Camera_utils\include\DX\DShowIDL;$(ProjectDir)\Camera_utils\include\DX;$(ProjectDir)\Camera_utils\include\BaseClasses;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -173,42 +172,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="DCT.h" />
-    <ClInclude Include="getFrame.h" />
-    <ClInclude Include="Huffman.h" />
-    <ClInclude Include="qedit.h" />
-    <ClInclude Include="Quantize.h" />
-    <ClInclude Include="RgbToYCbCr.h" />
-    <ClInclude Include="Runlength.h" />
-    <ClInclude Include="Socket.h" />
-    <ClInclude Include="SocketServer.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="ToBlock.h" />
-    <ClInclude Include="ZigZag.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DCT.cpp" />
-    <ClCompile Include="getFrame.cpp" />
-    <ClCompile Include="Huffman.cpp" />
-    <ClCompile Include="Quantize.cpp" />
-    <ClCompile Include="RgbToYCbCr.cpp" />
-    <ClCompile Include="Runlength.cpp" />
-    <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="SocketServer.cpp" />
-    <ClCompile Include="ToBlock.cpp" />
-    <ClCompile Include="VideoCoding.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="ZigZag.cpp" />
-  </ItemGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
