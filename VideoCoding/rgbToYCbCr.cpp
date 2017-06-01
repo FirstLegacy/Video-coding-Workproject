@@ -1,14 +1,11 @@
 #include "stdafx.h"
 #include "RgbToYCbCr.h"
-
-#include <vector>
-#include <array>
-
+#include "ToBlock.h"
 
 std::array<uint8_t, img_res> yArray;
 std::array<uint8_t, img_res> cbArray;
 std::array<uint8_t, img_res> crArray;
-std::array<uint8_t, (img_res * 3)/4> out_putArray;
+std::array<uint8_t, img_res_ycbcr> out_putArray;
 
 std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, img_res_rgb> in) {
 // inputtet er i unit8_t som er 8 bit som kommer i sæt af 3 for hver pixel
@@ -29,9 +26,13 @@ std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, img_res_rgb> in) {
 		crArray[i]	=	0.500*R	-0.419*G - 0.081*B + 128;
 		i++;
 	}
+
+	// Skal også bruge downsampling et eller andet sted her.
+
+	return ToBlock::blockify(out_putArray);
 }
 
-void RgbToYCbCr::downSampling(std::array<uint8_t, img_res_ycbcr> &in) {
+void RgbToYCbCr::downSampling(std::array<uint8_t, img_res_rgb> &in) {
 	std::array<uint8_t, img_res/4> out_yArray;
 	std::array<uint8_t, img_res/4> out_cbArray;
 	std::array<uint8_t, img_res/4> out_crArray;

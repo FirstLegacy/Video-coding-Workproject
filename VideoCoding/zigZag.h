@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <array>
+
 class ZigZag
 {
 public:

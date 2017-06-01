@@ -2,9 +2,6 @@
 #include "DCT.h"
 #include "Quantize.h"
 
-#include <vector>
-#include <array>
-
 // https://pdfs.semanticscholar.org/e024/bdc2b5b6db2d0eed65ca96ae575b600fa3a9.pdf
 
 std::vector<char> DCT::transform(std::array<uint_fast8_t, img_res_ycbcr> in) {
@@ -13,8 +10,8 @@ std::vector<char> DCT::transform(std::array<uint_fast8_t, img_res_ycbcr> in) {
 	std::array<uint_fast16_t, img_res_ycbcr> out;
 	
 	for (int i = 0; i < img_div_blocksize; ++i) {
-		binDCT(&in.data[i], &out.data[i], true);
-		binDCT(&in.data[i], &out.data[i], false);
+		binDCT(&in[i], &out[i], true);
+		binDCT(&in[i], &out[i], false);
 	}
 	
 	return Quantize::quant(out);
@@ -26,7 +23,7 @@ void DCT::binDCT(uint_fast8_t *arr, uint_fast16_t *out, bool dir) {
 	//
 	// HUSK TIL RAPPORT: Der var fejl i artiklens proposed pipeline, og matricen er blevet brugt.
 	//
-
+	
 	for (size_t i = 0; i < blockSize; i++) {
 		uint_fast16_t x0, x1, x2, x3, x4, x5, x6, x7;
 		if (dir) {
