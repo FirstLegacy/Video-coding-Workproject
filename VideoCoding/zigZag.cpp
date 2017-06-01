@@ -2,7 +2,8 @@
 #include "ZigZag.h"
 #include "Runlength.h"
 
-const std::array<uint_fast8_t, mBlockSize> zigzagOrder =
+// Array for the order of the zigzag pattern.
+const std::array<uint_fast8_t, mBlockSize> ZigZag::zigzagOrder =
 {
 	 0,  1,  8, 16,  9,  2,  3, 10,
 	17, 24, 32, 25, 18, 11,  4,  5,
@@ -14,12 +15,14 @@ const std::array<uint_fast8_t, mBlockSize> zigzagOrder =
 	53, 60, 61, 54, 47, 55, 62, 63
 };
 
-std::vector<char> ZigZag::zigzag(std::array<uint_fast16_t, img_res_ycbcr> in) {
-	std::array<uint_fast16_t, img_res_ycbcr> out;
+// Sets the image in zigzag pattern.
+std::vector<char> ZigZag::zigzag(std::vector<int_fast16_t> in) {
+	std::vector<int_fast16_t> out(img_res_ycbcr);
 
+	// Goes through every block and inserts the value in the new vector at the correct place by looking up the table.
 	for (size_t i = 0; i < img_div_blocksize; i += mBlockSize) {
 		for (size_t j = 0; j < mBlockSize; ++j) {
-			out.at(i + zigzagOrder.at(j)) = in.at(i + j);
+			out.at(i * mBlockSize + zigzagOrder.at(j)) = in.at(i * mBlockSize + j);
 		}
 	}
 
