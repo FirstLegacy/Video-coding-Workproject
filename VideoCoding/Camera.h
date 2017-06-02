@@ -2,5 +2,9 @@
 
 #include <windows.h>
 
-void StopPreview();
-HRESULT CaptureVideo();
+
+class Camera
+{
+public:
+	static void test();
+};
