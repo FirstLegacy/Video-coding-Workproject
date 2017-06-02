@@ -2,20 +2,21 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="DeHuffman.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
     <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="DeRunlength.h" />
     <ClInclude Include="DeQuantize.h" />
     <ClInclude Include="DeDCT.h" />
     <ClInclude Include="deYCbCrToRgb.h" />
+    <ClInclude Include="..\VideoCoding\targetver.h" />
+    <ClInclude Include="..\VideoCoding\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
     <ClCompile Include="DeRunlength.cpp" />
     <ClCompile Include="DeQuantize.cpp" />
     <ClCompile Include="DeDCT.cpp" />
     <ClCompile Include="deYCbCrToRgb.cpp" />
+    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
   </ItemGroup>
 </Project>

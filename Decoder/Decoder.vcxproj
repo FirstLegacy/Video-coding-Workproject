@@ -41,6 +41,7 @@
   <ItemGroup>
     <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="..\VideoCoding\stdafx.h" />
+    <ClInclude Include="..\VideoCoding\targetver.h" />
     <ClInclude Include="DeDCT.h" />
     <ClInclude Include="DeHuffman.h" />
     <ClInclude Include="DeQuantize.h" />
@@ -49,14 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
     <ClCompile Include="DeDCT.cpp" />
     <ClCompile Include="DeHuffman.cpp" />
     <ClCompile Include="DeQuantize.cpp" />
