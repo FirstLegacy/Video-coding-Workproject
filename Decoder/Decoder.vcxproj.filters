@@ -8,6 +8,7 @@
     <ClInclude Include="DeQuantize.h" />
     <ClInclude Include="DeDCT.h" />
     <ClInclude Include="deYCbCrToRgb.h" />
+    <ClInclude Include="Interface.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
@@ -17,5 +18,6 @@
     <ClCompile Include="DeQuantize.cpp" />
     <ClCompile Include="DeDCT.cpp" />
     <ClCompile Include="deYCbCrToRgb.cpp" />
+    <ClCompile Include="Interface.cpp" />
   </ItemGroup>
 </Project>
