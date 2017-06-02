@@ -5,15 +5,13 @@
     <ClCompile Include="Huffman.cpp" />
     <ClCompile Include="Quantize.cpp" />
     <ClCompile Include="Runlength.cpp" />
-    <ClCompile Include="VideoCoding.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="ZigZag.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="getFrame.cpp" />
     <ClCompile Include="RgbToYCbCr.cpp" />
     <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="SocketServer.cpp" />
     <ClCompile Include="ToBlock.cpp" />
+    <ClCompile Include="VideoCoding.cpp" />
+    <ClCompile Include="zigZag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DCT.h" />
@@ -21,19 +19,11 @@
     <ClInclude Include="Quantize.h" />
     <ClInclude Include="Runlength.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="ZigZag.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="getFrame.h" />
-    <ClInclude Include="qedit.h" />
     <ClInclude Include="RgbToYCbCr.h" />
     <ClInclude Include="Socket.h" />
-    <ClInclude Include="SocketServer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="ToBlock.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Camera_stuff">
-      <UniqueIdentifier>{07c9d06f-1e6f-4682-bdf4-98e5f4e1fbe6}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="zigZag.h" />
   </ItemGroup>
 </Project>

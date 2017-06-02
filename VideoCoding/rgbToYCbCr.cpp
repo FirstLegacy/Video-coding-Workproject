@@ -31,7 +31,9 @@ std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, img_res_rgb> in) {
 	// Skal også bruge downsampling et eller andet sted her.
 	downSampling(yArray, cbArray, crArray, &out_putArray);
 
-	return ToBlock::blockify(out_putArray);
+	std::vector<uint8_t> trash;
+
+	return ToBlock::blockify(trash);
 }
 
 void RgbToYCbCr::downSampling(

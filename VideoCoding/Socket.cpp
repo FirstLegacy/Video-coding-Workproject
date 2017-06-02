@@ -3,19 +3,22 @@
 
 #include<stdio.h>
 #include<winsock2.h>
+#include <Ws2tcpip.h>
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
 #define SERVER "127.0.0.1"  //ip address of udp server
 #define BUFLEN 512  //Max length of buffer
 #define PORT 8888   //The port on which to listen for incoming data
+// #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-int s = 0, slen = 0;
+SOCKET s = 0;
+int slen = 0;
 struct sockaddr_in si_other;
 
 // The function to send a message through the socket
 void Socket::send(std::vector<char> message) {
-	if (sendto(s, &message.data()[0], message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
+	if (sendto(s, &message.data()[0], (int)message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
 	{
 		printf("sendto() failed with error code : %d", WSAGetLastError());
 		exit(EXIT_FAILURE);
@@ -26,8 +29,6 @@ void Socket::send(std::vector<char> message) {
 void Socket::connect()
 {
 	s, slen = sizeof(si_other);
-	char buf[BUFLEN];
-	char message[BUFLEN];
 	WSADATA wsa;
 
 	//Initialise winsock
@@ -50,7 +51,9 @@ void Socket::connect()
 	memset((char *)&si_other, 0, sizeof(si_other));
 	si_other.sin_family = AF_INET;
 	si_other.sin_port = htons(PORT);
-	si_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
+	inet_pton(AF_INET, SERVER, &si_other.sin_addr);
+	// si_other.sin_addr.S_un.S_addr = inet_addr(SERVER);
+
 	// Socket is now ready to start communication
 }
 
