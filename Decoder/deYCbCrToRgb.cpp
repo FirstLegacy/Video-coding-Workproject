@@ -13,7 +13,7 @@ std::array<uint8_t, img_res> yArray;
 std::array<uint8_t, img_res> cbArray;
 std::array<uint8_t, img_res> crArray;
 
-std::array<uint8_t, img_res_rbg> out_rbgArray;
+std::array<uint8_t, img_res_rbg> out_rgbArray;
 
 void deYCbCrToRgb::upSampling(std::array<uint8_t, (img_res * 3) / 4 > &in) {
 	int i = 0;
@@ -69,9 +69,9 @@ deYCbCrToRgb::deYCbCrToRgb()
 		Cb	= cbArray[0];
 		Cr	= crArray[0];
 
-		out_rbgArray[i]		=	1.000*Y + 0.000*(Cb-128) + 1.400*(Cr-128);
-		out_rbgArray[i+1]	= 	1.000*Y - 0.343*(Cb-128) - 0.711*(Cr-128);
-		out_rbgArray[i+2]	=	1.000*Y + 1.765*(Cb-128) - 0.000*(Cr-128);
+		out_rgbArray[i]		=	1.000*Y + 0.000*(Cb-128) + 1.400*(Cr-128);
+		out_rgbArray[i+1]	= 	1.000*Y - 0.343*(Cb-128) - 0.711*(Cr-128);
+		out_rgbArray[i+2]	=	1.000*Y + 1.765*(Cb-128) - 0.000*(Cr-128);
 		
 		i = i + 3;
 	}
