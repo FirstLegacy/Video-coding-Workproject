@@ -2,38 +2,34 @@
 #include "RgbToYCbCr.h"
 #include "ToBlock.h"
 
-std::vector<char> RgbToYCbCr::convert(std::array<uint8_t, img_res_rgb> in) {
-// inputtet er i unit8_t som er 8 bit som kommer i sæt af 3 for hver pixel
-//
+std::vector<char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
+// Inputtet er i unsigned char er 8 bit som kommer i sæt af 3 for hver pixel
+// Total size: image_res_rgb (width * height * 3). With default settings 921600
 
-	std::vector<uint8_t> yArray;
-	std::vector<uint8_t> cbArray;
-	std::vector<uint8_t> crArray;
-	std::vector<uint8_t> out_putArray;
+	std::vector<uint8_t> yArray(img_res);
+	std::vector<uint8_t> cbArray(img_res);
+	std::vector<uint8_t> crArray(img_res);
+	std::vector<uint8_t> out_putArray(img_res_ycbcr);
 
 	int R;
 	int G;
 	int B;
 
 	//http://www.equasys.de/colorconversion.html Det er her fra at formlen er taget fra til RBG til YCbCr
-	int i = 0;
-	for(const auto &val : in){
-		R = in[0];
-		G = in[1];
-		B = in[2];
 
-		yArray.at(i)	=	0.299*R	+0.587*G + 0.114*B;
-		cbArray.at(i)	=  -0.169*R	-0.331*G + 0.500*B + 128;
-		crArray.at(i)	=	0.500*R	-0.419*G - 0.081*B + 128;
-		i++;
+	for (size_t i = 0; i < img_res; ++i) {
+		R = in.at(i * 3 + 2); // opencv uses BGR not RGB
+		G = in.at(i * 3 + 1);
+		B = in.at(i * 3);
+
+		yArray.at(i)	=	(uint8_t) (0.299*R + 0.587*G + 0.114*B);
+		cbArray.at(i)	=	(uint8_t) (-0.169*R - 0.331*G + 0.500*B + 128);
+		crArray.at(i)	=	(uint8_t) (0.500*R - 0.419*G - 0.081*B + 128);
 	}
 
-	// Skal også bruge downsampling et eller andet sted her.
 	downSampling(yArray, cbArray, crArray, &out_putArray);
-
-	std::vector<uint8_t> trash;
-
-	return ToBlock::blockify(trash);
+	
+	return ToBlock::blockify(out_putArray);
 }
 
 void RgbToYCbCr::downSampling(
@@ -42,32 +38,50 @@ void RgbToYCbCr::downSampling(
 			std::vector<uint8_t> crArray,
 			std::vector<uint8_t> *out_putArray) {
 	
-	std::vector<uint8_t> out_yArray;
-	std::vector<uint8_t> out_cbArray;
-	std::vector<uint8_t> out_crArray;
+	std::vector<uint8_t> out_cbArray(img_res / 4);
+	std::vector<uint8_t> out_crArray(img_res / 4);
 
+	size_t j = 0;
 
-	int i = 0;
-	for (size_t i = 0; i < img_res_rgb;) {
-		out_yArray.at(i) = yArray.at(i);
-		out_cbArray.at(i) = cbArray.at(i);
-		out_crArray.at(i) = crArray.at(i);
-		if(i % img_res_w == 0 || i % img_res_w == 1){
-			i = i + img_res_w + 1;
+	for (size_t i = 0; i < img_res;) {
+		if (i % img_res_w == 0) { // || i % img_res_w == 1){
+			i += img_res_w;
 		}
-		else {
-		i = i + 2;
-		}
+
+		out_cbArray.at(j) = cbArray.at(i);
+		out_crArray.at(j) = crArray.at(i);
+
+		i += 2;
+		++j;
 	}
+
+	size_t i = 0;
+
+	for (const auto &val : yArray) {
+		out_putArray->at(i) = val;
+		++i;
+	}
+
+	for (const auto &val : out_cbArray) {
+		out_putArray->at(i) = val;
+		++i;
+	}
+
+	for (const auto &val : out_crArray) {
+		out_putArray->at(i) = val;
+		++i;
+	}
+	/*
 	for (size_t i = 0; i < img_res_ycbcr; ++i) {
-		if (out_yArray.size() >= i) {
+		if (img_res >= i) {
 			out_putArray->at(i) = out_yArray.at(i);
 		}
-		else if (out_yArray.size() + out_cbArray.size() >= i) {
+		else if (img_res + img_res_cbcr / 2 >= i) {
 			out_putArray->at(i) = out_cbArray.at(i);
 		}
-		else if (out_yArray.size() + out_cbArray.size() + out_crArray.size() >= i) {
+		else {
 			out_putArray->at(i) = out_crArray.at(i);
 		}
 	}
+	*/
 }

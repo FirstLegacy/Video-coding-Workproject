@@ -17,10 +17,9 @@ private:
 	const static std::array<bitvec, 12> dcLumTable;
 	const static std::array<bitvec, 11> acTable;
 	const static std::array<bitvec, 10> zeroLengthTable;
-	const static std::map<std::bitset<11>, int_fast16_t> signValueTable;
-	const static std::array<int_fast16_t, 10> two_pow;
+	const static std::map<std::bitset<11>, int_fast16_t> signValueMap;
 	static size_t getLength(bitvec, int_fast8_t);
-	static int_fast16_t getValue(std::vector<int_fast16_t>&, size_t, int_fast16_t);
+	static int_fast16_t getValue(std::vector<int_fast16_t>&, std::vector<char>, size_t, size_t);
 public:
 	static std::vector<int_fast16_t> huff(std::vector<char>);
 };
