@@ -32,26 +32,26 @@ std::array<int_fast16_t, 64> Quantize::lumTable = lumTableOrig;
 std::array<int_fast16_t, 64> Quantize::chromTable = chromTableOrig;
 
 std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
-	int j = 0;
+	size_t j = 0;
 	// First quantize the luminance part using the lum table
 	for (size_t i = 0; i < img_res; ++i) {
 		// J is used to find the correct part of the table.
-		if (j >= 64)
+		if (j == 64)
 			j = 0;
 
 		in.at(i) /= lumTable.at(j);
 
-		j++;
+		++j;
 	}
 	
 	// Quantize the chrom table.
-	for (size_t i = img_res; i < img_res_cbcr; ++i) {
-		if (j >= 64)
+	for (size_t i = img_res; i < img_res_ycbcr; ++i) {
+		if (j == 64)
 			j = 0;
 
 		in.at(i) /= chromTable.at(j);
 
-		j++;
+		++j;
 	}
 
 	return ZigZag::zigzag(in);

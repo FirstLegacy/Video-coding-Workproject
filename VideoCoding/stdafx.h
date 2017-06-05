@@ -19,7 +19,7 @@ const static size_t img_res = img_res_w * img_res_h;
 const static size_t img_res_rgb = img_res * 3;
 const static size_t img_res_cbcr = (img_res / 4) * 2;
 const static size_t img_res_ycbcr = img_res + img_res_cbcr;
-const static size_t img_div_blocksize = img_res_ycbcr / mBlockSize;
+const static size_t img_block_count = img_res_ycbcr / mBlockSize;
 
 // Gets 2D position in a flat array.
 template<typename T, size_t SIZE>

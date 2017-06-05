@@ -20,9 +20,9 @@ std::vector<char> ZigZag::zigzag(std::vector<int_fast16_t> in) {
 	std::vector<int_fast16_t> out(img_res_ycbcr);
 
 	// Goes through every block and inserts the value in the new vector at the correct place by looking up the table.
-	for (size_t i = 0; i < img_div_blocksize; i += mBlockSize) {
+	for (size_t i = 0; i < img_block_count; ++i) {
 		for (size_t j = 0; j < mBlockSize; ++j) {
-			out.at(i * mBlockSize + zigzagOrder.at(j)) = in.at(i * mBlockSize + j);
+			out.at(i * mBlockSize + j) = in.at(i * mBlockSize + zigzagOrder.at(j));
 		}
 	}
 

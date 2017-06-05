@@ -7,8 +7,9 @@
     <ClInclude Include="DeQuantize.h" />
     <ClInclude Include="DeDCT.h" />
     <ClInclude Include="deYCbCrToRgb.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
@@ -17,7 +18,7 @@
     <ClCompile Include="DeQuantize.cpp" />
     <ClCompile Include="DeDCT.cpp" />
     <ClCompile Include="deYCbCrToRgb.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
     <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
 </Project>

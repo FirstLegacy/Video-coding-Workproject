@@ -71,7 +71,7 @@ constexpr std::bitset<11> f(int_fast16_t n) {
 
 // Note: Functional programming.
 // If only one input start with the lowest value (-2047)
-// N is max size.
+// N is max size.B
 template <int N>
 constexpr typename std::map<std::bitset<11>, int_fast16_t>
 makeVal() {
@@ -145,15 +145,13 @@ size_t DeHuffman::getLength(bitvec in, int_fast8_t type) {
 
 // Inserts the bits of the value.
 int_fast16_t DeHuffman::getValue(std::vector<int_fast16_t> &out, std::vector<char> in, size_t length, size_t val) {
-	std::bitset<11> bits;
+	std::bitset<11> bits{ 0 };
 
 	for (size_t i = 0; i < length; ++i) {
-		bits[length - i] = out.at(val);
+		bits[length - i] = out.at(val + i);
 	}
-
-	auto sval = signValueMap[bits];
-
-	out.push_back(sval);
+	
+	return signValueMap.at(bits);
 }
 
 // Huffman encoder.
@@ -194,7 +192,7 @@ std::vector<int_fast16_t> DeHuffman::huff(std::vector<char> in) {
 		else {
 			num_count += len;
 
-			out.push_back(getVal(out, in, len, i));
+			out.push_back(getValue(out, in, len, i));
 
 			if (num_count == 64) {
 				num_count = 0;
