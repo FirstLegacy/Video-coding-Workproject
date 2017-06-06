@@ -1,58 +1,34 @@
 #include "stdafx.h"
 #include "Interface.h"
+
+#include <Windows.h>
+#include <thread>
 #include <opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <array>
-#include <ctime>
-#include <chrono>
-#include <thread>
-#include <functional>
 
-using namespace cv;
+#define MS_PER_FRAME 1000/24
 
-std::clock_t start;
-
-int interval = 1000 / 24;
-/*
-int main()
-{
-	timer_start(load_image, interval);
-	while (true)
-		;
-}
-*/
-void timer_start(std::function<void(void)> func, unsigned int interval)
-{
-	std::thread([func, interval]()
-	{
-		while (true)
-		{
-			auto x = std::chrono::steady_clock::now() + std::chrono::milliseconds(interval);
-			func();
-			std::this_thread::sleep_until(x);
-		}
-	}).detach();
-}
-/*
-void load_image() {
-	start = std::clock();
-
-}
-*/
+std::vector<unsigned char> Interface::frame;
 
 //Input is a ras RGB file in a one frame structur
-void Interface::GUI(std::vector<unsigned char> in){
-	Mat image(img_res_h,img_res_w,CV_8UC3,in.data());
+void Interface::GUI(std::vector<unsigned char> firstFrame) {
+	time_t start, end, diff;
+	frame = firstFrame;
+
+	cv::namedWindow("Display window", cv::WINDOW_AUTOSIZE);// Create a window for display.
 
 	while (true) {
+		time(&start);
+		cv::Mat image(img_res_h, img_res_w, CV_8UC3, frame.data());
 
-
-		namedWindow("Display window", WINDOW_AUTOSIZE);// Create a window for display.
-		imshow("Display window", image);
+		cv::imshow("Display window", image);
 		if (cv::waitKey(10) == 27) break; // stop capturing by pressing ESC
-	}
-	
-}
 
+		time(&end);
+		diff = difftime(start, end);
+		Sleep(MS_PER_FRAME - diff);
+	}
+}

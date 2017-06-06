@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Decoder\Interface.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DCT.cpp" />
     <ClCompile Include="huffman.cpp" />
@@ -35,6 +36,7 @@
     <ClCompile Include="zigZag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Decoder\Interface.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="dCT.h" />
     <ClInclude Include="huffman.h" />
