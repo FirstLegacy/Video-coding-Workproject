@@ -1,46 +1,29 @@
 #include "stdafx.h"
 
 #include <vector>
-#include <Windows.h>
-#include <thread>
 
 #include "rgbToYCbCr.h"
 #include "Camera.h"
 #include "quantize.h"
-#include "Socket.h"
-
-#define ms_per_frame 1000/24
+#include "socket.h"
 
 unsigned int frameCount = 0;
 
-void send_frames() {
-	time_t start, end, diff;
-	std::vector<unsigned char> image;
-	std::vector<char> coded_image;
-
-	while (true) {
-		time(&start);
-
-		image = Camera::getFrame();
-		coded_image = RgbToYCbCr::convert(image);
-		Socket::send(coded_image);
-
-		time(&end);
-
-		diff = difftime(start, end);
-
-		Sleep(ms_per_frame - diff);
-	}
-}
-
 int main() {
-	// Camera::test();
+	//Camera::test();
 	
 	Camera::startCam();
-	Socket::connect();
+
+	std::vector<unsigned char> image = Camera::getFrame();
+
 	Quantize::setQuality(1);
 
-	std::thread sf(send_frames);
+	auto coded_img = RgbToYCbCr::convert(image);
 
-	sf.join();
+	auto conv = coded_img;
+
+	Socket::connect();
+
+	Socket::send(coded_img);
+
 }

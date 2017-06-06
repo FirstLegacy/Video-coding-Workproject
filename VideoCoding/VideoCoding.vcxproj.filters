@@ -1,29 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="DCT.cpp" />
-    <ClCompile Include="Huffman.cpp" />
-    <ClCompile Include="Quantize.cpp" />
-    <ClCompile Include="Runlength.cpp" />
-    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="RgbToYCbCr.cpp" />
+    <ClCompile Include="DCT.cpp" />
+    <ClCompile Include="huffman.cpp" />
+    <ClCompile Include="quantize.cpp" />
+    <ClCompile Include="rgbToYCbCr.cpp" />
+    <ClCompile Include="runlength.cpp" />
     <ClCompile Include="Socket.cpp" />
-    <ClCompile Include="ToBlock.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="toBlock.cpp" />
     <ClCompile Include="VideoCoding.cpp" />
     <ClCompile Include="zigZag.cpp" />
+    <ClCompile Include="..\Decoder\Interface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DCT.h" />
-    <ClInclude Include="Huffman.h" />
-    <ClInclude Include="Quantize.h" />
-    <ClInclude Include="Runlength.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="RgbToYCbCr.h" />
+    <ClInclude Include="dCT.h" />
+    <ClInclude Include="huffman.h" />
+    <ClInclude Include="quantize.h" />
+    <ClInclude Include="rgbToYCbCr.h" />
+    <ClInclude Include="runlength.h" />
     <ClInclude Include="Socket.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="ToBlock.h" />
+    <ClInclude Include="toBlock.h" />
     <ClInclude Include="zigZag.h" />
+    <ClInclude Include="..\Decoder\Interface.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Camera_stuff">
+      <UniqueIdentifier>{07c9d06f-1e6f-4682-bdf4-98e5f4e1fbe6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

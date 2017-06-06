@@ -9,7 +9,7 @@
 
 #define SERVER "127.0.0.1"  //ip address of udp server
 #define BUFLEN 512  //Max length of buffer
-#define PORT 8888   //The port on which to listen for incoming data
+#define PORT 8890   //The port on which to listen for incoming data
 // #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 SOCKET s = 0;

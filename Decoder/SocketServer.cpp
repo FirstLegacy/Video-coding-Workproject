@@ -10,7 +10,7 @@ using namespace std;
 
 //init
 int server_length;
-int port = 123;
+int port = 8890;
 int STRLEN = 256;
 char recMessage[256];
 char sendMessage[256];

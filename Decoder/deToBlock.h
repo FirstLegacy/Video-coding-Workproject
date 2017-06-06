@@ -1,7 +1,11 @@
 #pragma once
+
+#include <vector>
+#include <array>
+
 ref class deToBlock sealed
 {
 public:
-	deToBlock();
+	static std::vector<uint_fast8_t> deBlockify(std::vector<char>);
 };
 

@@ -1,7 +1,8 @@
 #pragma once
+#include <vector>
 class Interface
 {
 public:
-	Interface();
+	static void GUI(std::vector<unsigned char>);
 };
 

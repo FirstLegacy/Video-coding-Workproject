@@ -44,6 +44,7 @@
     <ClInclude Include="DeHuffman.h" />
     <ClInclude Include="DeQuantize.h" />
     <ClInclude Include="DeRunlength.h" />
+    <ClInclude Include="DeToBlock.h" />
     <ClInclude Include="deYCbCrToRgb.h" />
     <ClInclude Include="DeZigZag.h" />
     <ClInclude Include="Interface.h" />
@@ -56,6 +57,7 @@
     <ClCompile Include="DeHuffman.cpp" />
     <ClCompile Include="DeQuantize.cpp" />
     <ClCompile Include="DeRunlength.cpp" />
+    <ClCompile Include="DeToBlock.cpp" />
     <ClCompile Include="deYCbCrToRgb.cpp" />
     <ClCompile Include="DeZigZag.cpp" />
     <ClCompile Include="Interface.cpp" />
