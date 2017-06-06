@@ -9,7 +9,7 @@
 unsigned int frameCount = 0;
 
 int main() {
-	// Camera::test();
+	Camera::test();
 	
 	Camera::startCam();
 

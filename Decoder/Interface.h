@@ -1,8 +1,8 @@
 #pragma once
+#include <vector>
 class Interface
 {
 public:
-	Interface();
-	Interface(std::array<uint8_t, img_res_rgb> in);
+	static void GUI(std::vector<unsigned char>);
 };
 

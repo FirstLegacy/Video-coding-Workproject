@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Camera.h"
-
+#include "Decoder\Interface.h"
 #include <opencv.hpp>
 
 cv::VideoCapture cap;
-
+/*
 void Camera::test() {
 	cv::VideoCapture capt;
 	
@@ -25,6 +25,25 @@ void Camera::test() {
 	cv::imshow("this is you, smile! :)", frame);
 	if (cv::waitKey(10) == 27) break; // stop capturing by pressing ESC
 	}
+}
+*/
+void Camera::test() {
+	cv::VideoCapture capt;
+
+	if (!capt.open(0))
+		return;
+
+	capt.set(CV_CAP_PROP_FRAME_WIDTH, img_res_w);
+	capt.set(CV_CAP_PROP_FRAME_HEIGHT, img_res_h);
+
+	cv::Mat frame;
+	capt >> frame;
+
+	std::vector<unsigned char> image;
+	image.assign(frame.datastart, frame.dataend);
+	
+	Interface::GUI(image);
+
 }
 
 void Camera::startCam() {

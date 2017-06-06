@@ -1,24 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
-    <ClCompile Include="DeDCT.cpp" />
-    <ClCompile Include="DeHuffman.cpp" />
-    <ClCompile Include="DeQuantize.cpp" />
-    <ClCompile Include="DeRunlength.cpp" />
-    <ClCompile Include="deYCbCrToRgb.cpp" />
-    <ClCompile Include="Interface.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DCT.cpp" />
+    <ClCompile Include="huffman.cpp" />
+    <ClCompile Include="quantize.cpp" />
+    <ClCompile Include="rgbToYCbCr.cpp" />
+    <ClCompile Include="runlength.cpp" />
+    <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="toBlock.cpp" />
+    <ClCompile Include="VideoCoding.cpp" />
+    <ClCompile Include="zigZag.cpp" />
+    <ClCompile Include="..\Decoder\Interface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\VideoCoding\SocketServer.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
-    <ClInclude Include="DeDCT.h" />
-    <ClInclude Include="DeHuffman.h" />
-    <ClInclude Include="DeQuantize.h" />
-    <ClInclude Include="DeRunlength.h" />
-    <ClInclude Include="deYCbCrToRgb.h" />
-    <ClInclude Include="Interface.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="dCT.h" />
+    <ClInclude Include="huffman.h" />
+    <ClInclude Include="quantize.h" />
+    <ClInclude Include="rgbToYCbCr.h" />
+    <ClInclude Include="runlength.h" />
+    <ClInclude Include="Socket.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="toBlock.h" />
+    <ClInclude Include="zigZag.h" />
+    <ClInclude Include="..\Decoder\Interface.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Camera_stuff">
