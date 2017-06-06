@@ -156,7 +156,7 @@ int_fast16_t DeHuffman::getValue(std::vector<int_fast16_t> &out, std::vector<cha
 
 // Huffman encoder.
 // Returns char-array, which is what socket can send.
-std::vector<int_fast16_t> DeHuffman::huff(std::vector<char> in) {
+std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
 
 	std::vector<int_fast16_t> out;

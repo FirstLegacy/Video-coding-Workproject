@@ -36,7 +36,7 @@ std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 	// First quantize the luminance part using the lum table
 	for (size_t i = 0; i < img_res; ++i) {
 		// J is used to find the correct part of the table.
-		if (j == 64)
+		if (j == mBlockSize)
 			j = 0;
 
 		in.at(i) /= lumTable.at(j);
@@ -46,7 +46,7 @@ std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 	
 	// Quantize the chrom table.
 	for (size_t i = img_res; i < img_res_ycbcr; ++i) {
-		if (j == 64)
+		if (j == mBlockSize)
 			j = 0;
 
 		in.at(i) /= chromTable.at(j);
@@ -59,7 +59,7 @@ std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 
 // Sets quality
 // 100 is max quality, 1 is min quality
-void Quantize::setQuality(int_fast16_t q) {
+void Quantize::setQuality(uint_fast8_t q) {
 	int_fast16_t s;
 	q < 50 ? s = 5000 / q : s = 200 - q * 2;
 

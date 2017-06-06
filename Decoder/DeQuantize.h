@@ -1,8 +1,12 @@
 #pragma once
-ref class DeQuantize sealed
+
+#include <vector>
+
+class DeQuantize
 {
 public:
-	DeQuantize();
-	std::vector<char> dequant(std::array<uint_fast16_t, img_res_ycbcr> in);
+	static std::vector<unsigned char> dequant(std::vector<int_fast16_t>);
+private:
+	static void DeQuantize::setQuality(uint_fast8_t);
 };
 

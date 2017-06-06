@@ -15,15 +15,13 @@ void Camera::test() {
 	capt.set(CV_CAP_PROP_FRAME_HEIGHT, img_res_h);
 
 	cv::Mat frame;
-	capt >> frame;
 
 	for (;;)
 	{
-	cv::Mat frame;
-	capt >> frame;
-	if (frame.empty()) break; // end of video stream
-	cv::imshow("this is you, smile! :)", frame);
-	if (cv::waitKey(10) == 27) break; // stop capturing by pressing ESC
+		capt >> frame;
+		if (frame.empty()) break; // end of video stream
+		cv::imshow("this is you, smile! :)", frame);
+		if (cv::waitKey(10) == 27) break; // stop capturing by pressing ESC
 	}
 }
 
@@ -38,7 +36,7 @@ void Camera::startCam() {
 std::vector<unsigned char> Camera::getFrame() {
 	cv::Mat frame;
 	cap >> frame;
-
+		
 	std::vector<unsigned char> image;
 
 	image.assign(frame.datastart, frame.dataend);
