@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Camera.h"
 #include "Decoder\Interface.h"
+
+#include <thread>
 #include <opencv.hpp>
 
 cv::VideoCapture cap;
@@ -39,9 +41,19 @@ void Camera::test() {
 
 	std::vector<unsigned char> image;
 	image.assign(frame.datastart, frame.dataend);
-	
-	Interface::GUI(image);
 
+	std::thread gui(Interface::GUI, image);
+
+	while (true) {
+		capt >> frame;
+
+		std::vector<unsigned char> image;
+		image.assign(frame.datastart, frame.dataend);
+
+		Interface::frame = image;
+	}
+	
+	gui.join();
 }
 
 void Camera::startCam() {
