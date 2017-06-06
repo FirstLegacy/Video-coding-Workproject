@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Interface.h"
+#include "SocketServer.h"
 #include<opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -18,6 +19,7 @@ int interval = 1000 / 24;
 
 int main()
 {
+	SocketServer::init();
 	timer_start(load_image, interval);
 	while (true)
 		;

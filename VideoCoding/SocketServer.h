@@ -1,8 +1,9 @@
 #pragma once
+
+#include <vector>
+
 class SocketServer
 {
 public:
-	SocketServer();
-	~SocketServer();
+	static void init();
 };
-
