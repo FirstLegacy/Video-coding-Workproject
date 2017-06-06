@@ -5,11 +5,12 @@
 #include "rgbToYCbCr.h"
 #include "Camera.h"
 #include "quantize.h"
+#include "socket.h"
 
 unsigned int frameCount = 0;
 
 int main() {
-	Camera::test();
+	//Camera::test();
 	
 	Camera::startCam();
 
@@ -20,4 +21,9 @@ int main() {
 	auto coded_img = RgbToYCbCr::convert(image);
 
 	auto conv = coded_img;
+
+	Socket::connect();
+
+	Socket::send(coded_img);
+
 }
