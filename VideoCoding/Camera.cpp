@@ -26,7 +26,7 @@ void Camera::test() {
 		if (cv::waitKey(10) == 27) break; // stop capturing by pressing ESC
 	}
 }
-*/
+
 void Camera::test() {
 	cv::VideoCapture capt;
 
@@ -47,21 +47,21 @@ void Camera::test() {
 	while (true) {
 		capt >> frame;
 
-		std::vector<unsigned char> image;
-		image.assign(frame.datastart, frame.dataend);
+		std::vector<unsigned char> image(frame.datastart, frame.dataend);
 
 		Interface::frame = image;
 	}
 	
 	gui.join();
 }
+*/
 
 void Camera::startCam() {
 	if (!cap.open(0))
 		return;
 
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, img_res_w);
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, img_res_h);
+	cap.set(CV_CAP_PROP_FRAME_WIDTH, (double)img_res_w);
+	cap.set(CV_CAP_PROP_FRAME_HEIGHT,(double)img_res_h);
 }
 
 std::vector<unsigned char> Camera::getFrame() {

@@ -15,7 +15,8 @@ std::vector<unsigned char> Interface::frame;
 
 //Input is a ras RGB file in a one frame structur
 void Interface::GUI(std::vector<unsigned char> firstFrame) {
-	time_t start, end, diff;
+	time_t start, end;
+	double diff;
 	frame = firstFrame;
 
 	cv::namedWindow("Display window", cv::WINDOW_AUTOSIZE);// Create a window for display.
@@ -29,6 +30,6 @@ void Interface::GUI(std::vector<unsigned char> firstFrame) {
 
 		time(&end);
 		diff = difftime(start, end);
-		Sleep(MS_PER_FRAME - diff);
+		Sleep((DWORD)(MS_PER_FRAME - diff));
 	}
 }
