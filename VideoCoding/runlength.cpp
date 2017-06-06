@@ -33,5 +33,8 @@ std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 		++j;
 	}
 
+	out.push_back(0);
+	out.push_back(0);
+	
 	return Huffman::huff(out);
 }

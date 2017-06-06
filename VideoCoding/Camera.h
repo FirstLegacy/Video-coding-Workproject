@@ -1,6 +1,11 @@
 #pragma once
 
-#include <windows.h>
+#include <vector>
 
-void StopPreview();
-HRESULT CaptureVideo();
+class Camera
+{
+public:
+	static void test();
+	static void startCam();
+	static std::vector<unsigned char> Camera::getFrame();
+};
