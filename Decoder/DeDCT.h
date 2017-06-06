@@ -1,7 +1,12 @@
 #pragma once
-ref class DeDCT sealed
+
+#include <vector>
+
+class DeDCT
 {
 public:
-	DeDCT();
+	static std::vector<unsigned char> DeDCT::deDCT(std::vector<int_fast16_t>);
+private:
+	static void invBinDCT(int_fast16_t*, uint_fast8_t*);
 };
 

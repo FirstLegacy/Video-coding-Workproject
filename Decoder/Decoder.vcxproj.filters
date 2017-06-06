@@ -10,6 +10,9 @@
     <ClInclude Include="deYCbCrToRgb.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="DeToBlock.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="DeZigZag.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
@@ -21,5 +24,7 @@
     <ClCompile Include="deYCbCrToRgb.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="DeToBlock.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="DeZigZag.cpp" />
   </ItemGroup>
 </Project>

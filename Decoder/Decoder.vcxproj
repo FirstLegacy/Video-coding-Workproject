@@ -46,6 +46,7 @@
     <ClInclude Include="DeRunlength.h" />
     <ClInclude Include="DeToBlock.h" />
     <ClInclude Include="deYCbCrToRgb.h" />
+    <ClInclude Include="DeZigZag.h" />
     <ClInclude Include="Interface.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -58,6 +59,7 @@
     <ClCompile Include="DeRunlength.cpp" />
     <ClCompile Include="DeToBlock.cpp" />
     <ClCompile Include="deYCbCrToRgb.cpp" />
+    <ClCompile Include="DeZigZag.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
