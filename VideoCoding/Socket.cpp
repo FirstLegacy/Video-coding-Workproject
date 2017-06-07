@@ -52,9 +52,6 @@ std::string integral_to_binary_string(T byte, IS_INTEGRAL(T))
 	return bs.to_string();
 }
 
-int main() {
-}
-
 // The function to send a message through the socket
 void Socket::send(std::vector<char> message) {
 	if (sendto(s, &message.data()[0], (int)message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
