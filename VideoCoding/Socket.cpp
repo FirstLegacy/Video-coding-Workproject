@@ -37,15 +37,15 @@ Used Packet size 1400 byte
 
 void Socket::SendFrame(std::vector<char> message) {
 	// fill
-	int packetSize = 5;
-	int splitSize = message.size / packetSize;
-	int i = 0;
-	for (i = 1; i <= splitSize; i++); {
+	int frame_Part_Size = 1400;
+	int frame_Part_Number = message.size / frame_Part_Size;
+	int frame_Part_Count = 0;
+	for (frame_Part_Count = 1; frame_Part_Count <= frame_Part_Number; frame_Part_Count++); {
 		//Socket::send(split_lo(message.begin()*i, message.begin() + packetSize*i));
-		std::vector<char> split_lo(message.begin() + packetSize*i, message.begin() + (packetSize * i) + packetSize);
+		std::vector<char> split_lo(message.begin() + frame_Part_Size*frame_Part_Count, message.begin() + (frame_Part_Size * frame_Part_Count) + frame_Part_Size);
 		
 
-		char aChar = UDP_header + frameCount + i;
+		char aChar = UDP_header + frameCount + frame_Part_Count;
 		std::vector<char> header = { aChar };
 		
 		header.insert(header.end(), split_lo.begin(), split_lo.end());
