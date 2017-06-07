@@ -7,23 +7,24 @@
 #include "quantize.h"
 #include "socket.h"
 
-unsigned int frameCount = 0;
-
 int main() {
 	//Camera::test();
 	
-	Camera::startCam();
+	while (true) {
+		frameCount++;
 
-	std::vector<unsigned char> image = Camera::getFrame();
+		Camera::startCam();
 
-	Quantize::setQuality(1);
+		std::vector<unsigned char> image = Camera::getFrame();
 
-	auto coded_img = RgbToYCbCr::convert(image);
+		Quantize::setQuality(1);
 
-	auto conv = coded_img;
+		auto coded_img = RgbToYCbCr::convert(image);
 
-	Socket::connect();
+		auto conv = coded_img;
 
-	Socket::send(coded_img);
+		Socket::connect();
 
+		Socket::send(coded_img);
+	}
 }

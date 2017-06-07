@@ -22,6 +22,18 @@ SOCKET s = 0;
 int slen = 0;
 char UDP_header = '00';
 struct sockaddr_in si_other;
+int count = 0;
+
+/*
+UDP
+IN	PORT:
+OUT PORT:
+IP		:
+Header: 00
+Max Packet size: 1460 byte
+Used Packet size 1400 byte
+*/
+
 
 void Socket::SendFrame(std::vector<char> message) {
 	// fill
@@ -33,7 +45,7 @@ void Socket::SendFrame(std::vector<char> message) {
 		std::vector<char> split_lo(message.begin() + packetSize*i, message.begin() + (packetSize * i) + packetSize);
 		
 
-		char aChar = UDP_header + i;
+		char aChar = UDP_header + frameCount + i;
 		std::vector<char> header = { aChar };
 		
 		header.insert(header.end(), split_lo.begin(), split_lo.end());
@@ -52,8 +64,6 @@ std::string integral_to_binary_string(T byte, IS_INTEGRAL(T))
 	return bs.to_string();
 }
 
-int main() {
-}
 
 // The function to send a message through the socket
 void Socket::send(std::vector<char> message) {
