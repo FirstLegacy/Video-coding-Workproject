@@ -12,9 +12,11 @@
 #define PORT 8890   //The port on which to listen for incoming data
 // #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-SOCKET s = 0;
+SOCKET s = 0;	
 int slen = 0;
 struct sockaddr_in si_other;
+
+
 
 // The function to send a message through the socket
 void Socket::send(std::vector<char> message) {
