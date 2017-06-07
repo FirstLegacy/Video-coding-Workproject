@@ -21,6 +21,8 @@ const static size_t img_res_cbcr = (img_res / 4) * 2;
 const static size_t img_res_ycbcr = img_res + img_res_cbcr;
 const static size_t img_block_count = img_res_ycbcr / mBlockSize;
 
+extern unsigned int frameCount = 0;
+
 // Gets 2D position in a flat array.
 template<typename T, size_t SIZE>
 inline T flatget(const typename std::array<T, SIZE> arr, size_t width, size_t x, size_t y)
