@@ -6,25 +6,50 @@
 #include "Camera.h"
 #include "quantize.h"
 #include "socket.h"
+#include <thread>
+#include <ctime>
+#include <chrono>
+
 
 int main() {
 	//Camera::test();
-	
-	while (true) {
-		frameCount++;
 
-		Camera::startCam();
+	Camera::startCam();
 
-		std::vector<unsigned char> image = Camera::getFrame();
+	Socket::connect();
 
-		Quantize::setQuality(1);
+	timer_start(runner, 1000 / 24);
 
-		auto coded_img = RgbToYCbCr::convert(image);
+}
 
-		auto conv = coded_img;
 
-		Socket::connect();
+void runner() {
 
-		Socket::send(coded_img);
-	}
+	frameCount++;
+
+	std::vector<unsigned char> image = Camera::getFrame();
+
+	Quantize::setQuality(1);
+
+	auto coded_img = RgbToYCbCr::convert(image);
+
+	auto conv = coded_img;
+
+	Socket::send(coded_img);
+
+
+}
+
+
+void timer_start(std::function<void(void)> func, unsigned int interval)
+{
+	std::thread([func, interval]()
+	{
+		while (true)
+		{
+			auto x = std::chrono::steady_clock::now() + std::chrono::milliseconds(interval);
+			func();
+			std::this_thread::sleep_until(x);
+		}
+	}).detach();
 }
