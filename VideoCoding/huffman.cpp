@@ -48,28 +48,23 @@ const std::array<bitvec, 11> Huffman::acTable = {						// Value:	Total size:
 	bitvec{ true, true, true, true, true, true, true, true, true, true }// 10			19
 };
 
-
 // Huffman table for a length of zeroes.
-const std::array<bitvec, 10> Huffman::zeroLengthTable = {	// Value:				Total size (incl. 00 in front):
-	bitvec{ false, false, false },							// EOB								5
-	bitvec{ true },											// 1								3
-	// false, true, true is reserved for full 5-bit number giving a size of 8 bit.				10
-	bitvec{ false, true, false },							// 2								5
-	bitvec{ false, false, true, true },						// 3								6
-	bitvec{ false, false, true, false, false },				// 4								7
-	bitvec{ false, false, true, false, true, true },		// 5								8
-	bitvec{ false, false, true, false, true, false, true },	// 6								9
-	bitvec{ false, false, true, false, true, false, false },// 7								9
+const std::array<bitvec, 6> Huffman::zeroLengthTable = {	// Value:				Size(this)	Size(total)
+	bitvec{ false },											// One 0					1			3
+	bitvec{ true, false },									// 1						2			5
+	bitvec{ true, true, false },							// 2						3			7
+	bitvec{ true, true, true, false },						// 3						4			9
+	bitvec{ true, true, true, true, false },				// 4						5			11
+	bitvec{ true, true, true, true, true },					// 5						5			12
 };
 
-// Calculate the DC Huffman table - at compile time - from here...
+// Calculate the signed value table - at compile time (doesn't work, runs on startup) - from here...
 // Gets correct values.
 constexpr std::bitset<11> f(int_fast16_t n) {
 	return n < 0 ? std::bitset<11>(-n).flip() : std::bitset<11>(n); // Gets binary representation of values.
 																    // Flips bits if negative.
 }
 
-// Note: Functional programming.
 // If only one input start with the lowest value (-2047)
 // N is max size.
 template <int N>
@@ -106,6 +101,64 @@ makeVal<1536, 1024>(
 makeVal<1024, 512>(
 makeVal<512>()))))))); // Split up due to recursive function limits in the Visual C++ compiler.
 
+// Calculate the zero value table - at compile time (doesn't work, runs on startup) - from here...
+// Gets correct values.
+template <size_t val>
+constexpr typename std::enable_if<(val > 31), std::bitset<5>>::type
+g() {
+	return std::bitset<5>(val - 32);
+}
+
+template <size_t val>
+constexpr typename std::enable_if<(val > 15 && val <= 31), std::bitset<5>>::type
+g() {
+	return std::bitset<5>(val - 16);
+}
+
+template <size_t val>
+constexpr typename std::enable_if<(val > 7 && val <= 15), std::bitset<5>>::type
+g() {
+	return std::bitset<5>(val - 8);
+}
+
+template <size_t val>
+constexpr typename std::enable_if<(val > 3 && val <= 7), std::bitset<5>>::type
+g() {
+	return std::bitset<5>(val - 4);
+}
+
+template <size_t val>
+constexpr typename std::enable_if<(val <= 3), std::bitset<5>>::type
+g() {
+	return std::bitset<5>(val - 2);
+}
+
+// If only one input start with the lowest value (-2047)
+// N is max size.
+template <int N>
+constexpr typename std::vector<std::bitset<5>>
+makeZero() {
+	return makeZero<N, 3>(std::vector<std::bitset<5>>{g<2>()}); // First value is 2
+}
+
+// Returns if size reaches N.
+template <int N, size_t size>
+constexpr typename std::enable_if<N == size, std::vector<std::bitset<5>>>::type
+makeZero(std::vector<std::bitset<5>> Vals) {
+	return Vals;
+}
+
+// Recursive function adding to vector.
+// This function is called if the size has not yet reached N, adding another value.
+template <int N, size_t size>
+constexpr typename std::enable_if<N != size, std::vector<std::bitset<5>>>::type
+makeZero(std::vector<std::bitset<5>> Vals) {
+	Vals.push_back(g<size>());
+	return makeZero<N, size + 1>(Vals);
+}
+
+const std::vector<std::bitset<5>> Huffman::zeroValueTable = makeZero<64>();
+
 // 2 to the power of 1-10 for easy lookup
 const std::array<int_fast16_t, 10> Huffman::two_pow = {
 	2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
@@ -116,8 +169,48 @@ const std::array<int_fast16_t, 10> Huffman::two_pow = {
 #define FAST16_BITS (sizeof(UINT_FAST16_MAX) * CHAR_BIT - 1) // Amount of bits minus 1.
 #endif
 
+// Inserts bits from bitvec
+void Huffman::insertBits(std::vector<char> &out, bitvec bits, uint_fast8_t &reached) {
+	uint_fast8_t reached_buffer = reached;
+
+	for (size_t i = 0; i < bits.size(); ++i) {
+		if (reached_buffer == 0) {
+			out.push_back(0);
+		}
+
+		out.back() |= bits.at(i) << reached_buffer;
+		
+		if (++reached_buffer == CHAR_BIT) {
+			reached_buffer = 0;
+		}
+	}
+
+	reached = reached_buffer;
+}
+
+// Inserts bits from bitset
+template <size_t size>
+void Huffman::insertBits(std::vector<char> &out, std::bitset<size> bits,
+						 size_t length, uint_fast8_t &reached) {
+	uint_fast8_t reached_buffer = reached;
+
+	for (size_t i = length - 1; i != -1; --i) {
+		if (reached_buffer == 0) {
+			out.push_back(0);
+		}
+
+		out.back() |= bits[i] << reached_buffer;
+
+		if (++reached_buffer == CHAR_BIT) {
+			reached_buffer = 0;
+		}
+	}
+
+	reached = reached_buffer;
+}
+
 // Inserts the length in bit of the value table.
-void Huffman::insertLength(bitvec &out, size_t length, int_fast8_t type) {
+void Huffman::insertLength(std::vector<char> &out, size_t length, int_fast8_t type, uint_fast8_t &reached) {
 	bitvec bits;
 	switch (type)
 	{
@@ -128,47 +221,56 @@ void Huffman::insertLength(bitvec &out, size_t length, int_fast8_t type) {
 		bits = dcChromTable.at(length);
 		break;
 	case -2: // Zero length table
-		if (length < zeroLengthTable.size()) {
-			// If length if 0 then it inserts the EOB value.
-			bits = zeroLengthTable.at(length);
-		}
-		else {
-			bits = { false, true, true };
-			std::bitset<6> bset = std::bitset<6>(length);
-			for (size_t i = 0; i < 6; ++i) {
-				bits.push_back(bset[i]);
-			}
-		}
+		bits = zeroLengthTable.at(length);
 		break;
 	default: // AC table
 		bits = acTable.at(length);
 		break;
 	}
-	out.insert(out.end(), bits.begin(), bits.end());
+	insertBits(out, bits, reached);
 }
 
-// Inserts the bits of the value.
-void Huffman::insertValue(bitvec &out, size_t length, int_fast16_t val) {
+// Inserts the value.
+void Huffman::insertSignedValue(std::vector<char> &out, size_t length,
+								int_fast16_t val, uint_fast8_t &reached) {
 	auto bits = signValueTable.at(val + 2047);
-	for (size_t i = length - 1; i != -1; i--) {
-		out.push_back(bits[i]);
-	}
+	insertBits(out, bits, length, reached);
+}
+
+void Huffman::insertZeroValue(std::vector<char> &out, size_t length,
+							  int_fast16_t val, uint_fast8_t &reached) {
+	auto bits = zeroValueTable.at(val - 2);
+	insertBits(out, bits, length, reached);
 }
 
 // Handles inserting the bits.
-void Huffman::inserter(bitvec &out, int_fast16_t current, int_fast16_t last, int_fast8_t type) {
-	if (current == 0 && last != 0) {
-		Huffman::insertLength(out, 0, type); // Insert length of value.
-	}
-	else if (last == 0) { // If it's a length of zeroes.
-		Huffman::insertLength(out, current, -2); // Set the length of a 1 without the value.
-	}
-	else {
+void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
+					   int_fast16_t last, int_fast8_t type, uint_fast8_t &reached) {
+	if (type == 0 || type == -1 || (current != 0 && last != 0)) {
 		for (size_t i = 0; i < two_pow.size(); ++i) {
 			if (abs(current) < two_pow[i]) {
-				Huffman::insertLength(out, i + 1, type); // Insert length of value.
-				Huffman::insertValue(out, i + 1, current); // Insert actual value.
+				insertLength(out, i + 1, type, reached); // Insert length of value.
+				insertSignedValue(out, i + 1, current, reached); // Insert actual value.
 				break;
+			}
+		}
+	}
+	if (last == 0) { // If it's a length of zeroes.
+		insertLength(out, 0, 1, reached); // Insert zero-run indicator.
+		if (current == 0) {
+			insertLength(out, 0, -2, reached); // Insert one zero.
+			insertLength(out, 0, 1, reached); // Insert zero-run indicator
+			// All this indicates End of Block (EoB)
+		}
+		else {
+			for (size_t i = 0; i < 6; ++i) {
+				if (current < two_pow[i]) {
+					insertLength(out, i, -2, reached); // Insert length of value.
+					if (i != 0) {
+						insertZeroValue(out, i, current, reached); // Insert actual value if it's not one.
+					}
+					break;
+				}
 			}
 		}
 	}
@@ -177,19 +279,17 @@ void Huffman::inserter(bitvec &out, int_fast16_t current, int_fast16_t last, int
 // Huffman encoder.
 // Returns char-array, which is what socket can send.
 std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
-	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
-	
-	bitvec bout;
-	bout.reserve(3500 * 8); // Reserve 3.5 KB
+	uint_fast8_t reached = 0;
+	std::vector<char> out;
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
-	const size_t y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
+	static const size_t y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
 	size_t dc_count = 0;
 
 	uint_fast16_t last = -1;
 
 	for (const auto &current : in) {
-		Huffman::inserter(bout, current, last, dcmeasure);
+		Huffman::inserter(out, current, last, dcmeasure, reached);
 
 		if (current == 0 && last == 0) {
 			// Once the dc count exceeds the amount of DC values in the luminance parts the chroma part is being processed.
@@ -203,16 +303,6 @@ std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 		} else {
 			dcmeasure = 1;
 			last = current;
-		}
-	}
-		
-	// Sets the correct vector, the output HAS to be a char vector.
-	std::vector<char> out(bout.size() / CHAR_BIT);
-
-	// Iterates every bit, might not be most efficient.
-	for (int i = 0; i < out.size(); ++i) {
-		for (int j = 0; j < CHAR_BIT; ++j) {
-			out[i] |= bout.at(i * CHAR_BIT + j) << j; // OR bit operation on the bit, it's 0 as default, så it's set to the bout value.
 		}
 	}
 

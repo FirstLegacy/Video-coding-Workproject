@@ -24,11 +24,19 @@ void send_frames(std::vector<unsigned char> image) {
 
 int main() {
 	// Camera::test();
-	
+
+
 	Camera::startCam();
 	Quantize::setQuality(1);
-	std::vector<unsigned char> image = Camera::getFrame();
 
+	while (true) {
+		std::vector<unsigned char> image = Camera::getFrame();
+
+		std::vector<char> coded_image = RgbToYCbCr::convert(image);
+		auto junk = coded_image;
+	}
+
+	/*
 	std::thread gui(Interface::GUI, image);
 
 	// Socket::connect();
@@ -52,5 +60,5 @@ int main() {
 	}
 
 	gui.join();
-	
+	*/
 }
