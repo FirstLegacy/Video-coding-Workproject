@@ -45,12 +45,12 @@ const std::array<bitvec, 11> Huffman::acTable = {						// Value:	Total size:
 	bitvec{ true, true, true, true, true, true, false },				// 7			14
 	bitvec{ true, true, true, true, true, true, true, false },			// 8			16
 	bitvec{ true, true, true, true, true, true, true, true, false },	// 9			18
-	bitvec{ true, true, true, true, true, true, true, true, true, true }// 10			19
+	bitvec{ true, true, true, true, true, true, true, true, true }		// 10			19
 };
 
 // Huffman table for a length of zeroes.
 const std::array<bitvec, 6> Huffman::zeroLengthTable = {	// Value:				Size(this)	Size(total)
-	bitvec{ false },											// One 0					1			3
+	bitvec{ false },										// One 0					1			3
 	bitvec{ true, false },									// 1						2			5
 	bitvec{ true, true, false },							// 2						3			7
 	bitvec{ true, true, true, false },						// 3						4			9
@@ -160,14 +160,9 @@ makeZero(std::vector<std::bitset<5>> Vals) {
 const std::vector<std::bitset<5>> Huffman::zeroValueTable = makeZero<64>();
 
 // 2 to the power of 1-10 for easy lookup
-const std::array<int_fast16_t, 10> Huffman::two_pow = {
-	2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
+const std::array<int_fast16_t, 12> Huffman::two_pow = {
+	1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048
 };
-
-// int_fast16_t is not always 16 bit, so finding out is necessary.
-#ifndef FAST16_BITS
-#define FAST16_BITS (sizeof(UINT_FAST16_MAX) * CHAR_BIT - 1) // Amount of bits minus 1.
-#endif
 
 // Inserts bits from bitvec
 void Huffman::insertBits(std::vector<char> &out, bitvec bits, uint_fast8_t &reached) {
@@ -239,7 +234,7 @@ void Huffman::insertSignedValue(std::vector<char> &out, size_t length,
 
 void Huffman::insertZeroValue(std::vector<char> &out, size_t length,
 							  int_fast16_t val, uint_fast8_t &reached) {
-	auto bits = zeroValueTable.at(val - 2);
+	auto bits = zeroValueTable.at(val - 1);
 	insertBits(out, bits, length, reached);
 }
 
@@ -247,10 +242,10 @@ void Huffman::insertZeroValue(std::vector<char> &out, size_t length,
 void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 					   int_fast16_t last, int_fast8_t type, uint_fast8_t &reached) {
 	if (type == 0 || type == -1 || (current != 0 && last != 0)) {
-		for (size_t i = 0; i < two_pow.size(); ++i) {
-			if (abs(current) < two_pow[i]) {
-				insertLength(out, i + 1, type, reached); // Insert length of value.
-				insertSignedValue(out, i + 1, current, reached); // Insert actual value.
+		for (size_t i = 1; i < two_pow.size(); ++i) {
+			if (abs(current) < two_pow.at(i)) {
+				insertLength(out, i, type, reached); // Insert length of value.
+				insertSignedValue(out, i, current, reached); // Insert actual value.
 				break;
 			}
 		}
@@ -260,7 +255,7 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 		if (current == 0) {
 			insertLength(out, 0, -2, reached); // Insert one zero.
 			insertLength(out, 0, 1, reached); // Insert zero-run indicator
-			// All this indicates End of Block (EoB)
+			// All this indicates End of Block (EoB) Total length: 5 bit
 		}
 		else {
 			for (size_t i = 0; i < 6; ++i) {
@@ -281,9 +276,9 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 	uint_fast8_t reached = 0;
 	std::vector<char> out;
+	out.reserve(8000); // Allocate 8 KB (It doesn't matter if it's too high).
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
-	static const size_t y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
 	size_t dc_count = 0;
 
 	uint_fast16_t last = -1;
@@ -293,7 +288,7 @@ std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 
 		if (current == 0 && last == 0) {
 			// Once the dc count exceeds the amount of DC values in the luminance parts the chroma part is being processed.
-			if (dc_count > y_dc_values) {
+			if (dc_count > img_y_dc_values) {
 				dcmeasure = -1;
 			} else {
 				++dc_count;

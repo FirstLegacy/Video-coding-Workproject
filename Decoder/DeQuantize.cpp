@@ -1,5 +1,5 @@
-#include "DeQuantize.h"
 #include "stdafx.h"
+#include "DeQuantize.h"
 #include "DeDCT.h"
 
 #include <vector>

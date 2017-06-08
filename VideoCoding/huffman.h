@@ -18,7 +18,7 @@ private:
 	const static std::array<bitvec, 6> zeroLengthTable;
 	const static std::vector<std::bitset<11>> signValueTable;
 	const static std::vector<std::bitset<5>> zeroValueTable;
-	const static std::array<int_fast16_t, 10> two_pow;
+	const static std::array<int_fast16_t, 12> two_pow;
 	static void insertBits(std::vector<char>&, bitvec, uint_fast8_t&);
 	template <size_t size>
 	static void insertBits(std::vector<char>&, std::bitset<size>, size_t, uint_fast8_t&);

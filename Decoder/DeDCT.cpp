@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "DeDCT.h"
+#include "DeToBlock.h"
 
 // BinDCT coding.
 void DeDCT::invBinDCT(int_fast16_t *arr, uint_fast8_t *out) {
@@ -137,5 +138,5 @@ std::vector<unsigned char> DeDCT::deDCT(std::vector<int_fast16_t> in)
 		invBinDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
 	}
 
-	// return DeBlock::whatever();
+	return deToBlock::deBlockify(out);
 }

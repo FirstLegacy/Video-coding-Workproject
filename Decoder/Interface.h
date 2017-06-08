@@ -5,7 +5,10 @@
 class Interface
 {
 public:
-	static void GUI(std::vector<unsigned char>);
+	static void GUI();
+	static void updateFrame(std::vector<unsigned char>);
+private:
 	static std::vector<unsigned char> frame;
+	static bool updated;
 };
 

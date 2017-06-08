@@ -51,7 +51,7 @@ const std::array<bitvec, 11> DeHuffman::acTable = {						// Value:	Total size:
 
 // Huffman table for a length of zeroes.
 const std::array<bitvec, 6> DeHuffman::zeroLengthTable = {	// Value:				Size(this)	Size(total)
-	bitvec{ true },											// One 0					1			3
+	bitvec{ false },											// One 0					1			3
 	bitvec{ true, false },									// 1						2			5
 	bitvec{ true, true, false },							// 2						3			7
 	bitvec{ true, true, true, false },						// 3						4			9
@@ -167,15 +167,9 @@ const std::vector<std::bitset<5>> DeHuffman::zeroValueTable = makeZero<64>();
 
 //______________________________________________________________________________________________________
 
-
-// int_fast16_t is not always 16 bit, so finding out is necessary.
-#ifndef FAST16_BITS
-#define FAST16_BITS (sizeof(UINT_FAST16_MAX) * CHAR_BIT - 1) // Amount of bits minus 1.
-#endif
-
 // 2 to the power of 1-10 for easy lookup
-const std::array<int_fast16_t, 10> DeHuffman::two_pow = {
-	2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
+const std::array<int_fast16_t, 12> DeHuffman::two_pow = {
+	1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048
 };
 
 template<typename T, size_t size>
@@ -190,7 +184,7 @@ size_t checkLength(std::array<T, size> arr, bitvec in) {
 }
 
 // Inserts the length in bit of the value table.
-size_t DeHuffman::getLength(bitvec in, int_fast8_t type) {
+int_fast16_t DeHuffman::getLength(bitvec in, int_fast8_t type) {
 	size_t len = -1;
 	switch (type)
 	{
@@ -200,80 +194,145 @@ size_t DeHuffman::getLength(bitvec in, int_fast8_t type) {
 	case -1: // Chroma DC table
 		len = checkLength(dcChromTable, in);
 		break;
+	case -2:
+		len = checkLength(zeroLengthTable, in);
+		break;
 	default: // AC table
 		len = checkLength(acTable, in);
 		break;
 	}
 
-	return len;
+	return (int_fast16_t)len;
 }
 
-// Inserts the bits of the value.
-int_fast16_t DeHuffman::getValue(std::vector<int_fast16_t> &out, std::vector<char> in, size_t length, size_t val) {
+// Inserts the bits of the value from signed table.
+int_fast16_t DeHuffman::getValue(std::vector<char> in, size_t length,
+								 size_t start_byte, size_t start_bit) {
 	std::bitset<11> bits{ 0 };
-
-	for (size_t i = 0; i < length; ++i) {
-		bits[length - i] = out.at(val + i);
+	size_t j = 0;
+	for (size_t i = 0; i < length; ++i, ++j) {
+		if (start_bit + i == 8) { // 8th bit is invalid, set to bit 0 for next byte.
+			++start_byte;
+			start_bit = 0;
+			j = 0;
+		}
+		bits[length - i] = (in.at(start_byte) >> (start_bit + j)) & 1;
 	}
 	
-	return signValueMap.at(bits);
+	for (size_t i = two_pow.at(length - 1); i < two_pow.at(length); ++i) {
+		if (signValueTable.at(2047 + i) == bits) {
+			return (int_fast16_t)i;
+		}
+		else if (signValueTable.at(2047 - i) == bits) {
+			return -(int_fast16_t)i;
+		}
+	}
+
+	throw std::runtime_error("Value not found in signValueTable.");
 }
 
-// Huffman encoder.
-// Returns char-array, which is what socket can send.
-std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
-	// HUSK: Længde af char er ikke nødvendigvis 8 bit.
+// Inserts the bits of the value fron zero table.
+int_fast16_t DeHuffman::getZeroValue(std::vector<char> in, size_t length,
+									 size_t start_byte, size_t start_bit) {
+	std::bitset<5> bits{ 0 };
+	size_t j = 0;
+	for (size_t i = 0; i < length; ++i, ++j) {
+		if (start_bit + i == 8) { // 8th bit is invalid, set to bit 0 for next byte.
+			++start_byte;
+			start_bit = 0;
+			j = 0;
+		}
+		bits[length - i] = (in.at(start_byte) >> (start_bit + j)) & 1;
+	}
 
+	for (size_t i = two_pow.at(length); i < two_pow.at(length + 1); ++i) {
+		if (zeroValueTable.at(i) == bits) {
+			return (int_fast16_t)i;
+		}
+	}
+
+	throw std::runtime_error("Value not found in zeroValueTable.");
+}
+
+// Huffman decoder.
+std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 	std::vector<int_fast16_t> out;
 	out.reserve(img_res_cbcr); // Reserve a convervative amount of data in the vector. (Here 1/3 the full size)
 
 	bitvec buffer;
 
-	int_fast8_t dcmeasure = 1; // Lum DC if 0, Chrom DC if -1 else AC
-	const size_t y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
+	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
+	static const size_t y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
 	size_t dc_count = 0;
 	size_t num_count = 0;
 
-	size_t len = -1;
+	int_fast8_t len = -1;
+	bool eob_check = false;
 
-	char current = NULL;
+	bool current;
 	
-	for (size_t i = 0; i < in.size() * CHAR_BIT; ++i) {
-		current = in.at(i);
-		buffer.push_back(current);
+	for (size_t i = 0; i < in.size(); ++i) {
+		for (size_t j = 0; j < CHAR_BIT; ++j) {
+			current = (in.at(i) >> j) & 1; // Current bit
+			buffer.push_back(current);
 
-		len = DeHuffman::getLength(buffer, dcmeasure);
+			len = getLength(buffer, dcmeasure);
 
-		if (len == -1) {
-			; // Do nothing
-		}
-		else if (len == -2) { // Zeroes
-			;
-		}
-		else if (len == 0) {
-			out.push_back(0);
-			++num_count; // Can only happen on DC values so don't worry about checking AC stuff.
-		}
-		else {
-			num_count += len;
-
-			out.push_back(getValue(out, in, len, i));
-
-			if (num_count == 64) {
-				num_count = 0;
-				if (dc_count > y_dc_values) {
-					dcmeasure = -1;
-				}
-				else {
-					++dc_count;
-					dcmeasure = 0;
-				}
+			if (len == -1) { // If nothing was found.
+				; // Do nothing
 			}
-			else {
-				dcmeasure = 1;
+			else { // If a value is found.
+				if (dcmeasure == -2) { // If it's a length of zeroes.
+					if (len == 0) {
+						out.push_back(0); // If len is 0, next value is a single zero.
+						eob_check = true;
+					}
+					else {
+						out.push_back(getZeroValue(in, len, i, j + 1));
+					}
+					dcmeasure = 1;
+				}
+				else if (len == 0 && dcmeasure == 1) { // If next part is a length of zeroes.
+					if (eob_check) {
+						out.push_back(0); // Adds second zero, signifying EOB.
+						dcmeasure = 0; // Next is DC
+						eob_check = false;
+
+						num_count = 0;
+						if (dc_count > y_dc_values) {
+							dcmeasure = -1;
+						}
+						else {
+							++dc_count;
+							dcmeasure = 0;
+						}
+					}
+					else {
+						dcmeasure = -2;
+					}
+				}
+				else if (dcmeasure == 1) { // If AC.
+					out.push_back(getValue(in, len, i, j + 1));
+					eob_check = false;
+				}
+				else { // If DC
+					if (len == 0) {
+						out.push_back(0);
+					}
+					else {
+						out.push_back(getValue(in, len, i, j + 1));
+					}
+					dcmeasure = 1;
+				}
+
+				j += len;
+				if (j > 8) {
+					i += j / 8;
+					j += j % 8;
+				}
 			}
 		}
 	}
 	
-	DeRunlength::deRun(out);
+	return DeRunlength::deRun(out);
 }
