@@ -7,14 +7,13 @@
 #include "rgbToYCbCr.h"
 #include "Camera.h"
 #include "quantize.h"
+
 #include "Socket.h"
 #include "Decoder\Interface.h"
 
 #define MS_PER_FRAME 1000/24 // ms / fps = ms per frame
 
 size_t running_threads = 0;
-
-unsigned int frameCount = 0;
 
 void sendFrames() {
 	auto image = Camera::getFrame();

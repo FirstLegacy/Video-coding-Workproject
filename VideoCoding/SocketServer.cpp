@@ -1,9 +1,17 @@
 #include "stdafx.h"
 #include "SocketServer.h"
 
-#include<vector>
+#include <vector>
 #include <iostream>
 #include <winsock2.h>
+#include <stdio.h>
+#include <Ws2tcpip.h>
+#include <fstream>
+#include <iterator>
+#include <string>
+#include <bitset>
+#include <type_traits>
+
 
 using namespace std;
 
@@ -67,6 +75,12 @@ void init()
 
 	cout << endl;
 
+	char buf[200];
+	int fd;
+	long recvlen;
+
+	std::vector<char> frameConstruct;
+	
 	// wait for 
 	while (1)
 	{
@@ -74,6 +88,24 @@ void init()
 		recvfrom(mySocket, recMessage, STRLEN, 0, (SOCKADDR*)&myAddress, &server_length);
 		cout << recMessage << endl;
 		sendto(mySocket, sendMes, strlen(sendMes), 0, (SOCKADDR*)&myAddress, server_length);
+
+		//Convert message recieved to vector
+		std::vector<char> v(recMessage, recMessage + sizeof recMessage / sizeof recMessage[0]);
+		
+		/*
+		//recvfrom(fd, buf, BUFLEN, 0, (struct sockaddr *)&claddr, &clientlen);
+		if (recvlen < 0) {
+			perror("cannot recvfrom()");
+			return;
+		}
+		printf("Received %ld bytes\n", recvlen);
+		buf[recvlen] = 0;
+		printf("Received message: \"%s\"\n", buf);
+		*/
+
+		frameConstruct.insert(frameConstruct.end(), v.begin(), v.end());
+		
+		// Forward contructed frame when finished
 
 	}
 

@@ -4,6 +4,12 @@
 #include<stdio.h>
 #include<winsock2.h>
 #include <Ws2tcpip.h>
+#include <fstream>
+#include <iterator>
+#include <iostream>
+#include <string>
+#include <bitset>
+#include <type_traits>
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
@@ -14,7 +20,50 @@
 
 SOCKET s = 0;
 int slen = 0;
+char ID = '00';
 struct sockaddr_in si_other;
+int count = 0;
+
+/*
+UDP
+IN	PORT:
+OUT PORT:
+IP		:
+Header: 00
+Max Packet size: 1460 byte
+Used Packet size 1400 byte
+*/
+
+
+void Socket::SendFrame(std::vector<char> message) {
+	// fill
+	int frame_Part_Size = 1400;
+	int frame_Part_Number = message.size / frame_Part_Size;
+	int frame_Part_Count = 0;
+	for (frame_Part_Count = 1; frame_Part_Count <= frame_Part_Number; frame_Part_Count++); {
+		//Socket::send(split_lo(message.begin()*i, message.begin() + packetSize*i));
+		std::vector<char> split_lo(message.begin() + frame_Part_Size*frame_Part_Count, message.begin() + (frame_Part_Size * frame_Part_Count) + frame_Part_Size);
+		
+
+		char aChar = ID + frameCount + frame_Part_Count;
+		std::vector<char> header = { aChar };
+		
+		header.insert(header.end(), split_lo.begin(), split_lo.end());
+		Socket::send(header);
+	}
+
+}
+
+// SFINAE for safety. Sue me for putting it in a macro for brevity on the function
+#define IS_INTEGRAL(T) typename std::enable_if< std::is_integral<T>::value >::type* = 0
+
+template<class T>
+std::string integral_to_binary_string(T byte, IS_INTEGRAL(T))
+{
+	std::bitset<sizeof(T) * CHAR_BIT> bs(byte);
+	return bs.to_string();
+}
+
 
 // The function to send a message through the socket
 void Socket::send(std::vector<char> message) {
