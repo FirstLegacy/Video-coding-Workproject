@@ -133,7 +133,7 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 
 // NormalDCT-II (FOR TEST)
 void normalDCT(uint_fast8_t *arr, int_fast16_t *out) {
-	std::array<int_fast16_t, mBlockSize> buffer;
+	std::array<double, mBlockSize> buffer;
 
 	for (size_t row = 0; row < blockSize; ++row) { // For every row
 		for (size_t k = 0; k < blockSize; ++k) { // For every element
@@ -151,7 +151,7 @@ void normalDCT(uint_fast8_t *arr, int_fast16_t *out) {
 			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
 				result += buffer.at(col + blockSize * n) * cos((3.14159 / blockSize) * (n + 0.5) * k);
 			}
-			out[col + blockSize * k] = result;
+			out[col + blockSize * k] = (int_fast16_t)result;
 		}
 	}
 }

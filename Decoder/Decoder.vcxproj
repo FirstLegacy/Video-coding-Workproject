@@ -39,7 +39,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\VideoCoding\SocketServer.h" />
+    <ClInclude Include="SocketServer.h" />
     <ClInclude Include="DeDCT.h" />
     <ClInclude Include="DeHuffman.h" />
     <ClInclude Include="DeQuantize.h" />
@@ -52,7 +52,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
+    <ClCompile Include="SocketServer.cpp" />
     <ClCompile Include="DeDCT.cpp" />
     <ClCompile Include="DeHuffman.cpp" />
     <ClCompile Include="DeQuantize.cpp" />
@@ -61,7 +61,10 @@
     <ClCompile Include="deYCbCrToRgb.cpp" />
     <ClCompile Include="DeZigZag.cpp" />
     <ClCompile Include="Interface.cpp" />
-    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -123,6 +126,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <PackageCertificateKeyFile>Decoder_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
