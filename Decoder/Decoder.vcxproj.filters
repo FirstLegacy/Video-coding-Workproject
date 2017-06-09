@@ -12,6 +12,8 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="DeZigZag.h" />
     <ClInclude Include="SocketServer.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="DisplayBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
@@ -24,5 +26,10 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="DeZigZag.cpp" />
     <ClCompile Include="SocketServer.cpp" />
+    <ClCompile Include="Decoder.cpp" />
+    <ClCompile Include="DisplayBuffer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Decoder.rc" />
   </ItemGroup>
 </Project>

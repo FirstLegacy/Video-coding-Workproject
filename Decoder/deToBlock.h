@@ -3,9 +3,9 @@
 #include <vector>
 #include <array>
 
-ref class deToBlock sealed
+class deToBlock
 {
 public:
-	static std::vector<uint_fast8_t> deBlockify(std::vector<char>);
+	static std::vector<unsigned char> deBlockify(std::vector<uint_fast8_t>);
 };
 
