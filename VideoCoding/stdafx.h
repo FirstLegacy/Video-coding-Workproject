@@ -20,6 +20,7 @@ const static size_t img_res_rgb = img_res * 3;
 const static size_t img_res_cbcr = (img_res / 4) * 2;
 const static size_t img_res_ycbcr = img_res + img_res_cbcr;
 const static size_t img_block_count = img_res_ycbcr / mBlockSize;
+const static size_t img_y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
 
 extern unsigned int frameCount = 0;
 

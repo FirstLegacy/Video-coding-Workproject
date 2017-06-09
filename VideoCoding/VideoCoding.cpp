@@ -1,55 +1,50 @@
 #include "stdafx.h"
 
 #include <vector>
+#include <thread>
+#include <iostream>
 
 #include "rgbToYCbCr.h"
 #include "Camera.h"
 #include "quantize.h"
-#include "socket.h"
-#include <thread>
-#include <ctime>
-#include <chrono>
 
+#include "Socket.h"
+#include "Decoder\Interface.h"
+
+#define MS_PER_FRAME 1000/24 // ms / fps = ms per frame
+
+size_t running_threads = 0;
+
+void sendFrames() {
+	auto image = Camera::getFrame();
+
+	std::vector<char> coded_image = RgbToYCbCr::convert(image);
+	volatile char junk = coded_image.at(0);	// To avoid optimizing it away.
+	// Socket::send(coded_image);
+	
+	Interface::updateFrame(image);
+	--running_threads;
+}
 
 int main() {
-	//Camera::test();
-
 	Camera::startCam();
-
-	Socket::connect();
-
-	timer_start(runner, 1000 / 24);
-
-}
-
-
-void runner() {
-
-	frameCount++;
-
-	std::vector<unsigned char> image = Camera::getFrame();
-
 	Quantize::setQuality(1);
+	
+	std::thread gui(Interface::GUI);
 
-	auto coded_img = RgbToYCbCr::convert(image);
+	volatile auto suppThreads = std::thread::hardware_concurrency();
+	// Volatile prevents the empty while-loop below from being optimized away.
 
-	auto conv = coded_img;
+	// Socket::connect();
 
-	Socket::send(coded_img);
+	while (true) { // for (size_t i = 0; i < 1000; ++i) { // Only run 1000 times for profiling.
+		while (running_threads >= suppThreads) { } // Wait until there's not more running threads than cores.
+		++running_threads;
+		std::thread sf(sendFrames);
+		sf.detach();
+		
+		std::this_thread::sleep_for(std::chrono::milliseconds(MS_PER_FRAME));
+	}
 
-
-}
-
-
-void timer_start(std::function<void(void)> func, unsigned int interval)
-{
-	std::thread([func, interval]()
-	{
-		while (true)
-		{
-			auto x = std::chrono::steady_clock::now() + std::chrono::milliseconds(interval);
-			func();
-			std::this_thread::sleep_until(x);
-		}
-	}).detach();
+	gui.join();
 }

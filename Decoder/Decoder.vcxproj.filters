@@ -2,8 +2,6 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="DeHuffman.h" />
-    <ClInclude Include="..\VideoCoding\stdafx.h" />
-    <ClInclude Include="..\VideoCoding\SocketServer.h" />
     <ClInclude Include="DeRunlength.h" />
     <ClInclude Include="DeQuantize.h" />
     <ClInclude Include="DeDCT.h" />
@@ -13,11 +11,10 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="DeZigZag.h" />
+    <ClInclude Include="SocketServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DeHuffman.cpp" />
-    <ClCompile Include="..\VideoCoding\stdafx.cpp" />
-    <ClCompile Include="..\VideoCoding\SocketServer.cpp" />
     <ClCompile Include="DeRunlength.cpp" />
     <ClCompile Include="DeQuantize.cpp" />
     <ClCompile Include="DeDCT.cpp" />
@@ -26,5 +23,6 @@
     <ClCompile Include="DeToBlock.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="DeZigZag.cpp" />
+    <ClCompile Include="SocketServer.cpp" />
   </ItemGroup>
 </Project>
