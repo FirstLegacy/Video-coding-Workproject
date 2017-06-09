@@ -1,7 +1,10 @@
 #pragma once
-ref class DeRunlength sealed
+
+#include <vector>
+
+class DeRunlength
 {
 public:
-	DeRunlength();
+	static std::vector<unsigned char> deRun(std::vector<int_fast16_t>);
 };
 
