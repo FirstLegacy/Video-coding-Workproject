@@ -2,7 +2,6 @@
 #include "ToBlock.h"
 #include "DCT.h"
 
-
 std::vector<char> ToBlock::blockify(std::vector<uint_fast8_t> in) {
 	std::vector<uint_fast8_t> block(img_res_ycbcr);
 

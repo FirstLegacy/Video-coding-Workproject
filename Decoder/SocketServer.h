@@ -14,5 +14,5 @@
 class SocketServer
 {
 public:
-	static void init();
+	static void listen();
 };

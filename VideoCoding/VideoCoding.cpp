@@ -27,6 +27,14 @@ void sendFrames() {
 }
 
 int main() {
+	std::string str = "This is a message sent from VideoCoding.exe to Decoder.exe via an UDP socket";
+	std::vector<char> msg(str.begin(), str.end());
+
+	Socket::connect();
+
+	Socket::sendFrame(msg);
+
+	/*
 	Camera::startCam();
 	Quantize::setQuality(1);
 	
@@ -47,4 +55,5 @@ int main() {
 	}
 
 	gui.join();
+	*/
 }
