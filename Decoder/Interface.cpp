@@ -3,8 +3,6 @@
 
 #include <thread>
 #include <opencv.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
 
 #define MS_PER_FRAME 1000/24
 

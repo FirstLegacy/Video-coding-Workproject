@@ -2,9 +2,9 @@
 #include "Quantize.h"
 #include "ZigZag.h"
 
-
 // https://www.w3.org/Graphics/JPEG/itu-t81.pdf Page 143
 // JPEG standard quantization tables.
+
 // Luminance Quantization Table
 const std::array<int_fast16_t, 64> Quantize::lumTableOrig =
 { 16, 11, 10, 16, 24,  40,  51,  61,

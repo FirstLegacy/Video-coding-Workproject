@@ -262,7 +262,7 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 	bitvec buffer;
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
-	static const size_t y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.
+
 	size_t dc_count = 0;
 	size_t num_count = 0;
 
@@ -299,7 +299,7 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 						eob_check = false;
 
 						num_count = 0;
-						if (dc_count > y_dc_values) {
+						if (dc_count > img_y_dc_values) {
 							dcmeasure = -1;
 						}
 						else {

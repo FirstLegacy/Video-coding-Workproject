@@ -2,68 +2,19 @@
 #include "Camera.h"
 #include "Decoder\Interface.h"
 
-#include <thread>
 #include <opencv.hpp>
 
 cv::VideoCapture cap;
-/*
-void Camera::test() {
-	cv::VideoCapture capt;
-	
-	if (!capt.open(0))
-		return;
-
-	capt.set(CV_CAP_PROP_FRAME_WIDTH, img_res_w);
-	capt.set(CV_CAP_PROP_FRAME_HEIGHT, img_res_h);
-
-	cv::Mat frame;
-
-	for (;;)
-	{
-		capt >> frame;
-		if (frame.empty()) break; // end of video stream
-		cv::imshow("this is you, smile! :)", frame);
-		if (cv::waitKey(10) == 27) break; // stop capturing by pressing ESC
-	}
-}
-
-void Camera::test() {
-	cv::VideoCapture capt;
-
-	if (!capt.open(0))
-		return;
-
-	capt.set(CV_CAP_PROP_FRAME_WIDTH, img_res_w);
-	capt.set(CV_CAP_PROP_FRAME_HEIGHT, img_res_h);
-
-	cv::Mat frame;
-	capt >> frame;
-
-	std::vector<unsigned char> image;
-	image.assign(frame.datastart, frame.dataend);
-
-	std::thread gui(Interface::GUI, image);
-
-	while (true) {
-		capt >> frame;
-
-		std::vector<unsigned char> image(frame.datastart, frame.dataend);
-
-		Interface::frame = image;
-	}
-	
-	gui.join();
-}
-*/
 
 void Camera::startCam() {
 	if (!cap.open(0))
-		return;
+		throw std::runtime_error("Camera not found!");
 
 	cap.set(CV_CAP_PROP_FRAME_WIDTH, (double)img_res_w);
 	cap.set(CV_CAP_PROP_FRAME_HEIGHT,(double)img_res_h);
 }
 
+// Retrieves current frame from the camera.
 std::vector<unsigned char> Camera::getFrame() {
 	cv::Mat frame;
 	cap >> frame;

@@ -1,8 +1,5 @@
 #pragma once
 
-#include <vector>
-#include <array>
-
 class RgbToYCbCr
 {
 public:
