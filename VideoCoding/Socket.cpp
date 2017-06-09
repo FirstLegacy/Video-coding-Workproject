@@ -45,7 +45,7 @@ void Socket::SendFrame(std::vector<char> message) {
 		std::vector<char> split_lo(message.begin() + frame_Part_Size*frame_Part_Count, message.begin() + (frame_Part_Size * frame_Part_Count) + frame_Part_Size);
 		
 
-		char aChar = ID + frameCount + frame_Part_Count;
+		char aChar = ID + frameCount + frame_Part_Count + frame_Part_Number;
 		std::vector<char> header = { aChar };
 		
 		header.insert(header.end(), split_lo.begin(), split_lo.end());
