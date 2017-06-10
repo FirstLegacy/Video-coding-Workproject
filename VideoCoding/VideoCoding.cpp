@@ -30,7 +30,9 @@ int main() {
 
 	Socket::connect();
 
-	Socket::sendFrame(msg);
+	std::vector<char> msg2(3500); // 3.5 KB
+
+	Socket::sendFrame(msg2);
 
 	/*
 	Camera::startCam();

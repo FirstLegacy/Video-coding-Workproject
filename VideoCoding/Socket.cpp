@@ -8,11 +8,11 @@
 
 #define SERVER "127.0.0.1"  // IP adress of the UDP server.
 #define PORT 8890   // Port of the UDP server.
-#define MAX_FRAME_SIZE 1400 // Max size of a frame payload in bytes.
+#define MAX_FRAME_SIZE 1440 // Max size of a payload.
+#define ID 0x0f // Header ID byte (00001111).
 
 SOCKET s = 0;
 int slen = 0;
-char ID = 0x0F;
 struct sockaddr_in si_other;
 uint32_t frame_count = 0;
 
