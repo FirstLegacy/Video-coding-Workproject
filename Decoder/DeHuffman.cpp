@@ -216,7 +216,7 @@ int_fast16_t DeHuffman::getValue(std::vector<char> in, size_t length,
 			start_bit = 0;
 			j = 0;
 		}
-		bits[length - i] = (in.at(start_byte) >> (start_bit + j)) & 1;
+		bits[length - 1 - i] = (in.at(start_byte) >> (start_bit + j)) & 1;
 	}
 	
 	for (size_t i = two_pow.at(length - 1); i < two_pow.at(length); ++i) {
@@ -273,7 +273,8 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 	
 	for (size_t i = 0; i < in.size(); ++i) {
 		for (size_t j = 0; j < CHAR_BIT; ++j) {
-			current = (in.at(i) >> j) & 1; // Current bit
+			auto junk = in.at(i);
+			current = (in.at(i) >> j) | current; // Current bit
 			buffer.push_back(current);
 
 			len = getLength(buffer, dcmeasure);
@@ -326,9 +327,10 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 				}
 
 				j += len;
-				if (j > 8) {
-					i += j / 8;
-					j += j % 8;
+				if (j >= CHAR_BIT) {
+					i += j / CHAR_BIT;
+					j = j % CHAR_BIT;
+					break;
 				}
 			}
 		}

@@ -1,18 +1,18 @@
 #include "stdafx.h"
 #include "SocketServer.h"
-#include "DeHuffman.h"
+#include "DisplayBuffer.h"
 
 #include <iostream>
 #include <Ws2tcpip.h>
 
 #pragma comment(lib, "Ws2_32.lib") // Winsock library.
 
-#define PORT 8890
+#define PORT 8888
 #define MAX_SIZE 1460
 
 WSADATA wsaData;
 SOCKET mySocket;
-sockaddr_in myAddress;
+sockaddr_in myAddress, otherAddress;
 
 // void init(int port)
 void SocketServer::listen()
@@ -40,8 +40,8 @@ void SocketServer::listen()
 	inet_pton(AF_INET, "0.0.0.0", &myAddress.sin_addr);
 
 	myAddress.sin_port = htons(PORT);
-
 	// Bind to local socket.
+
 	if (bind(mySocket, (SOCKADDR*)&myAddress, sizeof(myAddress)) == SOCKET_ERROR)
 	{
 		WSACleanup();
@@ -57,11 +57,13 @@ void SocketServer::listen()
 
 	while (true)
 	{
-		result = recvfrom(mySocket, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&myAddress, &server_length);
+		result = recvfrom(mySocket, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&otherAddress, &server_length);
 		if (result != -1) {
 			vec.resize(result);
 
-			// Send vector to buffer control junk.
+			std::cout << "Received packet." << std::endl;
+
+			DisplayBuffer::add(vec);
 
 			vec.resize(MAX_SIZE);
 		}

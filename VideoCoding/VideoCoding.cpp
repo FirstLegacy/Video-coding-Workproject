@@ -25,19 +25,28 @@ void sendFrames() {
 }
 */
 int main() {
-	std::string str = "This is a message sent from VideoCoding.exe to Decoder.exe via an UDP socket";
-	std::vector<char> msg(str.begin(), str.end());
-
 	Socket::connect();
-
-	std::vector<char> msg2(3500); // 3.5 KB
-
-	Socket::sendFrame(msg2);
-
-	/*
+	
 	Camera::startCam();
 	Quantize::setQuality(1);
 	
+	std::string str = "Hej med dig";
+
+	std::vector<char> hej(str.begin(), str.end());
+
+	Socket::sendMsg(hej);
+
+
+	/*
+	auto coded_image = RgbToYCbCr::convert(Camera::getFrame());
+
+	Socket::sendFrame(coded_image);
+
+	coded_image = RgbToYCbCr::convert(Camera::getFrame());
+
+	Socket::sendFrame(coded_image);
+	*/
+	/*
 	std::thread gui(Interface::GUI);
 
 	volatile auto suppThreads = std::thread::hardware_concurrency();

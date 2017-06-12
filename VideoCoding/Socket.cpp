@@ -6,15 +6,16 @@
 
 #pragma comment(lib, "ws2_32.lib") // Winsock library.
 
-#define SERVER "127.0.0.1"  // IP adress of the UDP server.
-#define PORT 8890   // Port of the UDP server.
-#define MAX_FRAME_SIZE 1440 // Max size of a payload.
+#define SERVER "169.254.67.196"  // IP adress of the UDP server.
+#define PORT 22205   // Port of the UDP server.
+#define MAX_FRAME_SIZE 1453 // Max size of a payload.
 #define ID 0x0f // Header ID byte (00001111).
+#define MAX_SIZE 1460
 
 SOCKET s = 0;
 int slen = 0;
 struct sockaddr_in si_other;
-uint32_t frame_count = 0;
+uint32_t frame_count = 543099453;
 
 /*
 UDP
@@ -49,12 +50,18 @@ void Socket::sendFrame(std::vector<char> message) {
 
 // The function to send a message through the UDP socket.
 void Socket::sendMsg(std::vector<char> message) {
-	// char *msg = message.data();
+
 	if (sendto(s, message.data(), (int)message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
 	{
 		printf("sendto() failed with error code : %d", WSAGetLastError());
 		exit(EXIT_FAILURE);
 	}
+	std::vector<char> vec(MAX_SIZE);
+/*
+	if (int result = recvfrom(s, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&si_other, &slen) != -1) {
+		std::cout << vec.data() << std::endl;
+	}
+	*/
 }
 
 // Initialize socket with port and IP-address
