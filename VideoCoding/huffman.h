@@ -1,9 +1,6 @@
 #pragma once
 
-#include <functional>
-#include <vector>
 #include <array>
-#include <limits>
 #include <bitset>
 
 using bitvec = std::vector<bool>; // Alias for std::vector<bool>. std::vector<bool> is actually a bit vector, not boolean.

@@ -1,26 +1,18 @@
 #include "stdafx.h"
 #include "SocketServer.h"
-#include "DeHuffman.h"
+#include "DisplayBuffer.h"
 
-#include <vector>
 #include <iostream>
-#include <winsock2.h>
-#include <stdio.h>
 #include <Ws2tcpip.h>
-#include <fstream>
-#include <iterator>
-#include <string>
-#include <bitset>
-#include <type_traits>
 
 #pragma comment(lib, "Ws2_32.lib") // Winsock library.
 
-#define PORT 8890
+#define PORT 8888
 #define MAX_SIZE 1460
 
 WSADATA wsaData;
 SOCKET mySocket;
-sockaddr_in myAddress;
+sockaddr_in myAddress, otherAddress;
 
 // void init(int port)
 void SocketServer::listen()
@@ -30,23 +22,15 @@ void SocketServer::listen()
 	// Create socket
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
 	{
-		std::cerr << "Socket Initialization: Error with WSAStartup\n";
-		do {
-			std::cout << std::endl << "Press the Enter key to continue.";
-		} while (std::cin.get() != '\n');
 		WSACleanup();
-		exit(10);
+		throw std::runtime_error("Failed to startup WSA.");
 	}
 
 	mySocket = socket(AF_INET, SOCK_DGRAM, 0);
 	if (mySocket == INVALID_SOCKET)
 	{
-		std::cerr << "Socket Initialization: Error creating socket" << std::endl;
-		do {
-			std::cout << '\n' << "Press the Enter key to continue.";
-		} while (std::cin.get() != '\n');
 		WSACleanup();
-		exit(11);
+		throw std::runtime_error("Failed to create socket.");
 	}
 	
 	// Reserve port for socket connection
@@ -56,16 +40,12 @@ void SocketServer::listen()
 	inet_pton(AF_INET, "0.0.0.0", &myAddress.sin_addr);
 
 	myAddress.sin_port = htons(PORT);
-
 	// Bind to local socket.
+
 	if (bind(mySocket, (SOCKADDR*)&myAddress, sizeof(myAddress)) == SOCKET_ERROR)
 	{
-		do {
-			std::cerr << "ServerSocket: Failed to connect" << std::endl
-				<< "Press any key to continue.";
-		} while (std::cin.get() != '\n');
 		WSACleanup();
-		exit(14);
+		throw std::runtime_error("Failed to bind socket.");
 	}
 
 	int server_length = sizeof(struct sockaddr_in);
@@ -77,11 +57,13 @@ void SocketServer::listen()
 
 	while (true)
 	{
-		result = recvfrom(mySocket, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&myAddress, &server_length);
+		result = recvfrom(mySocket, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&otherAddress, &server_length);
 		if (result != -1) {
 			vec.resize(result);
 
-			// Send vector to buffer control junk.
+			std::cout << "Received packet." << std::endl;
+
+			DisplayBuffer::add(vec);
 
 			vec.resize(MAX_SIZE);
 		}

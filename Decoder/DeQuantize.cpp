@@ -2,13 +2,10 @@
 #include "DeQuantize.h"
 #include "DeDCT.h"
 
-#include <vector>
-#include <array>
-
-
 // https://www.w3.org/Graphics/JPEG/itu-t81.pdf Page 143
+
 // Luminance Quantization Table
-const std::array<uint_fast16_t, 64> lumTableOrig =
+const std::array<int_fast16_t, 64> DeQuantize::lumTableOrig =
 { 16, 11, 10, 16, 24,  40,  51,  61,
   12, 12, 14, 19, 26,  58,  60,  55,
   14, 13, 16, 24, 40,  57,  69,  56,
@@ -19,7 +16,7 @@ const std::array<uint_fast16_t, 64> lumTableOrig =
   72, 92, 95, 98, 112, 100, 103, 99 };
 
 // Chrominance Quantization Table - also used for DeQuantization
-const std::array<uint_fast16_t, 64> chromTableOrig =
+const std::array<int_fast16_t, 64> DeQuantize::chromTableOrig =
 { 17, 18, 24, 47, 99, 99, 99, 99,
   18, 21, 26, 66, 99, 99, 99, 99,
   24, 26, 56, 99, 99, 99, 99, 99,
@@ -29,8 +26,8 @@ const std::array<uint_fast16_t, 64> chromTableOrig =
   99, 99, 99, 99, 99, 99, 99, 99,
   99, 99, 99, 99, 99, 99, 99, 99 };
 
-std::array<uint_fast16_t, 64> lumTable = lumTableOrig;
-std::array<uint_fast16_t, 64> chromTable = chromTableOrig;
+std::array<int_fast16_t, 64> DeQuantize::lumTable = lumTableOrig;
+std::array<int_fast16_t, 64> DeQuantize::chromTable = chromTableOrig;
 
 std::vector<unsigned char> DeQuantize::dequant(std::vector<int_fast16_t> in){
 	int j = 0;
@@ -55,14 +52,12 @@ std::vector<unsigned char> DeQuantize::dequant(std::vector<int_fast16_t> in){
 	return DeDCT::deDCT(in);
 }
 
-
-
 void DeQuantize::setQuality(uint_fast8_t q) {
-	uint_fast16_t s;
+	int_fast16_t s;
 	q < 50 ? s = 5000 / q : s = 200 - q * 2;
 
 	for (size_t i = 0; i < mBlockSize; ++i) {
-		lumTable[i] *= (s + 50) / 100;
-		chromTable[i] *= (s + 50) / 100;
+		lumTable.at(i) = lumTableOrig.at(i) * (s + 50) / 100;
+		chromTable.at(i) = chromTableOrig.at(i) * (s + 50) / 100;
 	}
 }

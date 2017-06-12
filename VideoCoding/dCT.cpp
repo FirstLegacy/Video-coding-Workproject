@@ -2,6 +2,8 @@
 #include "DCT.h"
 #include "Quantize.h"
 
+#include <array>
+
 // Implements BinDCT, source: https://pdfs.semanticscholar.org/e024/bdc2b5b6db2d0eed65ca96ae575b600fa3a9.pdf
 
 // BinDCT coding.

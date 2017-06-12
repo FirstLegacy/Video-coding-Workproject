@@ -1,20 +1,18 @@
 #include "stdafx.h"
-
-#include <vector>
-#include <thread>
-#include <iostream>
-
 #include "rgbToYCbCr.h"
 #include "Camera.h"
 #include "quantize.h"
-
 #include "Socket.h"
-#include "Decoder\Interface.h"
+
+// #include "Decoder\Interface.h"
+
+#include <thread>
+//#include <iostream>
 
 #define MS_PER_FRAME 1000/24 // ms / fps = ms per frame
 
 size_t running_threads = 0;
-
+/*
 void sendFrames() {
 	auto image = Camera::getFrame();
 
@@ -25,19 +23,30 @@ void sendFrames() {
 	Interface::updateFrame(image);
 	--running_threads;
 }
-
+*/
 int main() {
-	std::string str = "This is a message sent from VideoCoding.exe to Decoder.exe via an UDP socket";
-	std::vector<char> msg(str.begin(), str.end());
-
 	Socket::connect();
-
-	Socket::sendFrame(msg);
-
-	/*
+	
 	Camera::startCam();
 	Quantize::setQuality(1);
 	
+	std::string str = "Hej med dig";
+
+	std::vector<char> hej(str.begin(), str.end());
+
+	Socket::sendMsg(hej);
+
+
+	/*
+	auto coded_image = RgbToYCbCr::convert(Camera::getFrame());
+
+	Socket::sendFrame(coded_image);
+
+	coded_image = RgbToYCbCr::convert(Camera::getFrame());
+
+	Socket::sendFrame(coded_image);
+	*/
+	/*
 	std::thread gui(Interface::GUI);
 
 	volatile auto suppThreads = std::thread::hardware_concurrency();
@@ -56,4 +65,6 @@ int main() {
 
 	gui.join();
 	*/
+
+	Socket::closeConnection();
 }

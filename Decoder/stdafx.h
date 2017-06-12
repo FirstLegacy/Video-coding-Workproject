@@ -7,25 +7,15 @@
 
 #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
-#include <array>
+#include <vector> // Everything uses vector so it's included here.
 
-const static size_t blockSize = 8;
-const static size_t mBlockSize = blockSize * blockSize;
-const static size_t img_res_w = 640;
-const static size_t img_res_h = 480;
-const static size_t img_res = img_res_w * img_res_h;
-const static size_t img_res_rgb = img_res * 3;
-const static size_t img_res_cbcr = (img_res / 4) * 2;
-const static size_t img_res_ycbcr = img_res + img_res_cbcr;
-const static size_t img_block_count = img_res_ycbcr / mBlockSize;
-
-// Gets 2D position in a flat array.
-template<typename T, size_t SIZE>
-inline T flatget(const typename std::array<T, SIZE> arr, size_t width, size_t x, size_t y)
-{
-	return &arr[x + y * width];
-};
-
-// TODO: reference additional headers your program requires here
+extern const size_t blockSize = 8;
+extern const size_t mBlockSize = blockSize * blockSize;
+extern const size_t img_res_w = 640;
+extern const size_t img_res_h = 480;
+extern const size_t img_res = img_res_w * img_res_h;
+extern const size_t img_res_rgb = img_res * 3;
+extern const size_t img_res_cbcr = (img_res / 4) * 2;
+extern const size_t img_res_ycbcr = img_res + img_res_cbcr;
+extern const size_t img_block_count = img_res_ycbcr / mBlockSize;
+extern const size_t img_y_dc_values = img_res / mBlockSize; // The amount of DC values in the luminance part.

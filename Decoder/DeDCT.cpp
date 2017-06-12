@@ -128,7 +128,6 @@ void DeDCT::invBinDCT(int_fast16_t *arr, uint_fast8_t *out) {
 	}
 }
 
-
 std::vector<unsigned char> DeDCT::deDCT(std::vector<int_fast16_t> in)
 {
 	std::vector<uint_fast8_t> out(img_res_ycbcr);
