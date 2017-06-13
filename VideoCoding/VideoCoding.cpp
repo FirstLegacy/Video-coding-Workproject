@@ -29,23 +29,17 @@ int main() {
 	
 	Camera::startCam();
 	Quantize::setQuality(1);
-	
-	std::string str = "Hej med dig";
 
-	std::vector<char> hej(str.begin(), str.end());
+	auto image = Camera::getFrame();
 
-	Socket::sendMsg(hej);
-
-
-	/*
-	auto coded_image = RgbToYCbCr::convert(Camera::getFrame());
+	auto coded_image = RgbToYCbCr::convert(image);
 
 	Socket::sendFrame(coded_image);
-
+	/*
 	coded_image = RgbToYCbCr::convert(Camera::getFrame());
 
 	Socket::sendFrame(coded_image);
-	*/
+
 	/*
 	std::thread gui(Interface::GUI);
 

@@ -11,7 +11,7 @@ class Huffman
 private:
 	const static std::array<bitvec, 12> dcChromTable;
 	const static std::array<bitvec, 12> dcLumTable;
-	const static std::array<bitvec, 11> acTable;
+	const static std::array<bitvec, 12> acTable;
 	const static std::array<bitvec, 6> zeroLengthTable;
 	const static std::vector<std::bitset<11>> signValueTable;
 	const static std::vector<std::bitset<5>> zeroValueTable;

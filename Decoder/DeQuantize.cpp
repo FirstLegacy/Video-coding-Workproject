@@ -30,7 +30,7 @@ std::array<int_fast16_t, 64> DeQuantize::lumTable = lumTableOrig;
 std::array<int_fast16_t, 64> DeQuantize::chromTable = chromTableOrig;
 
 std::vector<unsigned char> DeQuantize::dequant(std::vector<int_fast16_t> in){
-	int j = 0;
+	size_t j = 0;
 	for (size_t i = 0; i < img_res; ++i) {
 		if (j == mBlockSize)
 			j = 0;

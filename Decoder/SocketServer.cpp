@@ -7,7 +7,7 @@
 
 #pragma comment(lib, "Ws2_32.lib") // Winsock library.
 
-#define PORT 8888
+#define PORT 22205
 #define MAX_SIZE 1460
 
 WSADATA wsaData;

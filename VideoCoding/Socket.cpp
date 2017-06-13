@@ -6,7 +6,8 @@
 
 #pragma comment(lib, "ws2_32.lib") // Winsock library.
 
-#define SERVER "169.254.67.196"  // IP adress of the UDP server.
+// #define SERVER "169.254.67.196"  // IP adress of the UDP server.
+#define SERVER "127.0.0.1"
 #define PORT 22205   // Port of the UDP server.
 #define MAX_FRAME_SIZE 1453 // Max size of a payload.
 #define ID 0x0f // Header ID byte (00001111).
@@ -57,7 +58,7 @@ void Socket::sendMsg(std::vector<char> message) {
 		exit(EXIT_FAILURE);
 	}
 	std::vector<char> vec(MAX_SIZE);
-/*
+	/*
 	if (int result = recvfrom(s, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&si_other, &slen) != -1) {
 		std::cout << vec.data() << std::endl;
 	}
@@ -91,7 +92,7 @@ void Socket::connect()
 	si_other.sin_port = htons(PORT); // Assigns port.
 	inet_pton(AF_INET, SERVER, &si_other.sin_addr); // Assigns IP-address.
 
-	std::cout << "Initialised." << std::endl;
+	std::cout << "finished." << std::endl;
 }
 
 void Socket::closeConnection()
