@@ -279,26 +279,24 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 	int_fast8_t len = -1;
 
 	bool current;
-	size_t j_buffer = 0;
 	size_t i_buffer = 0;
 
 	for (size_t i = 0; i < in.size(); ++i) {
-		for (size_t j = j_buffer; j < CHAR_BIT; ++j) {
+		for (size_t j = 0; j < CHAR_BIT; ++j) {
 			current = (in.at(i) >> j) & 1; // Current bit
 			buffer.push_back(current);
-			
+
 			len = getLength(buffer, dcmeasure);
 
 			if (len != -1) { // If a value is found.
-				j_buffer = j + 1;
-				i_buffer = i;
+				++j;
 				
 				if (dcmeasure == -2) { // If it's a length of zeroes.
 					if (len == 0) {
 						out.push_back(1); // If len is 0, next value is a single zero.
 					}
 					else {
-						out.push_back(getZeroValue(in, len, i_buffer, j_buffer));
+						out.push_back(getZeroValue(in, len, i, j));
 					}
 					dcmeasure = 1;
 				}
@@ -313,6 +311,10 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 
 						if (dc_count > img_y_dc_values) {
 							dcmeasure = -1;
+
+							if (i == in.size() - 1) {
+								break; // End if EOB in the last byte.
+							}
 						}
 						else {
 							++dc_count;
@@ -320,7 +322,7 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 						}
 					}
 					else {
-						out.push_back(getValue(in, len, i_buffer, j_buffer));
+						out.push_back(getValue(in, len, i, j));
 					}
 					
 				}
@@ -329,19 +331,13 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 						out.push_back(0);
 					}
 					else {
-						out.push_back(getValue(in, len, i_buffer, j_buffer));
+						out.push_back(getValue(in, len, i, j));
 					}
 					dcmeasure = 1;
 				}
 				buffer.clear();
-				j = j_buffer - 1;
-
-				if (i_buffer > i) {
-					i += i_buffer - i;
-					break;
-				}
+				--j;
 			}
-			j_buffer = 0;
 		}
 	}
 	
