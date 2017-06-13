@@ -34,18 +34,19 @@ const std::array<bitvec, 12> Huffman::dcLumTable = {		// Value:	Total size:
 };
 
 // Custom AC table for both Luminance and Chroma. It might change.
-const std::array<bitvec, 11> Huffman::acTable = {						// Value:	Total size:
-	bitvec{ false, false },			// Next is a length of zeroes.
-	bitvec{ false, true },												// 1			3
-	bitvec{ true, false },												// 2			4
-	bitvec{ true, true, false },										// 3			6
-	bitvec{ true, true, true, false },									// 4			8
-	bitvec{ true, true, true, true, false },							// 5			10
-	bitvec{ true, true, true, true, true, false },						// 6			12
-	bitvec{ true, true, true, true, true, true, false },				// 7			14
-	bitvec{ true, true, true, true, true, true, true, false },			// 8			16
-	bitvec{ true, true, true, true, true, true, true, true, false },	// 9			18
-	bitvec{ true, true, true, true, true, true, true, true, true }		// 10			19
+const std::array<bitvec, 12> Huffman::acTable = {							// Value:	Total size:
+	bitvec{ false, false },													// Next is a length of zeroes.
+	bitvec{ false, true },													// 1			3
+	bitvec{ true, false },													// 2			4
+	bitvec{ true, true, false },											// EOB			6
+	bitvec{ true, true, true, false },										// 3			7
+	bitvec{ true, true, true, true, false },								// 4			8
+	bitvec{ true, true, true, true, true, false },							// 5			11
+	bitvec{ true, true, true, true, true, true, false },					// 6			13
+	bitvec{ true, true, true, true, true, true, true, false },				// 7			15
+	bitvec{ true, true, true, true, true, true, true, true, false },		// 8			17
+	bitvec{ true, true, true, true, true, true, true, true, true, false },	// 9			18
+	bitvec{ true, true, true, true, true, true, true, true, true, true }	// 10			20
 };
 
 // Huffman table for a length of zeroes.
@@ -167,13 +168,13 @@ const std::array<int_fast16_t, 12> Huffman::two_pow = {
 // Inserts bits from bitvec
 void Huffman::insertBits(std::vector<char> &out, bitvec bits, uint_fast8_t &reached) {
 	uint_fast8_t reached_buffer = reached;
-
+	
 	for (size_t i = 0; i < bits.size(); ++i) {
 		if (reached_buffer == 0) {
 			out.push_back(0);
 		}
 
-		out.back() |= bits.at(i) << reached_buffer;
+		out.back() |= (bits.at(i) << reached_buffer);
 		
 		if (++reached_buffer == CHAR_BIT) {
 			reached_buffer = 0;
@@ -187,20 +188,21 @@ void Huffman::insertBits(std::vector<char> &out, bitvec bits, uint_fast8_t &reac
 template <size_t size>
 void Huffman::insertBits(std::vector<char> &out, std::bitset<size> bits,
 						 size_t length, uint_fast8_t &reached) {
-	uint_fast8_t reached_buffer = reached;
 
+	uint_fast8_t reached_buffer = reached;
+	
 	for (size_t i = length - 1; i != -1; --i) {
 		if (reached_buffer == 0) {
 			out.push_back(0);
 		}
 
-		out.back() |= bits[i] << reached_buffer;
+		out.back() |= (bits.test(i) << reached_buffer);
 
 		if (++reached_buffer == CHAR_BIT) {
 			reached_buffer = 0;
 		}
 	}
-
+	
 	reached = reached_buffer;
 }
 
@@ -251,19 +253,14 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 		}
 	}
 	if (last == 0) { // If it's a length of zeroes.
-		insertLength(out, 0, 1, reached); // Insert zero-run indicator.
 		if (current == 0) {
-			insertLength(out, 0, -2, reached); // Insert one zero.
-			insertLength(out, 0, 1, reached); // Insert zero-run indicator
-			// All this indicates End of Block (EoB) Total length: 5 bit
+			insertLength(out, 3, 1, reached); // AC table 3 is EOB
 		}
 		else {
+			insertLength(out, 0, 1, reached); // Insert zero-run indicator
 			for (size_t i = 0; i < 6; ++i) {
-				if (current < two_pow[i]) {
+				if (current < two_pow.at(i + 1)) {
 					insertLength(out, i, -2, reached); // Insert length of value.
-					if (i != 0) {
-						insertZeroValue(out, i, current, reached); // Insert actual value if it's not one.
-					}
 					break;
 				}
 			}

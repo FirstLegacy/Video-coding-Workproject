@@ -14,16 +14,21 @@ std::vector<unsigned char> DeRunlength::deRun(std::vector<int_fast16_t> in)
 
 	// Iterates entire input.
 	for (const auto &val : in) {
-		if (val == 0) {
+		if (val == 0 && lastVal == 0) {
+			std::vector<int_fast16_t> buffer(mBlockSize - j);
+			out.insert(out.end(), buffer.begin(), buffer.end());
+			j = 0;
+		} else if (val == 0) {
 			; // Do nothing
 		}
 		else if (lastVal == 0) { // Insert run of zeroes
-			for (size_t i = 0; i < val; ++i) {
-				out.push_back(0);
-			}
+			std::vector<int_fast16_t> buffer(val);
+			out.insert(out.end(), buffer.begin(), buffer.end());
+			j += val;
 		}
 		else {
 			out.push_back(val);
+			++j;
 		}
 
 		lastVal = val;
