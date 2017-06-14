@@ -17,8 +17,9 @@ std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 			out.push_back(0); // 00 for end block.
 			zeroCount = 0;
 			j = 0;
+			out.push_back(val);
 		}
-		if (val == 0) {
+		else if (val == 0) {
 			++zeroCount;
 		} else {
 			// If it's not zero add a zero, the amount of zeroes before it, and the number.
@@ -35,6 +36,6 @@ std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 
 	out.push_back(0);
 	out.push_back(0);
-	
+
 	return Huffman::huff(out);
 }
