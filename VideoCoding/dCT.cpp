@@ -66,7 +66,6 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 				b5 = (b6 + (b6 << 2)) >> 3 - a5;
 				*/
 
-
 			// Stage 3:
 			int_fast16_t
 				c0 = a0 + a3, // c0 = b0 + b3,
@@ -112,57 +111,36 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 			*/
 
 			if (j == 0) {
-				out[0 + i * blockSize] = d0;
-				out[1 + i * blockSize] = c7;
-				out[2 + i * blockSize] = d3;
-				out[3 + i * blockSize] = d6;
-				out[4 + i * blockSize] = d1;
-				out[5 + i * blockSize] = d5;
-				out[6 + i * blockSize] = d2;
-				out[7 + i * blockSize] = d4;
+				out[0 + i * blockSize] = d0 / 2;
+				out[1 + i * blockSize] = c7 / 2;
+				out[2 + i * blockSize] = d3 / 2;
+				out[3 + i * blockSize] = d6 / 2;
+				out[4 + i * blockSize] = d1 / 2;
+				out[5 + i * blockSize] = d5 / 2;
+				out[6 + i * blockSize] = d2 / 2;
+				out[7 + i * blockSize] = d4 / 2;
 			}
 			else {
-				out[i + 0 * blockSize] = d0;
-				out[i + 1 * blockSize] = c7;
-				out[i + 2 * blockSize] = d3;
-				out[i + 3 * blockSize] = d6;
-				out[i + 4 * blockSize] = d1;
-				out[i + 5 * blockSize] = d5;
-				out[i + 6 * blockSize] = d2;
-				out[i + 7 * blockSize] = d4;
+				out[i + 0 * blockSize] = d0 / 2;
+				out[i + 1 * blockSize] = c7 / 2;
+				out[i + 2 * blockSize] = d3 / 2;
+				out[i + 3 * blockSize] = d6 / 2;
+				out[i + 4 * blockSize] = d1 / 2;
+				out[i + 5 * blockSize] = d5 / 2;
+				out[i + 6 * blockSize] = d2 / 2;
+				out[i + 7 * blockSize] = d4 / 2;
 			}
 		}
 	}
 }
-/*
+
+
 // NormalDCT-II (FOR TEST)
-void normalDCT(uint_fast8_t *arr, double *out) {
+void normalDCT(uint_fast8_t *arr, int_fast16_t *out) {
 	std::array<double, mBlockSize> buffer;
-
-	for (size_t row = 0; row < blockSize; ++row) { // For every row
-		for (size_t k = 0; k < blockSize; ++k) { // For every element
-			double result = 0;
-			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
-				result += arr[row * blockSize + n] * cos((3.14159265359 / blockSize) * (n + 0.5) * k);
-			}
-			buffer.at(row * blockSize + k) = result;
-		}
-	}
-
-	for (size_t col = 0; col < blockSize; ++col) { // For every column
-		for (size_t k = 0; k < blockSize; ++k) { // For every element
-			double result = 0;
-			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
-				result += buffer.at(col + blockSize * n) * cos((3.14159265359 / blockSize) * (n + 0.5) * k);
-			}
-			out[col + blockSize * k] = result;// (int_fast16_t)result;
-		}
-	}
-}
-*/
-
-void normalDCT(uint_fast8_t *arr, double *out) {
-	std::array<double, mBlockSize> buffer;
+	const static double scale = 2 / sqrt(mBlockSize);
+	const static double m_sqrt2 = 1 / sqrt(2);
+	double c_m, c_n;
 	const static double pi = 3.14159265359;
 
 	for (size_t row = 0; row < blockSize; ++row) { // For every row
@@ -177,18 +155,47 @@ void normalDCT(uint_fast8_t *arr, double *out) {
 
 	for (size_t col = 0; col < blockSize; ++col) { // For every column
 		for (size_t k = 0; k < blockSize; ++k) { // For every element
+			c_m = col == 0 ? m_sqrt2 : 1;
+			c_n = k == 0 ? m_sqrt2 : 1;
 			double result = 0;
 			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
 				result += buffer.at(col + blockSize * n) * cos((pi / blockSize) * (n + 0.5) * k);
 			}
-			out[col + blockSize * k] = result;// (int_fast16_t)result;
+			out[col + blockSize * k] = (int_fast16_t)(scale * c_m * c_n * result);
 		}
 	}
 }
 
+void normalDCT2(uint_fast8_t *arr, int_fast16_t *out) {
+	double c_m;
+	double c_n;
+	const static double scale = 2 / sqrt(mBlockSize);
+	const static double m_sqrt2 = 1 / sqrt(2);
+	const static double pi = 3.14159265359;
+
+
+	for (size_t m = 0; m < blockSize; ++m) { // For every row
+		for (size_t n = 0; n < blockSize; ++n) { // For every element
+			double result = 0.0;
+			c_m = m == 0 ? m_sqrt2 : 1;
+			c_n = n == 0 ? m_sqrt2 : 1;
+			for (size_t x = 0; x < blockSize; ++x) {
+				for (size_t y = 0; y < blockSize; ++y) {
+					result += arr[m * blockSize + n]
+						* cos(((2 * x + 1) * m * pi) / (2 * blockSize))
+						* cos(((2 * y + 1) * n * pi) / (2 * blockSize));
+				}
+			}
+			out[m * blockSize + n] = scale * c_m * c_n * result;
+		}
+	}
+}
+
+
 // Performs DCT transformation.
 std::vector<unsigned char> DCT::transform(std::vector<uint_fast8_t> in) {	
-	std::vector<double> out(img_res_ycbcr);
+	std::vector<int_fast16_t> out(img_res_ycbcr);
+	std::vector<int_fast16_t> zout(img_res_ycbcr);
 
 	// Runs for every block in the image, first the rows, then the columns.
 	for (size_t i = 0; i < img_block_count; ++i) {
@@ -197,5 +204,6 @@ std::vector<unsigned char> DCT::transform(std::vector<uint_fast8_t> in) {
 	}
 	
 	// return Quantize::quant(out);
+	auto a = zout;
 	return DeDCT::deDCT(out);
 }

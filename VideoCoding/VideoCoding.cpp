@@ -32,7 +32,7 @@ int main() {
 	
 	Interface::init();
 
-	while (true) {
+	for (size_t i = 0; i < 100000; ++i) {
 		auto image = Camera::getFrame();
 
 		auto image2 = RgbToYCbCr::convert(image);
