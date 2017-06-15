@@ -77,3 +77,21 @@ void DisplayBuffer::add(std::vector<char> newPart) {
 		img_queue.insert(ImgFrame(frame_count, part_amount, part, part_count));
 	}
 }
+
+bool DisplayBuffer::get(std::vector<unsigned char> &image)
+{
+	if (img_queue.size() > 0) {
+		auto first_entry = img_queue.begin();
+		ImgFrame entry = *first_entry;
+
+		if (entry.assembled) {
+			auto newEntry = entry;
+			img_queue.erase(first_entry);
+
+			image = newEntry.image;
+			return true;
+		}
+	}
+
+	return false;
+}

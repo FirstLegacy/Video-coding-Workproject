@@ -247,13 +247,14 @@ int_fast16_t DeHuffman::getValue(std::vector<char> in, size_t length,
 int_fast16_t DeHuffman::getZeroValue(std::vector<char> in, size_t length,
 									 size_t &start_byte, size_t &start_bit) {
 	std::bitset<5> bits{ 0 };
+	size_t m_length = length - 1;
 	
 	for (size_t i = 0; i < length; ++i, ++start_bit) {
 		if (start_bit == 8) { // 8th bit is invalid, set to bit 0 for next byte.
 			++start_byte;
 			start_bit = 0;
 		}
-		bits[i] = ((in.at(start_byte) >> start_bit) & 1);
+		bits[m_length - i] = ((in.at(start_byte) >> start_bit) & 1);
 	}
 
 	for (size_t i = two_pow.at(length); i < two_pow.at(length + 1); ++i) {
@@ -300,21 +301,21 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 					}
 					dcmeasure = 1;
 				}
-				else if (len == 0 && dcmeasure == 1) { // If next part is a length of zeroes.
-					out.push_back(0);
-					dcmeasure = -2;
-				}
 				else if (dcmeasure == 1) { // If AC.
-					if (len == EOB) {
+					if (len == 0) { // If next part is a length of zeroes.
+						out.push_back(0);
+						dcmeasure = -2;
+					}
+					else if (len == EOB) { // If End of Block
 						out.push_back(0);
 						out.push_back(0); // Adds two zeroes, signifying EOB.
 
 						if (dc_count > img_y_dc_values) {
 							dcmeasure = -1;
-
+							/*
 							if (i == in.size() - 1) {
 								break; // End if EOB in the last byte.
-							}
+							}*/
 						}
 						else {
 							++dc_count;

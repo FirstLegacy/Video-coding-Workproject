@@ -4,6 +4,8 @@
 
 #include <array>
 
+#include "Decoder\DeDCT.h"
+
 // Implements BinDCT, source: https://pdfs.semanticscholar.org/e024/bdc2b5b6db2d0eed65ca96ae575b600fa3a9.pdf
 
 // BinDCT coding.
@@ -47,7 +49,7 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 				a4 = x3 - x4,
 				a5 = x2 - x5,
 				a6 = x1 - x6,
-				a7 = x1 - x7;
+				a7 = x0 - x7;
 
 			// Stage 2:
 			int_fast16_t
@@ -132,16 +134,16 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 		}
 	}
 }
-
+/*
 // NormalDCT-II (FOR TEST)
-void normalDCT(uint_fast8_t *arr, int_fast16_t *out) {
+void normalDCT(uint_fast8_t *arr, double *out) {
 	std::array<double, mBlockSize> buffer;
 
 	for (size_t row = 0; row < blockSize; ++row) { // For every row
 		for (size_t k = 0; k < blockSize; ++k) { // For every element
 			double result = 0;
 			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
-				result += arr[row * blockSize + n] * cos((3.14159 / blockSize) * (n + 0.5) * k);
+				result += arr[row * blockSize + n] * cos((3.14159265359 / blockSize) * (n + 0.5) * k);
 			}
 			buffer.at(row * blockSize + k) = result;
 		}
@@ -151,25 +153,49 @@ void normalDCT(uint_fast8_t *arr, int_fast16_t *out) {
 		for (size_t k = 0; k < blockSize; ++k) { // For every element
 			double result = 0;
 			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
-				result += buffer.at(col + blockSize * n) * cos((3.14159 / blockSize) * (n + 0.5) * k);
+				result += buffer.at(col + blockSize * n) * cos((3.14159265359 / blockSize) * (n + 0.5) * k);
 			}
-			out[col + blockSize * k] = (int_fast16_t)result;
+			out[col + blockSize * k] = result;// (int_fast16_t)result;
+		}
+	}
+}
+*/
+
+void normalDCT(uint_fast8_t *arr, double *out) {
+	std::array<double, mBlockSize> buffer;
+	const static double pi = 3.14159265359;
+
+	for (size_t row = 0; row < blockSize; ++row) { // For every row
+		for (size_t k = 0; k < blockSize; ++k) { // For every element
+			double result = 0;
+			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
+				result += arr[row * blockSize + n] * cos((pi / blockSize) * (n + 0.5) * k);
+			}
+			buffer.at(row * blockSize + k) = result;
+		}
+	}
+
+	for (size_t col = 0; col < blockSize; ++col) { // For every column
+		for (size_t k = 0; k < blockSize; ++k) { // For every element
+			double result = 0;
+			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
+				result += buffer.at(col + blockSize * n) * cos((pi / blockSize) * (n + 0.5) * k);
+			}
+			out[col + blockSize * k] = result;// (int_fast16_t)result;
 		}
 	}
 }
 
 // Performs DCT transformation.
-std::vector<char> DCT::transform(std::vector<uint_fast8_t> in) {	
-	std::vector<int_fast16_t> out(img_res_ycbcr);
-
-	// std::vector<int_fast16_t> out2(img_res_ycbcr);
-	// std::vector<uint_fast8_t> in2(in.begin(), in.end());
+std::vector<unsigned char> DCT::transform(std::vector<uint_fast8_t> in) {	
+	std::vector<double> out(img_res_ycbcr);
 
 	// Runs for every block in the image, first the rows, then the columns.
 	for (size_t i = 0; i < img_block_count; ++i) {
-		binDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
-		// normalDCT(&in2[i * mBlockSize], &out2[i * mBlockSize]);
+		//binDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
+		normalDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
 	}
 	
-	return Quantize::quant(out);
+	// return Quantize::quant(out);
+	return DeDCT::deDCT(out);
 }

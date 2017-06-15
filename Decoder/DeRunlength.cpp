@@ -11,6 +11,7 @@ std::vector<unsigned char> DeRunlength::deRun(std::vector<int_fast16_t> in)
 	size_t j = 0;
 
 	bool zero_run = false;
+	bool is_dc = true;
 
 	// Iterates entire input.
 	for (const auto &val : in) {
@@ -19,6 +20,7 @@ std::vector<unsigned char> DeRunlength::deRun(std::vector<int_fast16_t> in)
 				std::vector<int_fast16_t> buffer(mBlockSize - j);
 				out.insert(out.end(), buffer.begin(), buffer.end());
 				j = 0;
+				is_dc = true;
 			}
 			else {
 				std::vector<int_fast16_t> buffer(val);
@@ -27,13 +29,14 @@ std::vector<unsigned char> DeRunlength::deRun(std::vector<int_fast16_t> in)
 			}
 			zero_run = false;
 		}
-		else if (val == 0) {
+		else if (val == 0 && !is_dc) {
 			zero_run = true;
 		}
 		else {
 			out.push_back(val);
 			++j;
 			zero_run = false;
+			is_dc = false;
 		}
 	}
 

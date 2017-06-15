@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Huffman.h"
 
+#define EOB 3 // End of Block is entry 3 in the AC Array
+
 // JPEG standard DC Chroma Table
 const std::array<bitvec, 12> Huffman::dcChromTable = {			// Value:	Total size:
 	bitvec{ false, true },										// 0			2
@@ -236,7 +238,7 @@ void Huffman::insertSignedValue(std::vector<char> &out, size_t length,
 
 void Huffman::insertZeroValue(std::vector<char> &out, size_t length,
 							  int_fast16_t val, uint_fast8_t &reached) {
-	auto bits = zeroValueTable.at(val - 1);
+	auto bits = zeroValueTable.at(val - 2);
 	insertBits(out, bits, length, reached);
 }
 
@@ -254,14 +256,20 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 	}
 	if (last == 0) { // If it's a length of zeroes.
 		if (current == 0) {
-			insertLength(out, 3, 1, reached); // AC table 3 is EOB
+			insertLength(out, EOB, 1, reached); // End of Block
 		}
 		else {
 			insertLength(out, 0, 1, reached); // Insert zero-run indicator
-			for (size_t i = 0; i < 6; ++i) {
-				if (current < two_pow.at(i + 1)) {
-					insertLength(out, i, -2, reached); // Insert length of value.
-					break;
+			if (current == 1) {
+				insertLength(out, 0, -2, reached); // Insert length of 1 (indicating a single zero).
+			}
+			else {
+				for (size_t i = 1; i < 6; ++i) {
+					if (current < two_pow.at(i + 2)) {
+						insertLength(out, i, -2, reached); // Insert length of value.
+						insertZeroValue(out, i, current, reached); // Insert value if the length is not 1.
+						break;
+					}
 				}
 			}
 		}

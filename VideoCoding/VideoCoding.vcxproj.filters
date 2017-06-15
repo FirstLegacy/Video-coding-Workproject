@@ -13,6 +13,9 @@
     <ClCompile Include="VideoCoding.cpp" />
     <ClCompile Include="zigZag.cpp" />
     <ClCompile Include="..\Decoder\Interface.cpp" />
+    <ClCompile Include="..\Decoder\DeToBlock.cpp" />
+    <ClCompile Include="..\Decoder\deYCbCrToRgb.cpp" />
+    <ClCompile Include="..\Decoder\DeDCT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -27,6 +30,9 @@
     <ClInclude Include="toBlock.h" />
     <ClInclude Include="zigZag.h" />
     <ClInclude Include="..\Decoder\Interface.h" />
+    <ClInclude Include="..\Decoder\DeToBlock.h" />
+    <ClInclude Include="..\Decoder\deYCbCrToRgb.h" />
+    <ClInclude Include="..\Decoder\DeDCT.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Camera_stuff">
