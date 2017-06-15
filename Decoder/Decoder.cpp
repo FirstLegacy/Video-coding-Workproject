@@ -25,9 +25,5 @@ int main(int argc, char* argv[]) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(MS_PER_FRAME));
 	}
 
-
-
-
-
 	listen.join();
 }

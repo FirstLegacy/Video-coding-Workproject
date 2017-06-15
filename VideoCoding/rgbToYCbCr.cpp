@@ -2,7 +2,7 @@
 #include "RgbToYCbCr.h"
 #include "ToBlock.h"
 
-std::vector<char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
+std::vector<unsigned char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
 // Inputtet er i unsigned char er 8 bit som kommer i sæt af 3 for hver pixel
 // Total size: image_res_rgb (width * height * 3). With default settings 921600
 
@@ -29,6 +29,7 @@ std::vector<char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
 
 	downSampling(yArray, cbArray, crArray, &out_putArray);
 	
+
 	return ToBlock::blockify(out_putArray);
 }
 
@@ -44,15 +45,15 @@ void RgbToYCbCr::downSampling(
 	size_t j = 0;
 
 	for (size_t i = 0; i < img_res;) {
-		if (i % img_res_w == 0) { // || i % img_res_w == 1){
-			i += img_res_w;
-		}
 
 		out_cbArray.at(j) = cbArray.at(i);
 		out_crArray.at(j) = crArray.at(i);
 
 		i += 2;
 		++j;
+		if (i % img_res_w == 0) { // || i % img_res_w == 1){
+			i += img_res_w;
+		}
 	}
 
 	size_t i = 0;
@@ -71,17 +72,4 @@ void RgbToYCbCr::downSampling(
 		out_putArray->at(i) = val;
 		++i;
 	}
-	/*
-	for (size_t i = 0; i < img_res_ycbcr; ++i) {
-		if (img_res >= i) {
-			out_putArray->at(i) = out_yArray.at(i);
-		}
-		else if (img_res + img_res_cbcr / 2 >= i) {
-			out_putArray->at(i) = out_cbArray.at(i);
-		}
-		else {
-			out_putArray->at(i) = out_crArray.at(i);
-		}
-	}
-	*/
 }

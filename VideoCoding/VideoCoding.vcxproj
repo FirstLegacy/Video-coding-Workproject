@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Decoder\DeDCT.cpp" />
+    <ClCompile Include="..\Decoder\DeToBlock.cpp" />
+    <ClCompile Include="..\Decoder\deYCbCrToRgb.cpp" />
     <ClCompile Include="..\Decoder\Interface.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DCT.cpp" />
@@ -36,6 +39,9 @@
     <ClCompile Include="zigZag.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Decoder\DeDCT.h" />
+    <ClInclude Include="..\Decoder\DeToBlock.h" />
+    <ClInclude Include="..\Decoder\deYCbCrToRgb.h" />
     <ClInclude Include="..\Decoder\Interface.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="dCT.h" />

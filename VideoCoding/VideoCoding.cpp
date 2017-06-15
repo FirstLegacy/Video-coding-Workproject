@@ -4,7 +4,7 @@
 #include "quantize.h"
 #include "Socket.h"
 
-// #include "Decoder\Interface.h"
+#include "Decoder\Interface.h"
 
 #include <thread>
 //#include <iostream>
@@ -29,9 +29,19 @@ int main() {
 	
 	Camera::startCam();
 	Quantize::setQuality(1);
+	
+	Interface::init();
 
+	while (true) {
+		auto image = Camera::getFrame();
+
+		auto image2 = RgbToYCbCr::convert(image);
+
+		Interface::update(image2);
+	}
+	
+	/*
 	auto image = Camera::getFrame();
-
 	auto coded_image = RgbToYCbCr::convert(image);
 
 	Socket::sendFrame(coded_image);

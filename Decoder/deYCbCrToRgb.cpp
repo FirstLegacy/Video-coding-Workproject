@@ -18,14 +18,20 @@ std::vector<unsigned char> deYCbCrToRgb::upSampling(std::vector<uint_fast8_t> in
 			cbArray.at(j + 1) = val;
 			cbArray.at(j + img_res_w) = val;
 			cbArray.at(j + img_res_w + 1) = val;
-			++j;
+			j += 2;
+			if (j % img_res_w == 0) {
+				j += img_res_w;
+			}
 		}
 		else {
 			crArray.at(k) = val;
 			crArray.at(k + 1) = val;
 			crArray.at(k + img_res_w) = val;
 			crArray.at(k + img_res_w + 1) = val;
-			++k;
+			k += 2;
+			if (k % img_res_w == 0) {
+				k += img_res_w;
+			}
 		}
 
 		++i;
@@ -42,6 +48,14 @@ std::vector<unsigned char> deYCbCrToRgb::yCbCrToRGB(std::vector<uint_fast8_t> yA
 	int Cr;
 
 	std::vector<unsigned char> out(img_res_rgb);
+
+	/*/
+	for (size_t i = 0; i < img_res; ++i) {
+		out.at(i * 3) = crArray.at(i);
+		out.at(i * 3 + 1) = crArray.at(i);
+		out.at(i * 3 + 2) = crArray.at(i);
+	}
+	*/
 
 	for (size_t i = 0; i < img_res; ++i) {
 		Y	= yArray.at(i);
