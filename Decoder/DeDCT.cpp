@@ -130,8 +130,9 @@ void DeDCT::invBinDCT(int_fast16_t *arr, uint_fast8_t *out) {
 	}
 }
 
+/*
 // DCT-III * 2/N -- For testing
-void normalInverseDCT(double *arr, int_fast16_t *out) {
+void normalInverseDCT(double *arr, uint_fast8_t *out) {
 	std::array<double, mBlockSize> buffer;
 
 	for (size_t row = 0; row < blockSize; ++row) { // For every row
@@ -154,17 +155,43 @@ void normalInverseDCT(double *arr, int_fast16_t *out) {
 		}
 	}
 }
+*/
+
+void normalInverseDCT(double *arr, uint_fast8_t *out) {
+	std::array<double, mBlockSize> buffer;
+	double alpha_u;
+	double alpha_v;
+	const static double sqrt2 = sqrt(2);
+	const static double pi = 3.14159265359;
+
+
+	for (size_t x = 0; x < blockSize; ++x) { // For every row
+		for (size_t y = 0; y < blockSize; ++y) { // For every element
+			double result = 0.0;
+			for (size_t u = 0; u < blockSize; ++u) {
+				for (size_t v = 0; v < blockSize; ++v) {
+					alpha_u = u == 0 ? sqrt2 : 1;
+					alpha_v = v == 0 ? sqrt2 : 1;
+					result += alpha_u * alpha_v * arr[v * blockSize + u]
+						* cos(((2 * x + 1) * u * pi) / 16)
+						* cos(((2 * y + 1) * v * pi) / 16);
+				}
+			}
+			out[y * blockSize + x] = result / 4;
+		}
+	}
+}
+
 
 std::vector<unsigned char> DeDCT::deDCT(std::vector<double> in)
 {
 	std::vector<uint_fast8_t> out(img_res_ycbcr);
-	std::vector<int_fast16_t> zout(img_res_ycbcr);
 	
 	// Runs for every block in the image, first the rows, then the columns.
 
 	for (size_t i = 0; i < img_block_count; ++i) {
 		//invBinDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
-		normalInverseDCT(&in[i * mBlockSize], &zout[i * mBlockSize]);
+		normalInverseDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
 	}
 
 	return deToBlock::deBlockify(out);

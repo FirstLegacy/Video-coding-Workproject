@@ -134,11 +134,9 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 		}
 	}
 }
-
+/*
 // NormalDCT-II (FOR TEST)
 void normalDCT(uint_fast8_t *arr, double *out) {
-	auto x = arr;
-	auto y = out;
 	std::array<double, mBlockSize> buffer;
 
 	for (size_t row = 0; row < blockSize; ++row) { // For every row
@@ -156,6 +154,32 @@ void normalDCT(uint_fast8_t *arr, double *out) {
 			double result = 0;
 			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
 				result += buffer.at(col + blockSize * n) * cos((3.14159265359 / blockSize) * (n + 0.5) * k);
+			}
+			out[col + blockSize * k] = result;// (int_fast16_t)result;
+		}
+	}
+}
+*/
+
+void normalDCT(uint_fast8_t *arr, double *out) {
+	std::array<double, mBlockSize> buffer;
+	const static double pi = 3.14159265359;
+
+	for (size_t row = 0; row < blockSize; ++row) { // For every row
+		for (size_t k = 0; k < blockSize; ++k) { // For every element
+			double result = 0;
+			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
+				result += arr[row * blockSize + n] * cos((pi / blockSize) * (n + 0.5) * k);
+			}
+			buffer.at(row * blockSize + k) = result;
+		}
+	}
+
+	for (size_t col = 0; col < blockSize; ++col) { // For every column
+		for (size_t k = 0; k < blockSize; ++k) { // For every element
+			double result = 0;
+			for (size_t n = 0; n < blockSize; ++n) { // For every element (again)
+				result += buffer.at(col + blockSize * n) * cos((pi / blockSize) * (n + 0.5) * k);
 			}
 			out[col + blockSize * k] = result;// (int_fast16_t)result;
 		}
