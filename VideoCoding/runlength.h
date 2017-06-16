@@ -3,6 +3,6 @@
 class Runlength
 {
 public:
-	static std::vector<char> run(std::vector<int_fast16_t>);
+	static std::vector<unsigned char> run(std::vector<int_fast16_t>);
 };
 

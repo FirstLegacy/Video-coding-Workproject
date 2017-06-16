@@ -24,6 +24,6 @@ private:
 	static void insertZeroValue(std::vector<char>&, size_t, int_fast16_t, uint_fast8_t&);
 	static void inserter(std::vector<char>&, int_fast16_t, int_fast16_t, int_fast8_t, uint_fast8_t&);
 public:
-	static std::vector<char> huff(std::vector<int_fast16_t>);
+	static std::vector<unsigned char> huff(std::vector<int_fast16_t>);
 };
 

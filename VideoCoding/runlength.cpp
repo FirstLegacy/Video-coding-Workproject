@@ -2,7 +2,7 @@
 #include "Runlength.h"
 #include "Huffman.h"
 
-std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
+std::vector<unsigned char> Runlength::run(std::vector<int_fast16_t> in) {
 	std::vector<int_fast16_t> out; // Empty vector
 	out.reserve(img_res_cbcr); // Reserve a convervative amount of data in the vector. (Here 1/3 the full size)
 

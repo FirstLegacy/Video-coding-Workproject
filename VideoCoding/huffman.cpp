@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "Huffman.h"
 
-#define EOB 3 // End of Block is entry 3 in the AC Array
+#include "Decoder\DeHuffman.h"
+
+#define EOB 11 // End of Block is entry 11 in the AC Array
 
 // JPEG standard DC Chroma Table
 const std::array<bitvec, 12> Huffman::dcChromTable = {			// Value:	Total size:
@@ -40,7 +42,6 @@ const std::array<bitvec, 12> Huffman::acTable = {							// Value:	Total size:
 	bitvec{ false, false },													// Next is a length of zeroes.
 	bitvec{ false, true },													// 1			3
 	bitvec{ true, false },													// 2			4
-	bitvec{ true, true, false },											// EOB			6
 	bitvec{ true, true, true, false },										// 3			7
 	bitvec{ true, true, true, true, false },								// 4			8
 	bitvec{ true, true, true, true, true, false },							// 5			11
@@ -48,7 +49,8 @@ const std::array<bitvec, 12> Huffman::acTable = {							// Value:	Total size:
 	bitvec{ true, true, true, true, true, true, true, false },				// 7			15
 	bitvec{ true, true, true, true, true, true, true, true, false },		// 8			17
 	bitvec{ true, true, true, true, true, true, true, true, true, false },	// 9			18
-	bitvec{ true, true, true, true, true, true, true, true, true, true }	// 10			20
+	bitvec{ true, true, true, true, true, true, true, true, true, true },	// 10			20
+	bitvec{ true, true, false }												// EOB			6
 };
 
 // Huffman table for a length of zeroes.
@@ -190,9 +192,9 @@ void Huffman::insertBits(std::vector<char> &out, bitvec bits, uint_fast8_t &reac
 template <size_t size>
 void Huffman::insertBits(std::vector<char> &out, std::bitset<size> bits,
 						 size_t length, uint_fast8_t &reached) {
-
-	uint_fast8_t reached_buffer = reached;
 	
+	uint_fast8_t reached_buffer = reached;
+
 	for (size_t i = length - 1; i != -1; --i) {
 		if (reached_buffer == 0) {
 			out.push_back(0);
@@ -204,7 +206,7 @@ void Huffman::insertBits(std::vector<char> &out, std::bitset<size> bits,
 			reached_buffer = 0;
 		}
 	}
-	
+
 	reached = reached_buffer;
 }
 
@@ -245,16 +247,7 @@ void Huffman::insertZeroValue(std::vector<char> &out, size_t length,
 // Handles inserting the bits.
 void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 					   int_fast16_t last, int_fast8_t type, uint_fast8_t &reached) {
-	if (type == 0 || type == -1 || (current != 0 && last != 0)) {
-		for (size_t i = 1; i < two_pow.size(); ++i) {
-			if (abs(current) < two_pow.at(i)) {
-				insertLength(out, i, type, reached); // Insert length of value.
-				insertSignedValue(out, i, current, reached); // Insert actual value.
-				break;
-			}
-		}
-	}
-	if (last == 0) { // If it's a length of zeroes.
+	if (last == 0 && type == 1) { // If it's a length of zeroes.
 		if (current == 0) {
 			insertLength(out, EOB, 1, reached); // End of Block
 		}
@@ -274,11 +267,20 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 			}
 		}
 	}
+	else if (current != 0 || type != 1) {
+		for (size_t i = 1; i < two_pow.size(); ++i) {
+			if (abs(current) < two_pow.at(i)) {
+				insertLength(out, i, type, reached); // Insert length of value.
+				insertSignedValue(out, i, current, reached); // Insert actual value.
+				break;
+			}
+		}
+	}
 }
 
 // Huffman encoder.
 // Returns char-array, which is what socket can send.
-std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
+std::vector<unsigned char> Huffman::huff(std::vector<int_fast16_t> in) {
 	uint_fast8_t reached = 0;
 	std::vector<char> out;
 	out.reserve(8000); // Allocate 8 KB (It doesn't matter if it's too high).
@@ -291,9 +293,9 @@ std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 	for (const auto &current : in) {
 		Huffman::inserter(out, current, last, dcmeasure, reached);
 
-		if (current == 0 && last == 0) {
+		if (current == 0 && last == 0 && dcmeasure == 1) {
 			// Once the dc count exceeds the amount of DC values in the luminance parts the chroma part is being processed.
-			if (dc_count > img_y_dc_values) {
+			if (dc_count == img_y_dc_values) {
 				dcmeasure = -1;
 			} else {
 				++dc_count;
@@ -306,5 +308,6 @@ std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 		}
 	}
 
-	return out;
+	// return out;
+	return DeHuffman::huff(out);
 }
