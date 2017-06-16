@@ -5,6 +5,7 @@
 #include "Socket.h"
 
 #include "Decoder\Interface.h"
+#include "Decoder\DeQuantize.h"
 
 #include <thread>
 //#include <iostream>
@@ -28,11 +29,12 @@ int main() {
 	Socket::connect();
 	
 	Camera::startCam();
-	Quantize::setQuality(1);
+	// Quantize::setQuality(30);
+	// DeQuantize::setQuality(30);
 	
 	Interface::init();
 
-	for (size_t i = 0; i < 100000; ++i) {
+	for (;;) {
 		auto image = Camera::getFrame();
 
 		auto image2 = RgbToYCbCr::convert(image);

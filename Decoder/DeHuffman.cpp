@@ -2,7 +2,7 @@
 #include "DeHuffman.h"
 #include "DeRunlength.h"
 
-#define EOB 3
+#define EOB 11
 
 // JPEG standard DC Chroma Table
 const std::unordered_map<bitvec, int_fast16_t> DeHuffman::dcChromMap {// Value:	Total size:
@@ -41,7 +41,6 @@ const std::unordered_map<bitvec, int_fast16_t> DeHuffman::acMap = {
 	{ bitvec{ false, false },														0 },
 	{ bitvec{ false, true },														1 },
 	{ bitvec{ true, false },														2 },
-	{ bitvec{ true, true, false },													EOB },
 	{ bitvec{ true, true, true, false },											3 },
 	{ bitvec{ true, true, true, true, false },										4 },
 	{ bitvec{ true, true, true, true, true, false },								5 },
@@ -49,7 +48,8 @@ const std::unordered_map<bitvec, int_fast16_t> DeHuffman::acMap = {
 	{ bitvec{ true, true, true, true, true, true, true, false },					7 },
 	{ bitvec{ true, true, true, true, true, true, true, true, true, false },		8 },
 	{ bitvec{ true, true, true, true, true, true, true, true, true, true, false },	9 },
-	{ bitvec{ true, true, true, true, true, true, true, true, true, true, true },	9 }
+	{ bitvec{ true, true, true, true, true, true, true, true, true, true, true },	10 },
+	{ bitvec{ true, true, false },													EOB }
 };
 
 // Huffman table for a length of zeroes.
@@ -176,7 +176,7 @@ const std::array<int_fast16_t, 12> DeHuffman::two_pow = {
 };
 
 // Inserts the length in bit of the value table.
-int_fast16_t DeHuffman::getLength(bitvec in, int_fast8_t type) {
+size_t DeHuffman::getLength(bitvec in, int_fast8_t type) {
 	switch (type)
 	{
 	case 0: // Lum DC table
@@ -259,6 +259,7 @@ int_fast16_t DeHuffman::getZeroValue(std::vector<char> in, size_t length,
 
 	for (size_t i = two_pow.at(length); i < two_pow.at(length + 1); ++i) {
 		if (zeroValueTable.at(i - 2) == bits) {
+			auto junk = length + i;
 			return (int_fast16_t)i;
 		}
 	}
@@ -269,26 +270,32 @@ int_fast16_t DeHuffman::getZeroValue(std::vector<char> in, size_t length,
 // Huffman decoder.
 std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 	std::vector<int_fast16_t> out;
-	out.reserve(img_res_cbcr); // Reserve a convervative amount of data in the vector. (Here 1/3 the full size)
+	const static size_t reserve_amt = img_res / 10;
+	out.reserve(reserve_amt); // Reserve a convervative amount of data in the vector (here 1/10 the resolution).
 
 	bitvec buffer;
 
 	int_fast8_t dcmeasure = 0; // Lum DC if 0, Chrom DC if -1 else AC
-
 	size_t dc_count = 0;
+	size_t len = -1;
+	size_t j;
+	size_t i;
 
-	int_fast8_t len = -1;
+	for (i = 0; i < in.size(); ++i) {
+		for (j = 0; j < CHAR_BIT;) {
+			buffer.push_back((in.at(i) >> j) & 1);
 
-	bool current;
-	size_t i_buffer = 0;
-
-	for (size_t i = 0; i < in.size(); ++i) {
-		for (size_t j = 0; j < CHAR_BIT; ++j) {
-			current = (in.at(i) >> j) & 1; // Current bit
-			buffer.push_back(current);
+			if (buffer.size() == 1 && dcmeasure != -2) { // If not -2 the minimum length is 2 bit so insert 2 if none so far.
+				++j;
+				if (j == CHAR_BIT) {
+					++i;
+					j = 0;
+				}
+				buffer.push_back((in.at(i) >> j) & 1);
+			}
 
 			len = getLength(buffer, dcmeasure);
-
+			
 			if (len != -1) { // If a value is found.
 				++j;
 				
@@ -310,12 +317,12 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 						out.push_back(0);
 						out.push_back(0); // Adds two zeroes, signifying EOB.
 
-						if (dc_count > img_y_dc_values) {
+						if (dc_count == img_y_dc_values) {
 							dcmeasure = -1;
-							/*
+							
 							if (i == in.size() - 1) {
-								break; // End if EOB in the last byte.
-							}*/
+								goto end_loop; // End if EOB in the last byte.
+							}
 						}
 						else {
 							++dc_count;
@@ -337,10 +344,13 @@ std::vector<unsigned char> DeHuffman::huff(std::vector<char> in) {
 					dcmeasure = 1;
 				}
 				buffer.clear();
-				--j;
+			}
+			else {
+				++j;
 			}
 		}
 	}
-	
+
+end_loop:
 	return DeRunlength::deRun(out);
 }

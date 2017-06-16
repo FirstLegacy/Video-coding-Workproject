@@ -22,9 +22,9 @@ std::vector<unsigned char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
 		G = in.at(i * 3 + 1);
 		B = in.at(i * 3);
 
-		yArray.at(i)	=	(uint8_t) (0.299*R + 0.587*G + 0.114*B);
-		cbArray.at(i)	=	(uint8_t) (-0.169*R - 0.331*G + 0.500*B + 128);
-		crArray.at(i)	=	(uint8_t) (0.500*R - 0.419*G - 0.081*B + 128);
+		yArray.at(i)	= (uint8_t)( 0.299 * R + 0.587 * G + 0.114 * B);
+		cbArray.at(i)	= (uint8_t)(-0.169 * R - 0.331 * G + 0.500 * B + 128);
+		crArray.at(i)	= (uint8_t)( 0.500 * R - 0.419 * G - 0.081 * B + 128);
 	}
 
 	downSampling(yArray, cbArray, crArray, &out_putArray);

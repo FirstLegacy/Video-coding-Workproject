@@ -18,71 +18,62 @@ void DeDCT::invBinDCT(int_fast16_t *arr, uint_fast8_t *out) {
 		// For every row or column in the block.
 		for (size_t i = 0; i < blockSize; ++i) {
 			if (j == 0) {
-				d0 = arr[0 + i * blockSize] / 2; // e0
-				c7 = arr[1 + i * blockSize] / 2; // e1
-				d3 = arr[2 + i * blockSize] / 2; // e2
-				d6 = arr[3 + i * blockSize] / 2; // e3
-				d1 = arr[4 + i * blockSize] / 2; // e4
-				d5 = arr[5 + i * blockSize] / 2; // e5
-				d2 = arr[6 + i * blockSize] / 2; // e6
-				d4 = arr[7 + i * blockSize] / 2; // e7
+				d0 = arr[i + 0 * blockSize] * 2; // e0
+				c7 = arr[i + 1 * blockSize] * 2; // e1
+				d3 = arr[i + 2 * blockSize] * 2; // e2
+				d6 = arr[i + 3 * blockSize] * 2; // e3
+				d1 = arr[i + 4 * blockSize] * 2; // e4
+				d5 = arr[i + 5 * blockSize] * 2; // e5
+				d2 = arr[i + 6 * blockSize] * 2; // e6
+				d4 = arr[i + 7 * blockSize] * 2; // e7
 			}
 			else {
-				d0 = buffer[i + 0 * blockSize] / 2;
-				c7 = buffer[i + 1 * blockSize] / 2;
-				d3 = buffer[i + 2 * blockSize] / 2;
-				d6 = buffer[i + 3 * blockSize] / 2;
-				d1 = buffer[i + 4 * blockSize] / 2;
-				d5 = buffer[i + 5 * blockSize] / 2;
-				d2 = buffer[i + 6 * blockSize] / 2;
-				d4 = buffer[i + 7 * blockSize] / 2;
+				d0 = buffer[0 + i * blockSize];
+				c7 = buffer[1 + i * blockSize];
+				d3 = buffer[2 + i * blockSize];
+				d6 = buffer[3 + i * blockSize];
+				d1 = buffer[4 + i * blockSize];
+				d5 = buffer[5 + i * blockSize];
+				d2 = buffer[6 + i * blockSize];
+				d4 = buffer[7 + i * blockSize];
 			}
 
-			// Stage 1:
+			// Stage 5:
 			/*
 			uint_fast16_t
-			e0 = d0,
-			e1 = c7, // e1 = d7,
-			e2 = d3,
-			e3 = d6,
-			e4 = d1,
-			e5 = d5,
-			e6 = d2,
-			e7 = d4;
+				e0 = d0,
+				e1 = c7, // e1 = d7,
+				e2 = d3,
+				e3 = d6,
+				e4 = d1,
+				e5 = d5,
+				e6 = d2,
+				e7 = d4;
 			*/
 
-			// Stage 2:
+			// Stage 4:
 			int_fast16_t
-				c0 = d0 + d1,
-				c1 = (d0 - d1) / 2,
-				c2 = d2 - d3 * 3 / 8,
-				c3 = d2 * 3 / 8 + d3 * 55 / 64,
-				c4 = d4 - c7 / 8,
-				c5 = d5 + d6 * 7 / 8,
-				c6 = d6 * 9 / 16 - d5 / 2;
-				// d7 = c7;
-				/*
-				c0 = d0 + d1,
-				c1 = (d0 - d1) / 2,
-				c2 = d2 - ((d3 + (d3 << 1)) >> 3),
-				c3 = ((c2 + (c2 << 1)) >> 3) - d3,
-				c4 = d4 - c7 / 8,
-				c5 = d5 + (((d6 << 3) - d6) >> 3),
-				c6 = d6 - (c5 >> 1);
-				*/
+				c0 = d0 / 2 + d1,
+				c1 = d0 / 2 - d1,
+				c2 = d3 * 3 / 8 + d2 * 55 / 64,
+				c3 = d3 - d2 * 3 / 8,
+				c4 = d4 + c7 / 8,
+				c5 = d5 * 9 / 16 - d6 * 7 / 8,
+				c6 = d6 + d5 / 2;
+				// c7 = d7;
 
 			// Stage 3:
 			int_fast16_t
-				b0 = c0 + c3, // c0 = b0 + b3,
-				b1 = c1 + c2, // c1 = b1 + b2,
-				b2 = c1 - c2, // c2 = b1 - b2,
-				b3 = c0 - c3, // c3 = b0 - b3,
-				b4 = c4 + c5, // c4 = b4 + b5,
-				b5 = c4 - c5, // c5 = b4 - b5,
-				b6 = c7 - c6, // c6 = b7 - b6,
-				b7 = c6 + c7; // c7 = b6 + b7;
+				b0 = (c0 + c3) / 2,
+				b1 = (c1 + c2) / 2,
+				b2 = (c1 - c2) / 2,
+				b3 = (c0 - c3) / 2,
+				b4 = (c4 + c5) / 2,
+				b5 = (c4 - c5) / 2,
+				b6 = (c7 - c6) / 2,
+				b7 = (c6 + c7) / 2;
 
-			// Stage 4:
+			// Stage 2:
 			int_fast16_t
 				// a0 = b0,
 				// a1 = b1,
@@ -90,14 +81,10 @@ void DeDCT::invBinDCT(int_fast16_t *arr, uint_fast8_t *out) {
 				// a3 = b3,
 				// a4 = b4,
 				// a7 = b7,
-				a5 = b6 * 5 / 8 - b5 * 49 / 64,
-				a6 = b5 * 3 / 8 + b6;
-				/*
-				a6 = b6 + ((b5 + (b5 << 1)) >> 3),
-				a5 = ((a6 + (a6 << 2)) >> 3) - b5;
-				*/
+				a5 = b6 * 5 / 8 - b5,
+				a6 = b5 * 3 / 8 + b6 * 49 / 64;
 
-			// Stage 5:
+			// Stage 1:
 			int_fast16_t
 				x0 = b0 + b7,
 				x1 = b1 + a6,
@@ -109,24 +96,24 @@ void DeDCT::invBinDCT(int_fast16_t *arr, uint_fast8_t *out) {
 				x7 = b0 - b7;
 
 			if (j == 0) {
-				buffer[0 + i * blockSize] = x0;
-				buffer[1 + i * blockSize] = x1;
-				buffer[2 + i * blockSize] = x2;
-				buffer[3 + i * blockSize] = x3;
-				buffer[4 + i * blockSize] = x4;
-				buffer[5 + i * blockSize] = x5;
-				buffer[6 + i * blockSize] = x6;
-				buffer[7 + i * blockSize] = x7;
+				buffer[i + 0 * blockSize] = x0;
+				buffer[i + 1 * blockSize] = x1;
+				buffer[i + 2 * blockSize] = x2;
+				buffer[i + 3 * blockSize] = x3;
+				buffer[i + 4 * blockSize] = x4;
+				buffer[i + 5 * blockSize] = x5;
+				buffer[i + 6 * blockSize] = x6;
+				buffer[i + 7 * blockSize] = x7;
 			}
 			else {
-				out[i + 0 * blockSize] = x0;
-				out[i + 1 * blockSize] = x1;
-				out[i + 2 * blockSize] = x2;
-				out[i + 3 * blockSize] = x3;
-				out[i + 4 * blockSize] = x4;
-				out[i + 5 * blockSize] = x5;
-				out[i + 6 * blockSize] = x6;
-				out[i + 7 * blockSize] = x7;
+				out[0 + i * blockSize] = x0;
+				out[1 + i * blockSize] = x1;
+				out[2 + i * blockSize] = x2;
+				out[3 + i * blockSize] = x3;
+				out[4 + i * blockSize] = x4;
+				out[5 + i * blockSize] = x5;
+				out[6 + i * blockSize] = x6;
+				out[7 + i * blockSize] = x7;
 			}
 		}
 	}
@@ -157,7 +144,6 @@ void normalInverseDCT(double *arr, uint_fast8_t *out) {
 		}
 	}
 }
-*/
 
 void normalInverseDCT(int_fast16_t *arr, uint_fast8_t *out) {
 	std::array<double, mBlockSize> buffer;
@@ -214,6 +200,7 @@ void normalInverse2DCT(int_fast16_t *arr, uint_fast8_t *out) {
 		}
 	}
 }
+*/
 
 
 std::vector<unsigned char> DeDCT::deDCT(std::vector<int_fast16_t> in)
@@ -223,8 +210,7 @@ std::vector<unsigned char> DeDCT::deDCT(std::vector<int_fast16_t> in)
 	// Runs for every block in the image, first the rows, then the columns.
 
 	for (size_t i = 0; i < img_block_count; ++i) {
-		//invBinDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
-		normalInverse2DCT(&in[i * mBlockSize], &out[i * mBlockSize]);
+		invBinDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
 	}
 
 	return deToBlock::deBlockify(out);

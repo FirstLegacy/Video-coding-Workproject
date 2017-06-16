@@ -16,7 +16,7 @@ const std::array<uint_fast8_t, mBlockSize> ZigZag::zigzagOrder =
 };
 
 // Sets the image in zigzag pattern.
-std::vector<char> ZigZag::zigzag(std::vector<int_fast16_t> in) {
+std::vector<unsigned char> ZigZag::zigzag(std::vector<int_fast16_t> in) {
 	std::vector<int_fast16_t> out(img_res_ycbcr);
 
 	// Goes through every block and inserts the value in the new vector at the correct place by looking up the table.
@@ -26,5 +26,6 @@ std::vector<char> ZigZag::zigzag(std::vector<int_fast16_t> in) {
 		}
 	}
 
+	// return DeZigZag::unzigzag(out);
 	return Runlength::run(out);
 }

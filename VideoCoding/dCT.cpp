@@ -2,13 +2,12 @@
 #include "DCT.h"
 #include "Quantize.h"
 
-#include <array>
-
-#include "Decoder\DeDCT.h"
+// #include <array>
 
 // Implements BinDCT, source: https://pdfs.semanticscholar.org/e024/bdc2b5b6db2d0eed65ca96ae575b600fa3a9.pdf
 
 // BinDCT coding.
+// Input is the top left entry in a block for the in array and out array.
 void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 	// Note that the proposed pipeline in the article had an error, so the matrix from it has been used instead.
 	// Also note the commented equations are how it's written, but they are unnecessary, though kept in for good measure.
@@ -121,20 +120,20 @@ void DCT::binDCT(uint_fast8_t *arr, int_fast16_t *out) {
 				out[7 + i * blockSize] = d4 / 2;
 			}
 			else {
-				out[i + 0 * blockSize] = d0 / 2;
-				out[i + 1 * blockSize] = c7 / 2;
-				out[i + 2 * blockSize] = d3 / 2;
-				out[i + 3 * blockSize] = d6 / 2;
-				out[i + 4 * blockSize] = d1 / 2;
-				out[i + 5 * blockSize] = d5 / 2;
-				out[i + 6 * blockSize] = d2 / 2;
-				out[i + 7 * blockSize] = d4 / 2;
+				out[i + 0 * blockSize] = d0 / 4;
+				out[i + 1 * blockSize] = c7 / 4;
+				out[i + 2 * blockSize] = d3 / 4;
+				out[i + 3 * blockSize] = d6 / 4;
+				out[i + 4 * blockSize] = d1 / 4;
+				out[i + 5 * blockSize] = d5 / 4;
+				out[i + 6 * blockSize] = d2 / 4;
+				out[i + 7 * blockSize] = d4 / 4;
 			}
 		}
 	}
 }
 
-
+/*
 // NormalDCT-II (FOR TEST)
 void normalDCT(uint_fast8_t *arr, int_fast16_t *out) {
 	std::array<double, mBlockSize> buffer;
@@ -186,24 +185,21 @@ void normalDCT2(uint_fast8_t *arr, int_fast16_t *out) {
 						* cos(((2 * y + 1) * n * pi) / (2 * blockSize));
 				}
 			}
-			out[m * blockSize + n] = scale * c_m * c_n * result;
+			out[m * blockSize + n] = (int_fast16_t)(scale * c_m * c_n * result);
 		}
 	}
 }
-
+*/
 
 // Performs DCT transformation.
-std::vector<unsigned char> DCT::transform(std::vector<uint_fast8_t> in) {	
+std::vector<unsigned char> DCT::transform(std::vector<uint_fast8_t> in) {
 	std::vector<int_fast16_t> out(img_res_ycbcr);
-	std::vector<int_fast16_t> zout(img_res_ycbcr);
+
 
 	// Runs for every block in the image, first the rows, then the columns.
 	for (size_t i = 0; i < img_block_count; ++i) {
-		//binDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
-		normalDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
+		binDCT(&in[i * mBlockSize], &out[i * mBlockSize]);
 	}
 	
-	// return Quantize::quant(out);
-	auto a = zout;
-	return DeDCT::deDCT(out);
+	return Quantize::quant(out);
 }

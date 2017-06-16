@@ -20,8 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Decoder\DeDCT.cpp" />
+    <ClCompile Include="..\Decoder\DeHuffman.cpp" />
+    <ClCompile Include="..\Decoder\DeQuantize.cpp" />
+    <ClCompile Include="..\Decoder\DeRunlength.cpp" />
     <ClCompile Include="..\Decoder\DeToBlock.cpp" />
     <ClCompile Include="..\Decoder\deYCbCrToRgb.cpp" />
+    <ClCompile Include="..\Decoder\DeZigZag.cpp" />
     <ClCompile Include="..\Decoder\Interface.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DCT.cpp" />
@@ -40,8 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Decoder\DeDCT.h" />
+    <ClInclude Include="..\Decoder\DeHuffman.h" />
+    <ClInclude Include="..\Decoder\DeQuantize.h" />
+    <ClInclude Include="..\Decoder\DeRunlength.h" />
     <ClInclude Include="..\Decoder\DeToBlock.h" />
     <ClInclude Include="..\Decoder\deYCbCrToRgb.h" />
+    <ClInclude Include="..\Decoder\DeZigZag.h" />
     <ClInclude Include="..\Decoder\Interface.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="dCT.h" />
