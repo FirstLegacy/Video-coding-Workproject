@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Huffman.h"
 
-#include "Decoder\DeHuffman.h"
-
 #define EOB 11 // End of Block is entry 11 in the AC Array
 
 // JPEG standard DC Chroma Table
@@ -285,7 +283,7 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 
 // Huffman encoder.
 // Returns char-array, which is what socket can send.
-std::vector<unsigned char> Huffman::huff(std::vector<int_fast16_t> in) {
+std::vector<char> Huffman::huff(std::vector<int_fast16_t> in) {
 	uint_fast8_t reached = 0;
 	std::vector<char> out;
 	out.reserve(8000); // Allocate 8 KB (It doesn't matter if it's too high).
@@ -313,6 +311,5 @@ std::vector<unsigned char> Huffman::huff(std::vector<int_fast16_t> in) {
 		}
 	}
 
-	// return out;
-	return DeHuffman::huff(out);
+	return out;
 }

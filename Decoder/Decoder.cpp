@@ -10,7 +10,7 @@
 #define MS_PER_FRAME 1000/24
 
 int main(int argc, char* argv[]) {
-	DeQuantize::setQuality(5);
+	DeQuantize::setQuality(25);
 
 	std::thread listen(SocketServer::listen);
 

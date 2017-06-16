@@ -192,7 +192,7 @@ void normalDCT2(uint_fast8_t *arr, int_fast16_t *out) {
 */
 
 // Performs DCT transformation.
-std::vector<unsigned char> DCT::transform(std::vector<uint_fast8_t> in) {
+std::vector<char> DCT::transform(std::vector<uint_fast8_t> in) {
 	std::vector<int_fast16_t> out(img_res_ycbcr);
 
 

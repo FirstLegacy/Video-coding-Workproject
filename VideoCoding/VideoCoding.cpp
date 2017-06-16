@@ -22,15 +22,14 @@ void sendFrames() {
 }
 
 int main() {
+	Quantize::setQuality(25);
+
 	Socket::connect();
 	
 	Camera::startCam();
-	Quantize::setQuality(5);
 
 	volatile auto suppThreads = std::thread::hardware_concurrency();
 	// Volatile prevents the empty while-loop below from being optimized away.
-
-	Socket::connect();
 
 	while (true) {
 		while (running_threads >= suppThreads) { } // Wait until there's not more running threads than cores.

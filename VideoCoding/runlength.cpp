@@ -2,9 +2,7 @@
 #include "Runlength.h"
 #include "Huffman.h"
 
-#include "Decoder\DeRunlength.h"
-
-std::vector<unsigned char> Runlength::run(std::vector<int_fast16_t> in) {
+std::vector<char> Runlength::run(std::vector<int_fast16_t> in) {
 	std::vector<int_fast16_t> out; // Empty vector
 	out.reserve(img_res_cbcr); // Reserve a convervative amount of data in the vector. (Here 1/3 the full size)
 
@@ -39,7 +37,5 @@ std::vector<unsigned char> Runlength::run(std::vector<int_fast16_t> in) {
 	out.push_back(0);
 	out.push_back(0);
 
-
-	// return DeRunlength::deRun(out);
 	return Huffman::huff(out);
 }
