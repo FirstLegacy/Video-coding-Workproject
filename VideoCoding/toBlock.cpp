@@ -3,7 +3,7 @@
 #include "DCT.h"
 #include "Decoder\DeToBlock.h"
 
-std::vector<unsigned char> ToBlock::blockify(std::vector<uint_fast8_t> in) {
+std::vector<char> ToBlock::blockify(std::vector<uint_fast8_t> in) {
 	std::vector<uint_fast8_t> block(img_res_ycbcr);
 
 	static size_t w_blocks = img_res_w / blockSize;

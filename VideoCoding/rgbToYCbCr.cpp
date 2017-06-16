@@ -2,7 +2,7 @@
 #include "RgbToYCbCr.h"
 #include "ToBlock.h"
 
-std::vector<unsigned char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
+std::vector<char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
 // Inputtet er i unsigned char er 8 bit som kommer i sæt af 3 for hver pixel
 // Total size: image_res_rgb (width * height * 3). With default settings 921600
 

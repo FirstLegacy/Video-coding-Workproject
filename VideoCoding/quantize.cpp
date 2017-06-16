@@ -2,8 +2,6 @@
 #include "Quantize.h"
 #include "ZigZag.h"
 
-#include "Decoder\DeQuantize.h"
-
 // https://www.w3.org/Graphics/JPEG/itu-t81.pdf Page 143
 // JPEG standard quantization tables.
 
@@ -33,7 +31,7 @@ const std::array<int_fast16_t, 64> Quantize::chromTableOrig =
 std::array<int_fast16_t, 64> Quantize::lumTable = lumTableOrig;
 std::array<int_fast16_t, 64> Quantize::chromTable = chromTableOrig;
 
-std::vector<unsigned char> Quantize::quant(std::vector<int_fast16_t> in) {
+std::vector<char> Quantize::quant(std::vector<int_fast16_t> in) {
 	size_t j = 0;
 	// First quantize the luminance part using the lum table
 	for (size_t i = 0; i < img_res; ++i) {

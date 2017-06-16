@@ -259,7 +259,6 @@ int_fast16_t DeHuffman::getZeroValue(std::vector<char> in, size_t length,
 
 	for (size_t i = two_pow.at(length); i < two_pow.at(length + 1); ++i) {
 		if (zeroValueTable.at(i - 2) == bits) {
-			auto junk = length + i;
 			return (int_fast16_t)i;
 		}
 	}
