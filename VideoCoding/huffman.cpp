@@ -258,7 +258,7 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 			}
 			else {
 				for (size_t i = 1; i < 6; ++i) {
-					if (current < two_pow.at(i + 2)) {
+					if (current < two_pow.at(i + 1)) {
 						insertLength(out, i, -2, reached); // Insert length of value.
 						insertZeroValue(out, i, current, reached); // Insert value if the length is not 1.
 						break;
@@ -268,11 +268,16 @@ void Huffman::inserter(std::vector<char> &out, int_fast16_t current,
 		}
 	}
 	else if (current != 0 || type != 1) {
-		for (size_t i = 1; i < two_pow.size(); ++i) {
-			if (abs(current) < two_pow.at(i)) {
-				insertLength(out, i, type, reached); // Insert length of value.
-				insertSignedValue(out, i, current, reached); // Insert actual value.
-				break;
+		if (current == 0 && type != 1) {
+			insertLength(out, 0, type, reached);
+		}
+		else {
+			for (size_t i = 1; i < two_pow.size(); ++i) {
+				if (abs(current) < two_pow.at(i)) {
+					insertLength(out, i, type, reached); // Insert length of value.
+					insertSignedValue(out, i, current, reached); // Insert actual value.
+					break;
+				}
 			}
 		}
 	}

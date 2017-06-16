@@ -56,6 +56,7 @@ std::vector<unsigned char> Quantize::quant(std::vector<int_fast16_t> in) {
 		++j;
 	}
 
+	// return DeQuantize::dequant(in);
 	return ZigZag::zigzag(in);
 }
 

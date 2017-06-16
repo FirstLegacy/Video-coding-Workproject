@@ -2,6 +2,7 @@
 #include "SocketServer.h"
 #include "DisplayBuffer.h"
 #include "Interface.h"
+#include "DeQuantize.h"
 
 #include <thread>
 // #include <iostream>
@@ -9,6 +10,8 @@
 #define MS_PER_FRAME 1000/24
 
 int main(int argc, char* argv[]) {
+	DeQuantize::setQuality(5);
+
 	std::thread listen(SocketServer::listen);
 
 	Interface::init();

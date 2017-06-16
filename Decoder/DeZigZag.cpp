@@ -5,7 +5,7 @@
 // Array for the order of the zigzag pattern.
 const std::array<uint_fast8_t, mBlockSize> DeZigZag::zigzagOrder =
 {
-	0,  1,  8, 16,  9,  2,  3, 10,
+	 0,  1,  8, 16,  9,  2,  3, 10,
 	17, 24, 32, 25, 18, 11,  4,  5,
 	12, 19, 26, 33, 40, 48, 41, 34,
 	27, 20, 13,  6,  7, 14, 21, 28,
