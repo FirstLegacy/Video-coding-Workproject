@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "ToBlock.h"
 #include "DCT.h"
-#include "Decoder\DeToBlock.h"
 
 std::vector<char> ToBlock::blockify(std::vector<uint_fast8_t> in) {
 	std::vector<uint_fast8_t> block(img_res_ycbcr);
@@ -38,5 +37,4 @@ std::vector<char> ToBlock::blockify(std::vector<uint_fast8_t> in) {
 	}
 
 	return DCT::transform(block);
-	// return deToBlock::deBlockify(block);
 }

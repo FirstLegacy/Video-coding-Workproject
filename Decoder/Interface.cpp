@@ -39,4 +39,6 @@ void Interface::update(std::vector<unsigned char> new_frame) {
 
 void Interface::init() {
 	cv::namedWindow("Display window", cv::WINDOW_AUTOSIZE);// Create a window for display.
+
+	std::cout << "Interface started." << std::endl;
 }

@@ -12,7 +12,6 @@
     <ClCompile Include="toBlock.cpp" />
     <ClCompile Include="VideoCoding.cpp" />
     <ClCompile Include="zigZag.cpp" />
-    <ClCompile Include="..\Decoder\Interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -24,9 +23,7 @@
     <ClInclude Include="Socket.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="toBlock.h" />
     <ClInclude Include="zigZag.h" />
-    <ClInclude Include="..\Decoder\Interface.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Camera_stuff">

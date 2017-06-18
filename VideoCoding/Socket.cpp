@@ -6,17 +6,15 @@
 
 #pragma comment(lib, "ws2_32.lib") // Winsock library.
 
-// #define SERVER "169.254.67.196"  // IP adress of the UDP server.
-#define SERVER "127.0.0.1"
-#define PORT 22205   // Port of the UDP server.
 #define MAX_FRAME_SIZE 1453 // Max size of a payload.
-#define ID 0x0f // Header ID byte (00001111).
+#define ID 0x0F // Header ID byte (00001111).
 #define MAX_SIZE 1460
 
-SOCKET s = 0;
-int slen = 0;
-struct sockaddr_in si_other;
-uint32_t frame_count = 543099453;
+uint32_t frame_count = 0;
+
+SOCKET mySocket;
+sockaddr_in otherAddress;
+int slen;
 
 /*
 UDP
@@ -38,9 +36,14 @@ void Socket::sendFrame(std::vector<char> message) {
 		std::vector<char> split_lo(start,
 				(frame_part_count == frame_part_amount - 1) ? message.end() : (start + MAX_FRAME_SIZE));
 		
-		char *f_c = static_cast<char*>(static_cast<void*>(&frame_count));
+		char fc[4];
 
-		std::vector<char> header = { ID, *f_c, *++f_c, *++f_c, *++f_c,
+		fc[0] = (frame_count >> 24) & 0xFF;
+		fc[1] = (frame_count >> 16) & 0xFF;
+		fc[2] = (frame_count >> 8) & 0xFF;
+		fc[3] = frame_count & 0xFF;
+
+		std::vector<char> header = { ID, fc[0], fc[1], fc[2], fc[3],
 					(char)frame_part_count, (char)frame_part_amount };
 
 		header.insert(header.end(), split_lo.begin(), split_lo.end());
@@ -51,52 +54,50 @@ void Socket::sendFrame(std::vector<char> message) {
 
 // The function to send a message through the UDP socket.
 void Socket::sendMsg(std::vector<char> message) {
-
-	if (sendto(s, message.data(), (int)message.size(), 0, (struct sockaddr *) &si_other, slen) == SOCKET_ERROR)
+	if (sendto(mySocket, message.data(), (int)message.size(), 0, (struct sockaddr *) &otherAddress, slen) == SOCKET_ERROR)
 	{
 		printf("sendto() failed with error code : %d", WSAGetLastError());
 		exit(EXIT_FAILURE);
 	}
-	std::vector<char> vec(MAX_SIZE);
-	/*
-	if (int result = recvfrom(s, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&si_other, &slen) != -1) {
-		std::cout << vec.data() << std::endl;
-	}
-	*/
 }
 
 // Initialize socket with port and IP-address
-void Socket::connect()
+void Socket::connect(int port, char *server)
 {
-	s, slen = sizeof(si_other);
-	WSADATA wsa;
+	WSADATA wsaData;
+
+	slen = sizeof(otherAddress);
 
 	//Initialise Winsock
-	std::cout << "Winsock initializing . . . ";
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
+	std::cout << "Socket initializing . . . ";
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
 	{
-		printf("Failed. Error Code : %d", WSAGetLastError());
-		exit(EXIT_FAILURE);
+		WSACleanup();
+		throw std::runtime_error("Failed to startup WSA.");
 	}
 
 	// Create socket
-	if ((s = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == SOCKET_ERROR)
+	if ((mySocket = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET)
 	{
-		printf("socket() failed with error code: %d", WSAGetLastError());
-		exit(EXIT_FAILURE);
+		WSACleanup();
+		throw std::runtime_error("Failed to create socket.");
 	}
 
 	// Setup address structure.
-	memset((char *)&si_other, 0, sizeof(si_other)); // Sets all bytes in si_other to 0.
-	si_other.sin_family = AF_INET;
-	si_other.sin_port = htons(PORT); // Assigns port.
-	inet_pton(AF_INET, SERVER, &si_other.sin_addr); // Assigns IP-address.
+	// Reserve port for socket connection
+	otherAddress.sin_family = PF_INET;
+
+	// Listen from any IP (i.e. no matter what IP the program is on).
+	inet_pton(PF_INET, server, &otherAddress.sin_addr);
+
+	// Set port.
+	otherAddress.sin_port = htons(port);
 
 	std::cout << "finished." << std::endl;
 }
 
 void Socket::closeConnection()
 {
-	closesocket(s);
+	closesocket(mySocket);
 	WSACleanup();
 }

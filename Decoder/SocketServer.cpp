@@ -4,20 +4,20 @@
 
 #include <iostream>
 #include <Ws2tcpip.h>
+#include <thread>
 
 #pragma comment(lib, "Ws2_32.lib") // Winsock library.
 
-#define PORT 22205
 #define MAX_SIZE 1460
 
-WSADATA wsaData;
-SOCKET mySocket;
-sockaddr_in myAddress, otherAddress;
-
 // void init(int port)
-void SocketServer::listen()
+void SocketServer::listen(int port)
 {
 	std::cout << "Socket initializing . . . ";
+
+	WSADATA wsaData;
+	SOCKET mySocket;
+	sockaddr_in myAddress, otherAddress;
 
 	// Create socket
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != NO_ERROR)
@@ -26,22 +26,22 @@ void SocketServer::listen()
 		throw std::runtime_error("Failed to startup WSA.");
 	}
 
-	mySocket = socket(AF_INET, SOCK_DGRAM, 0);
-	if (mySocket == INVALID_SOCKET)
+	if ((mySocket = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) == INVALID_SOCKET)
 	{
 		WSACleanup();
 		throw std::runtime_error("Failed to create socket.");
 	}
 	
 	// Reserve port for socket connection
-	myAddress.sin_family = AF_INET;
-	
-	// Use local IP.
-	inet_pton(AF_INET, "0.0.0.0", &myAddress.sin_addr);
+	myAddress.sin_family = PF_INET;
 
-	myAddress.sin_port = htons(PORT);
+	// Listen from any IP (i.e. no matter what IP the program is on).
+	inet_pton(PF_INET, "0.0.0.0", &myAddress.sin_addr);
+
+	// Set port.
+	myAddress.sin_port = htons(port);
+
 	// Bind to local socket.
-
 	if (bind(mySocket, (SOCKADDR*)&myAddress, sizeof(myAddress)) == SOCKET_ERROR)
 	{
 		WSACleanup();
@@ -58,10 +58,11 @@ void SocketServer::listen()
 	while (true)
 	{
 		result = recvfrom(mySocket, vec.data(), MAX_SIZE, 0, (SOCKADDR*)&otherAddress, &server_length);
-		if (result != -1) {
+		if (result == SOCKET_ERROR) {
+			std::cout << "Socket recvfrom error: " << WSAGetLastError() << std::endl;
+		}
+		if (result > 0) {
 			vec.resize(result);
-
-			std::cout << "Received packet." << std::endl;
 
 			DisplayBuffer::add(vec);
 
