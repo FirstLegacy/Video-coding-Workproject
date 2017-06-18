@@ -3,5 +3,5 @@
 class SocketServer
 {
 public:
-	static void listen();
+	static void listen(int);
 };

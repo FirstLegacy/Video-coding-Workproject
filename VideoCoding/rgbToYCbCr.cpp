@@ -11,9 +11,9 @@ std::vector<char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
 	std::vector<uint8_t> crArray(img_res);
 	std::vector<uint8_t> out_putArray(img_res_ycbcr);
 
-	int R;
-	int G;
-	int B;
+	unsigned char R;
+	unsigned char G;
+	unsigned char B;
 
 	//http://www.equasys.de/colorconversion.html Det er her fra at formlen er taget fra til RBG til YCbCr
 
@@ -29,7 +29,6 @@ std::vector<char> RgbToYCbCr::convert(std::vector<unsigned char> in) {
 
 	downSampling(yArray, cbArray, crArray, &out_putArray);
 	
-
 	return ToBlock::blockify(out_putArray);
 }
 

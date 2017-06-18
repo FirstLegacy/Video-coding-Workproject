@@ -5,19 +5,45 @@
 #include "DeQuantize.h"
 
 #include <thread>
-// #include <iostream>
+#include <string>
+#include <iostream>
 
 #define MS_PER_FRAME 1000/24
 
 int main(int argc, char* argv[]) {
-	DeQuantize::setQuality(25);
+	std::cout << "Starting video decoder." << std::endl << std::endl;
 
-	std::thread listen(SocketServer::listen);
+	int deleteFromBufferAfter = 10000; // MS_PER_FRAME;
+	int port = 22205;
+
+	char* quality = "default";
+
+	if (argc > 1) {
+		quality = argv[1];
+		DeQuantize::setQuality(std::stoi(argv[1]));
+	}
+	if (argc > 2) {
+		port = std::stoi(argv[2]);
+	}
+	if (argc > 3) {
+		deleteFromBufferAfter = std::stoi(argv[3]);
+	}
+
+	std::cout << "Quality: " << quality << std::endl;
+	std::cout << "Keep unfinished frame in buffer for: " << deleteFromBufferAfter << "ms" << std::endl;
+	std::cout << "Port: " << port << std::endl;
+
+	DisplayBuffer::bufferDeleteTime = deleteFromBufferAfter;
 
 	Interface::init();
+
+	std::thread listen(SocketServer::listen, port);
+
+	std::thread handler(DisplayBuffer::mergeHandler);
+
 	std::vector<unsigned char> image;
 	bool gotImage;
-
+	
 	while (true) {
 		gotImage = DisplayBuffer::get(image);
 
@@ -29,4 +55,5 @@ int main(int argc, char* argv[]) {
 	}
 
 	listen.join();
+	handler.join();
 }

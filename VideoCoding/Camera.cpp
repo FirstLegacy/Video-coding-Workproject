@@ -12,6 +12,8 @@ void Camera::startCam() {
 
 	cap.set(CV_CAP_PROP_FRAME_WIDTH, (double)img_res_w);
 	cap.set(CV_CAP_PROP_FRAME_HEIGHT,(double)img_res_h);
+
+	std::cout << "Camera started." << std::endl;
 }
 
 // Retrieves current frame from the camera.

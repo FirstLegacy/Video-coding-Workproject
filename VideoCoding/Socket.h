@@ -3,7 +3,7 @@
 class Socket
 {
 public:
-	static void connect();
+	static void connect(int, char*);
   
 	static void closeConnection();
 	static void sendFrame(std::vector<char> message);
