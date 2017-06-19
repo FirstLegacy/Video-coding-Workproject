@@ -26,6 +26,5 @@ std::vector<char> ZigZag::zigzag(std::vector<int_fast16_t> in) {
 		}
 	}
 
-	// return DeZigZag::unzigzag(out);
 	return Runlength::run(out);
 }
