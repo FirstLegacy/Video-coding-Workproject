@@ -34,19 +34,19 @@ int main(int argc, char* argv[]) {
 	char* quality = "default";
 
 	if (argc > 1) {
-		quality = argv[1];
-		Quantize::setQuality(std::stoi(argv[1]));
-	}
-	if (argc > 1) {
-		ip = argv[2];
+		ip = argv[1];
 	}
 	if (argc > 2) {
+		quality = argv[2];
+		Quantize::setQuality(std::stoi(argv[2]));
+	}
+	if (argc > 3) {
 		port = std::stoi(argv[3]);
 	}
 
-	std::cout << "Quality: " << quality << std::endl;
 	std::cout << "Target IP: " << ip << std::endl;
 	std::cout << "Port: " << port << std::endl;
+	std::cout << "Quality: " << quality << std::endl;
 
 
 	auto suppThreads = std::thread::hardware_concurrency();

@@ -149,8 +149,8 @@ bool DisplayBuffer::get(std::vector<unsigned char> &image) {
 			img_queue.pop();
 		}
 		else if (first_entry.count > lastShownFrame + 1 && !first_entry.ditched_prev && ms_waited < max_wait_time) {
-			ms_waited += 8;
-			std::this_thread::sleep_for(std::chrono::milliseconds(8)); // Wait a little if previous frame hasn't arrived yet.
+			ms_waited += 1;
+			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // Wait a little if previous frame hasn't arrived yet.
 		} else {
 			lastShownFrame = first_entry.count;
 			image = first_entry.image; // Get the image from that.

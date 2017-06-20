@@ -25,9 +25,4 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="zigZag.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Camera_stuff">
-      <UniqueIdentifier>{07c9d06f-1e6f-4682-bdf4-98e5f4e1fbe6}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
 </Project>

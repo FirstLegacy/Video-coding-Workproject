@@ -6,9 +6,9 @@
 
 #pragma comment(lib, "ws2_32.lib") // Winsock library.
 
-#define MAX_FRAME_SIZE 1453 // Max size of a payload.
 #define ID 0x0F // Header ID byte (00001111).
-#define MAX_SIZE 1460
+#define MAX_SIZE 1472
+#define MAX_FRAME_SIZE MAX_SIZE - 7 // Max size of a payload.
 
 uint32_t frame_count = 0;
 
@@ -16,18 +16,7 @@ SOCKET mySocket;
 sockaddr_in otherAddress;
 int slen;
 
-/*
-UDP
-IN	PORT:
-OUT PORT:
-IP		:
-Header: 00
-Max Packet size: 1460 byte
-Used Packet size 1400 byte
-*/
-
 void Socket::sendFrame(std::vector<char> message) {
-	// fill
 	uint8_t frame_part_amount = (uint8_t)ceil((float)message.size() / MAX_FRAME_SIZE);
 
 	for (uint8_t frame_part_count = 0; frame_part_count < frame_part_amount; ++frame_part_count) {
